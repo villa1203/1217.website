@@ -1,7 +1,9 @@
 <template>
   <main class="v-index"
   >
-    <div></div>
+    <div>
+      <Blocks :content="data?.result.home.content || []" />
+    </div>
 
     <div>
       <AppLastProjectsPreview
