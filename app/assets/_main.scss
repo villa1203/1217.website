@@ -1,0 +1,34 @@
+@use "./grid";
+@use '../../node_modules/normalize.css/normalize.css';
+
+:root {
+  --app-color-primary: #aa00d2;
+  --app-color-secondary: #ff00ff;
+  --app-color-ternary: #ebd7c8;
+  --app-color-light: var(--app-color-ternary);
+  --app-color-dark: #000;
+
+  --app-header-height: 5rem;
+  --app-footer-height: 5rem;
+
+  --app-grid-gap: 2rem;
+  --app-grid-gap-small: 1rem;
+  --app-grid-gap-xs: .5rem;
+}
+
+html {
+  font-family: sans-serif;
+  font-size: 10px;
+}
+
+body {
+  font-size: 2rem;
+}
+
+
+
+//-------//
+
+
+
+

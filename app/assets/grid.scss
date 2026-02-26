@@ -1,0 +1,120 @@
+.app-rm-child-margin {
+  *:first-child {
+    margin-top: 0;
+  }
+  *:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.app-with-padding {
+  box-sizing: border-box;
+  padding-left: var(--app-grid-gap);
+  padding-right: var(--app-grid-gap);
+}
+
+.app-grid {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: var(--app-grid-gap);
+
+  &.app-grid--wrap {
+    flex-wrap: wrap;
+  }
+
+  &.app-grid--with-small-gap {
+    gap: var(--app-grid-gap-xs);
+  }
+
+  &.app-grid--without-gap {
+    gap: 0;
+  }
+
+  // Modificateurs pour flex-direction
+  &.app-grid--direction-row {
+    flex-direction: row;
+  }
+
+  &.app-grid--direction-row-reverse {
+    flex-direction: row-reverse;
+  }
+
+  &.app-grid--direction-column {
+    flex-direction: column;
+  }
+
+  &.app-grid--direction-column-reverse {
+    flex-direction: column-reverse;
+  }
+
+
+  &.app-grid--align-start {
+    align-items: flex-start;
+  }
+
+  &.app-grid--align-center {
+    align-items: center;
+  }
+
+  &.app-grid--align-end {
+    align-items: flex-end;
+  }
+
+  &.app-grid--align-stretch {
+    align-items: stretch;
+  }
+
+  &.app-grid--align-baseline {
+    align-items: baseline;
+  }
+
+  &.app-grid--justify-start {
+    justify-content: flex-start;
+  }
+
+  &.app-grid--justify-center {
+    justify-content: center;
+  }
+
+  &.app-grid--justify-end {
+    justify-content: flex-end;
+  }
+
+  &.app-grid--justify-between {
+    justify-content: space-between;
+  }
+
+  &.app-grid--justify-around {
+    justify-content: space-around;
+  }
+
+  .app-grid__col-auto {flex: 0 0 auto; max-width: none;}
+
+  .app-grid__col-1        {width: calc( (((100% + var(--app-grid-gap) ) / 12 ) * 1  ) - var(--app-grid-gap)  ); }
+  .app-grid__col-2        {width: calc( (((100% + var(--app-grid-gap) ) / 12 ) * 2  ) - var(--app-grid-gap)  ); }
+  .app-grid__col-3        {width: calc( (((100% + var(--app-grid-gap) ) / 12 ) * 3  ) - var(--app-grid-gap)  ); }
+  .app-grid__col-4        {width: calc( (((100% + var(--app-grid-gap) ) / 12 ) * 4  ) - var(--app-grid-gap)  ); }
+  .app-grid__col-5        {width: calc( (((100% + var(--app-grid-gap) ) / 12 ) * 5  ) - var(--app-grid-gap)  ); }
+  .app-grid__col-6        {width: calc( (((100% + var(--app-grid-gap) ) / 12 ) * 6  ) - var(--app-grid-gap)  ); }
+  .app-grid__col-7        {width: calc( (((100% + var(--app-grid-gap) ) / 12 ) * 7  ) - var(--app-grid-gap)  ); }
+  .app-grid__col-8        {width: calc( (((100% + var(--app-grid-gap) ) / 12 ) * 8  ) - var(--app-grid-gap)  ); }
+  .app-grid__col-9        {width: calc( (((100% + var(--app-grid-gap) ) / 12 ) * 9  ) - var(--app-grid-gap)  ); }
+  .app-grid__col-10       {width: calc( (((100% + var(--app-grid-gap) ) / 12 ) * 10 ) - var(--app-grid-gap)  ); }
+  .app-grid__col-11       {width: calc( (((100% + var(--app-grid-gap) ) / 12 ) * 11 ) - var(--app-grid-gap)  ); }
+  .app-grid__col-12       {width: calc( (((100% + var(--app-grid-gap) ) / 12 ) * 12 ) - var(--app-grid-gap)  ); }
+
+  .app-grid__col-offset-1  {width:  calc( (((100% + var(--app-grid-gap) ) / 12 ) * 1  ) - var(--app-grid-gap)  );}
+  .app-grid__col-offset-2  {width:  calc( (((100% + var(--app-grid-gap) ) / 12 ) * 2  ) - var(--app-grid-gap)  );}
+  .app-grid__col-offset-3  {width:  calc( (((100% + var(--app-grid-gap) ) / 12 ) * 3  ) - var(--app-grid-gap)  );}
+  .app-grid__col-offset-4  {width:  calc( (((100% + var(--app-grid-gap) ) / 12 ) * 4  ) - var(--app-grid-gap)  );}
+  .app-grid__col-offset-5  {width:  calc( (((100% + var(--app-grid-gap) ) / 12 ) * 5  ) - var(--app-grid-gap)  );}
+  .app-grid__col-offset-6  {width:  calc( (((100% + var(--app-grid-gap) ) / 12 ) * 6  ) - var(--app-grid-gap)  );}
+  .app-grid__col-offset-7  {width:  calc( (((100% + var(--app-grid-gap) ) / 12 ) * 7  ) - var(--app-grid-gap)  );}
+  .app-grid__col-offset-8  {width:  calc( (((100% + var(--app-grid-gap) ) / 12 ) * 8  ) - var(--app-grid-gap)  );}
+  .app-grid__col-offset-9  {width:  calc( (((100% + var(--app-grid-gap) ) / 12 ) * 9  ) - var(--app-grid-gap)  );}
+  .app-grid__col-offset-10 {width:  calc( (((100% + var(--app-grid-gap) ) / 12 ) * 10 ) - var(--app-grid-gap)   );}
+  .app-grid__col-offset-11 {width:  calc( (((100% + var(--app-grid-gap) ) / 12 ) * 11 ) - var(--app-grid-gap)   );}
+  .app-grid__col-offset-12 {width:  calc( (((100% + var(--app-grid-gap) ) / 12 ) * 12 ) - var(--app-grid-gap)   );}
+}
