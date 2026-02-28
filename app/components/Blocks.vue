@@ -1,28 +1,34 @@
 <template>
-  <template v-for="block of props.content" :key="block.id">
+  <template v-for="block of content" :key="block.id">
     <template v-if="block.type === 'article_heading'">
-      <BlockArticleHeading :block="block"/>
+      <BlockArticleHeading
+        :block_data="block"
+      />
     </template>
 
     <template v-else-if="block.type === 'image'">
-      <BlockImage :block="block"/>
+      <BlockImage :block_data="block"/>
     </template>
 
     <template v-else-if="block.type === 'text'">
-      <BlockText :block="block"/>
+      <BlockText :block_data="block"/>
     </template>
 
     <template v-else-if="block.type === 'video'">
-      <BlockVideo :block="block"/>
+      <BlockVideo :block_data="block"/>
+    </template>
+
+    <template v-else-if="block.type === 'pages_list'">
+      <BlockPagesList :block_data="block"/>
     </template>
   </template>
 </template>
 
 <script setup lang="ts">
-	import type {BlockData} from "#shared/cms_api";
+	import type {CMS_BlockData} from "#shared/cms_api";
 
-	const props = defineProps<{
-		content: BlockData[]
+	defineProps<{
+		content: CMS_BlockData[]
 	}>();
 
 </script>

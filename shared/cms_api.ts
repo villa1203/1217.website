@@ -29,32 +29,34 @@ export type CMS_API_Page = {
   id: string,
   title: string,
   slug: string,
-  url: string,
+  baseline: string,
+  cover: CMS_API_ImageInstance,
 }
 
-export type BlockData =
-  BlockArticleHeadingData |
-  BlockImageData |
-  BlockTextData |
-  BlockVideoData
+export type CMS_BlockData =
+  CMS_BlockArticleHeadingData |
+  CMS_BlockImageData |
+  CMS_BlockTextData |
+  CMS_BlockPages |
+  CMS_BlockVideoData
 
-export interface BlockDataBase {
+export interface CMS_BlockDataBase {
   "id": string,
   "isHidden": boolean,
-  "type": "article_heading" | "image" | "text" | "video"
+  "type": "article_heading" | "image" | "text" | "video" | "pages_list"
 }
 
-export interface BlockArticleHeadingData extends BlockDataBase {
+export interface CMS_BlockArticleHeadingData extends CMS_BlockDataBase {
   "content": {
-    "titre": string,
+    "title": string,
     "text": string
   },
   type: "article_heading"
 }
 
-export interface BlockImageData extends BlockDataBase {
+export interface CMS_BlockImageData extends CMS_BlockDataBase {
   "content": {
-    "titre": string,
+    "title": string,
     "text": string
   },
   "id": string,
@@ -62,9 +64,9 @@ export interface BlockImageData extends BlockDataBase {
   "type": "image"
 }
 
-export interface BlockTextData extends BlockDataBase {
+export interface CMS_BlockTextData extends CMS_BlockDataBase {
   "content": {
-    "titre": string,
+    "title": string,
     "text": string
   },
   "id": string,
@@ -72,10 +74,26 @@ export interface BlockTextData extends BlockDataBase {
   "type": "text"
 }
 
-export interface BlockVideoData extends BlockDataBase {
+export interface CMS_BlockVideoData extends CMS_BlockDataBase {
   "content": {
-    "titre": string,
-    "text": string
+    title?: string,
+    url?: string
+    video_file?: {
+      url: string,
+      id: string,
+      filename: string,
+      mime: string,
+    }[] | null,
+    caption?: string,
+    credits?: string,
   },
   "type": "video"
+}
+
+export interface CMS_BlockPages extends CMS_BlockDataBase {
+  "content": {
+    title?: string,
+    pages_liste?: CMS_API_Page[],
+  },
+  "type": "pages_list"
 }

@@ -1,18 +1,28 @@
 <template>
-	<section class="section-article-heading cols" :class="props.block.content.text.length > 500 ? 'cols-align-start' : ''">
-		<header class="col col-text col-with-padding">
-			<h2 class="h2 purple">{{ props.block.content.titre }}</h2>
+	<section class="block-article-heading" >
+		<header v-if="block_data.content.title">
+			<h2>{{ block_data.content.title }}</h2>
 		</header>
-		<div class="col col-text col-with-padding">
-			<div class="text" v-html="props.block.content.text"></div>
+		<div v-if="block_data.content.text">
+			<div v-html="block_data.content.text"/>
 		</div>
 	</section>
 </template>
 
 <script setup lang="ts">
-	import type {BlockArticleHeadingData} from "#shared/cms_api"
+	import type {CMS_BlockArticleHeadingData} from "#shared/cms_api"
 
-	const props = defineProps<{
-		block_data: BlockArticleHeadingData
+	defineProps<{
+		block_data: CMS_BlockArticleHeadingData
 	}>()
 </script>
+
+<style scoped lang="scss">
+.block-article-heading {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>
