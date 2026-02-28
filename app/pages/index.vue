@@ -42,6 +42,9 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
               url: true,
               caption: true,
               credits: true,
+              is_style_list: {
+                query: 'content.is_style_list.toBool',
+              },
               pages_liste: {
                 query: 'content.pages_liste.toPages',
                 select: {

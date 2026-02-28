@@ -94,6 +94,7 @@ export interface CMS_BlockPages extends CMS_BlockDataBase {
   "content": {
     title?: string,
     pages_liste?: CMS_API_Page[],
+    is_style_list?: boolean,
   },
   "type": "pages_list"
 }
