@@ -19,7 +19,7 @@
 			</div>
 
       <div v-if="block_data.content.video_file && block_data.content.video_file[0]">
-        <video controls
+        <video loop
                muted
                autoplay
                :src="block_data.content.video_file[0].url"
@@ -50,5 +50,5 @@ const props = defineProps<{
 		return null
 	};
 
-	const embedUrl = computed(() => getEmbedUrl(props.block_data.content.url))
+	const embedUrl = computed(() => props.block_data.content.url ? getEmbedUrl(props.block_data.content.url) : null)
 </script>
