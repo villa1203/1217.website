@@ -27,6 +27,7 @@
 <script setup lang="ts">
 import type {CMS_API_Page} from "#shared/cms_api";
 import {defineProps} from "vue";
+import AppProjectPreview__list from "~/components/AppProjectPreview__list.vue";
 
 defineProps<{
   pages: CMS_API_Page[]
