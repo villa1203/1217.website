@@ -1,12 +1,12 @@
 <template>
-	<section class="section-text cols">
-		<div v-if="props.block.content.title" class="col col-text col-with-padding">
-			<h3 class="h2">{{ props.block.content.title }}</h3>
+	<section>
+		<div v-if="block_data.content.title">
+			<h2>{{ block_data.content.title }}</h2>
 		</div>
-		<div v-else class="grid-background"></div>
-
-		<div class="col col-text col-with-padding">
-			<div class="text" v-html="props.block.content.title"></div>
+		<div>
+			<div
+        v-html="block_data.content.text"
+      />
 		</div>
 	</section>
 
@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import type {CMS_BlockTextData} from "#shared/cms_api";
 
-const props = defineProps<{
+defineProps<{
   block_data: CMS_BlockTextData
 }>()
 </script>
