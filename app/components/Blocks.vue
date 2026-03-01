@@ -31,6 +31,10 @@
       <BlockClientList :block_data="block"/>
     </template>
 
+    <template v-else-if="block.type === 'profiles'">
+      <BlockProfiles :block_data="block"/>
+    </template>
+
   </template>
 </template>
 

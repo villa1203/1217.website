@@ -1,5 +1,6 @@
-@use "./grid";
 @use '../../node_modules/normalize.css/normalize.css';
+@use "./grid";
+@use "./typo";
 
 :root {
   --app-color-primary: #aa00d2;

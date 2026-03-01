@@ -3,10 +3,9 @@
 		<div v-if="block_data.content.title">
 			<h2>{{ block_data.content.title }}</h2>
 		</div>
-		<div>
-			<div
-        v-html="block_data.content.text"
-      />
+
+    <div>
+			<div v-html="block_data.content.text"/>
 		</div>
 	</section>
 

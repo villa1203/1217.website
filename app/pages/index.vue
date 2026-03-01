@@ -9,7 +9,7 @@
 
 
 <script setup lang="ts">
-import type {CMS_API_Response, CMS_BlockData} from "#shared/cms_api";
+import type {CMS_API_ImageInstance, CMS_API_Response, CMS_BlockData} from "#shared/cms_api";
 
 type FetchData = CMS_API_Response & {
   "result": {
@@ -45,6 +45,30 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
               is_style_list: {
                 query: 'content.is_style_list.toBool',
               },
+
+              profiles_list: {
+                query: 'content.profiles_list.toStructure',
+                select: {
+                  // photo: {
+                  //   query: 'photo.toFiles.first',
+                  //   select: {
+                  //     alt: "file.alt.value",
+                  //     tiny: 'file.resize(50, null, 10)',
+                  //     small: 'file.resize(500)',
+                  //     reg: 'file.resize(1280)',
+                  //     large: 'file.resize(1920)',
+                  //     xxl: 'file.resize(2500)',
+                  //     focus: 'file.focus',
+                  //   },
+                  // },
+                  first_name: true,
+                  last_name: true,
+                  function: true,
+                  roles: true,
+                  id: true,
+                }
+              },
+
               pages_liste: {
                 query: 'content.pages_liste.toPages',
                 select: {

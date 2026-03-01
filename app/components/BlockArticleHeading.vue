@@ -1,11 +1,31 @@
 <template>
-	<section class="block-article-heading" >
-		<header v-if="block_data.content.title">
-			<h2>{{ block_data.content.title }}</h2>
-		</header>
-		<div v-if="block_data.content.text">
-			<div v-html="block_data.content.text"/>
-		</div>
+	<section class="block-article-heading app-grid app-grid--align-start" >
+
+    <div class="app-grid app-grid--align-start app-grid--justify-center">
+      <header v-if="block_data.content.title"
+              :class="{
+                'app-grid__col-4': block_data.content.text
+              }"
+      >
+        <div class="app-grid app-grid--align-start app-grid--justify-center">
+          <h2
+            :class="{
+                'app-text-align-center': !block_data.content.text
+            }"
+          >{{ block_data.content.title }}</h2>
+        </div>
+      </header>
+
+      <div v-if="block_data.content.text"
+           :class="{
+              'app-grid__col-8': block_data.content.title,
+              'app-grid__col-12': !block_data.content.title,
+            }"
+      >
+        <div v-html="block_data.content.text"/>
+      </div>
+    </div>
+
 	</section>
 </template>
 
@@ -20,7 +40,7 @@
 <style scoped lang="scss">
 .block-article-heading {
   width: 100%;
-  height: 100vh;
+  min-height: calc(100vh - 20rem);
   display: flex;
   justify-content: center;
   align-items: center;
