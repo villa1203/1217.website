@@ -38,12 +38,13 @@ export type CMS_BlockData =
   CMS_BlockImageData |
   CMS_BlockTextData |
   CMS_BlockPages |
-  CMS_BlockVideoData
+  CMS_BlockVideoData |
+  CMS_BlockClientList
 
 export interface CMS_BlockDataBase {
   "id": string,
   "isHidden": boolean,
-  "type": "article_heading" | "image" | "text" | "video" | "pages_list"
+  "type": "article_heading" | "image" | "text" | "video" | "pages_list" | "clients_list"
 }
 
 export interface CMS_BlockArticleHeadingData extends CMS_BlockDataBase {
@@ -97,4 +98,11 @@ export interface CMS_BlockPages extends CMS_BlockDataBase {
     is_style_list?: boolean,
   },
   "type": "pages_list"
+}
+
+export interface CMS_BlockClientList extends CMS_BlockDataBase {
+  "content": {
+    title?: string,
+  },
+  "type": "clients_list"
 }

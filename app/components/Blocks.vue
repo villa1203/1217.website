@@ -26,12 +26,18 @@
         <BlockPagesList :block_data="block"/>
       </template>
     </template>
+
+    <template v-else-if="block.type === 'clients_list'">
+      <BlockClientList :block_data="block"/>
+    </template>
+
   </template>
 </template>
 
 <script setup lang="ts">
 	import type {CMS_BlockData} from "#shared/cms_api";
   import BlockPagesList__list from "~/components/BlockPagesList__list.vue";
+  import BlockClientList from "~/components/BlockClientList.vue";
 
 	defineProps<{
 		content: CMS_BlockData[]
