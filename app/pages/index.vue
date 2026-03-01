@@ -49,23 +49,23 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
               profiles_list: {
                 query: 'content.profiles_list.toStructure',
                 select: {
-                  // photo: {
-                  //   query: 'photo.toFiles.first',
-                  //   select: {
-                  //     alt: "file.alt.value",
-                  //     tiny: 'file.resize(50, null, 10)',
-                  //     small: 'file.resize(500)',
-                  //     reg: 'file.resize(1280)',
-                  //     large: 'file.resize(1920)',
-                  //     xxl: 'file.resize(2500)',
-                  //     focus: 'file.focus',
-                  //   },
-                  // },
-                  first_name: true,
-                  last_name: true,
-                  function: true,
-                  roles: true,
-                  id: true,
+                  photo: {
+                    query: 'structureItem.content.photo.toFiles.first',
+                    select: {
+                      alt: "file.alt.value",
+                      tiny: 'file.resize(50, null, 10)',
+                      small: 'file.resize(500)',
+                      reg: 'file.resize(1280)',
+                      large: 'file.resize(1920)',
+                      xxl: 'file.resize(2500)',
+                      focus: 'file.focus',
+                    },
+                  },
+                  first_name: 'structureItem.content.first_name',
+                  last_name: 'structureItem.content.last_name',
+                  function: 'structureItem.content.function',
+                  roles: 'structureItem.content.roles',
+                  id: 'structureItem.content.id',
                 }
               },
 
