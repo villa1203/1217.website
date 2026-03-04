@@ -4,8 +4,8 @@
       <div class="app-grid app-grid--align-start app-grid--justify-start app-grid--wrap app-grid--wrap v-app-last-projects-preview__projects">
         <div v-for="(page, page_index) of pages"
              :class="{
-                'app-grid__col-4': (page_index + 1) % 5 === 1 || (page_index + 1) % 5 === 4,
-                'app-grid__col-8': (page_index + 1) % 5 === 2 || (page_index + 1) % 5 === 3,
+                'app-grid__col-5': (page_index + 1) % 5 === 1 || (page_index + 1) % 5 === 4,
+                'app-grid__col-7': (page_index + 1) % 5 === 2 || (page_index + 1) % 5 === 3,
                 'is-full': (page_index + 1) % 5 === 0
              }"
              class="v-app-last-projects-preview__projects__item"

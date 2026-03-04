@@ -10,7 +10,12 @@
         <div class="app-grid app-with-padding--left-right">
           <div class="app-grid__col-8 app-child-no-margin">
             <h1>{{ data.result.title }}</h1>
-            <p>{{data.result.baseline}}</p>
+            <div v-html="data.result.intro" />
+            <div class="app-grid app-grid--wrap v-projet-slug__collaborators">
+              <div class="app-grid__col-6"
+                   v-for="collaborator of data.result.collaborators">
+                {{collaborator.title}}</div>
+            </div>
           </div>
           <div class="app-grid__col-4">
             <div class="app-grid app-grid--direction-column">
@@ -78,10 +83,12 @@ type FetchData = CMS_API_Response & {
     title: string,
     slug: string,
     baseline: string,
+    intro: string,
     cover: CMS_API_ImageInstance,
     content: CMS_BlockData[],
     sectors: {title: string}[]
     clients: {title: string}[]
+    collaborators: {title: string}[]
     services: {title: string}[]
     date: string
     localisation: string
@@ -100,6 +107,15 @@ const {data, status} = await useFetch<FetchData>('/api/CMS_KQLRequest', {
       title: true,
       slug: true,
       baseline: true,
+
+      intro: true,
+
+      collaborators: {
+        query: 'page.collaborators.toPages',
+        select: {
+          title: true,
+        }
+      },
       sectors: {
         query: 'page.sectors.toPages',
         select: {
@@ -147,5 +163,9 @@ const {data, status} = await useFetch<FetchData>('/api/CMS_KQLRequest', {
   width: 100%;
   height: 100vh;
   object-fit: cover;
+}
+
+.v-projet-slug__collaborators {
+  max-width: 30rem;
 }
 </style>
