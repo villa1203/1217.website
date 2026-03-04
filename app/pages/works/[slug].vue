@@ -5,7 +5,7 @@
       <header class="v-projet-slug__header"
       >
         <img class="v-projet-slug__img"
-             :src="data.result.cover.reg.url">
+             :src="data.result.cover.xxl.url">
 
         <div class="v-projet-slug__intro app-grid app-with-padding--left-right app-max-width-reg app-margin-left-right-auto">
           <div class="app-grid__col-10 app-child-no-margin">
