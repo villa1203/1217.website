@@ -1,12 +1,14 @@
 <template>
     <nuxt-link class="v-app-project-preview app-rm-child-margin"
-               :to="`projets/${slug}`"
+               :to="`works/${slug}`"
     >
       <img class="v-app-project-preview__cover"
            :src="image.reg.url"
       />
-      <h3>{{title}}</h3>
-      <h4>{{baseline}}</h4>
+      <div>
+        <h2 class="app-text-reg app-text-strong app-no-margin">{{title}}</h2>
+        <p class="app-text-reg app-no-margin">{{baseline}}</p>
+      </div>
     </nuxt-link>
 </template>
 
@@ -39,5 +41,6 @@ defineProps<{
   width: 100%;
   object-fit: cover;
   aspect-ratio: 3/2;
+  padding-bottom: 1rem;
 }
 </style>

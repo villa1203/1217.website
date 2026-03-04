@@ -25,12 +25,18 @@ export type CMS_API_Image = {
   "width": number
 }
 
-export type CMS_API_Page = {
+export type CMS_API_Page_projet = {
   id: string,
   title: string,
   slug: string,
   baseline: string,
+  preview_full_size: 'true' | 'false',
   cover: CMS_API_ImageInstance,
+  gallery: CMS_API_ImageInstance[],
+  sectors: {
+    title: string,
+    slug: string,
+  }[]
 }
 
 export type CMS_BlockData =
@@ -45,7 +51,7 @@ export type CMS_BlockData =
 export interface CMS_BlockDataBase {
   "id": string,
   "isHidden": boolean,
-  "type": "article_heading" | "image" | "text" | "video" | "pages_list" | "clients_list" | "profiles"
+  "type": "article_heading" | "image" | "text" | "video" | "pages_list" | "clients_list" | "profiles" | 'sketch_text'
 }
 
 export interface CMS_BlockArticleHeadingData extends CMS_BlockDataBase {
@@ -95,7 +101,7 @@ export interface CMS_BlockVideoData extends CMS_BlockDataBase {
 export interface CMS_BlockPages extends CMS_BlockDataBase {
   "content": {
     title?: string,
-    pages_liste?: CMS_API_Page[],
+    pages_liste?: CMS_API_Page_projet[],
     is_style_list?: boolean,
   },
   "type": "pages_list"

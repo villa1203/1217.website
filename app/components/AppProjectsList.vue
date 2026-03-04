@@ -1,0 +1,63 @@
+<template>
+    <section class="v-app-projects-list"
+    >
+      <div class="v-app-projects-list__filters">
+        <button>All</button>
+        <button v-for="filter of filters">{{filter.title}}</button>
+      </div>
+      <div class="v-app-projects-list__projects">
+
+        <nuxt-link :to="`/works/${project.slug}`"
+                   v-for="project of projects"
+                   class="v-app-projects-list__projects__item app-grid"
+        >
+          <div class="app-grid__col-6">
+            <div>{{project.title}}</div>
+            <div>
+              <div>services</div>
+              <div>
+                <div v-for="sector of project.sectors">{{sector.title}}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="app-grid__col-6">
+            <div class="app-grid">
+              <img v-for="item of project.gallery"
+                   class="app-grid__col-4"
+                   :src="item.small.url"
+              />
+            </div>
+          </div>
+
+        </nuxt-link>
+
+      </div>
+    </section>
+</template>
+
+
+
+
+
+<script setup lang="ts">
+import { defineProps } from 'vue'
+import type {CMS_API_Page_projet} from "#shared/cms_api";
+
+const props = defineProps<{
+  filters: {title: string, slug: string}[]
+  projects: CMS_API_Page_projet[]
+}>()
+
+</script>
+
+
+
+
+
+<style lang="scss" scoped >
+.v-app-projects-list__projects__item {
+  color: inherit;
+  text-decoration: inherit;
+}
+</style>

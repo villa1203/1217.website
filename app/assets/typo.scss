@@ -1,5 +1,33 @@
+h1, .app-text-h1 {
+  font-weight: 400;
+  font-size: 36px;
+  line-height: 100%;
+}
+
 h2, .app-text-h2 {
-  max-width: 35em;
+  @extend h1;
+}
+
+h3, .app-text-h3 {
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 100%;
+}
+
+.p, .app-text-reg {
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 100%;
+}
+
+strong, .app-text-strong {
+  font-weight: 600;
+}
+
+.app-color-grey {
+  color: hsla(0, 0%, 42%, 1);
 }
 
 .app-text-align-center { text-align: center; }
+
+

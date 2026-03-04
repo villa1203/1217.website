@@ -23,6 +23,7 @@
                muted
                autoplay
                :src="block_data.content.video_file[0].url"
+               class="app-video__cover"
         ></video>
       </div>
 
@@ -52,3 +53,17 @@ const props = defineProps<{
 
 	const embedUrl = computed(() => props.block_data.content.url ? getEmbedUrl(props.block_data.content.url) : null)
 </script>
+
+
+<style lang="scss" scoped>
+.v-block-video {
+  figure {
+    margin: 0;
+  }
+}
+
+.v-block-video__video {
+  display: block;
+}
+
+</style>

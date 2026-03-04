@@ -1,5 +1,5 @@
 <template>
-    <section class="v-app-last-projects-preview"
+    <section class="v-app-last-projects-preview--list"
     >
       <div class="app-grid app-grid--align-start app-grid--justify-start app-grid--wrap">
         <div v-for="project of pages"
@@ -25,12 +25,12 @@
 
 
 <script setup lang="ts">
-import type {CMS_API_Page} from "#shared/cms_api";
+import type {CMS_API_Page_projet} from "#shared/cms_api";
 import {defineProps} from "vue";
 import AppProjectPreview__list from "~/components/AppProjectPreview__list.vue";
 
 defineProps<{
-  pages: CMS_API_Page[]
+  pages: CMS_API_Page_projet[]
 }>()
 </script>
 
@@ -39,6 +39,6 @@ defineProps<{
 
 
 <style lang="scss" scoped >
-.v-app-last-projects-preview {
+.v-app-last-projects-preview--list {
 }
 </style>

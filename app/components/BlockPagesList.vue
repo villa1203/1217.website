@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app-with-padding--left-right">
     <h2>{{block_data.content.title}}</h2>
 
     <AppProjectsPreview

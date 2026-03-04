@@ -1,14 +1,16 @@
 <template>
-  <main class="v-app"
+  <div class="v-app"
   >
-    <div>
-      <Nav/>
+    <div class="v-app__header app-grid">
+      <AppNav/>
     </div>
-    {{`${useRuntimeConfig().public.apiBase}/api/query`}}
-    <div>
+    <main>
       <NuxtPage/>
+    </main>
+    <div>
+      <AppFooter/>
     </div>
-  </main>
+  </div>
 </template>
 
 
@@ -18,6 +20,12 @@
 
 
 <style lang="scss" scoped>
-.v-app {
+.v-app__header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 100;
 }
 </style>

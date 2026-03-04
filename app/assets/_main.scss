@@ -3,30 +3,57 @@
 @use "./typo";
 
 :root {
-  --app-color-primary: #aa00d2;
-  --app-color-secondary: #ff00ff;
-  --app-color-ternary: #ebd7c8;
-  --app-color-light: var(--app-color-ternary);
+  --app-color-primary: hsla(66, 100%, 58%, 1);
+  //--app-color-secondary: #ff00ff;
+  //--app-color-ternary: #ebd7c8;
+  --app-color-light: #FFF;
   --app-color-dark: #000;
 
   --app-header-height: 5rem;
   --app-footer-height: 5rem;
 
-  --app-grid-gap: 2rem;
+  --app-grid-gap: 1rem;
   --app-grid-gap-small: 1rem;
   --app-grid-gap-xs: .5rem;
+
+  --app-gutter: 1rem;
+
+  --app-row-gap: 15rem;
 }
 
 html {
-  font-family: sans-serif;
-  font-size: 10px;
+  font-family: 'ES Allianz', sans-serif;
+  font-size: 16px;
 }
 
 body {
-  font-size: 2rem;
+  @extend .app-text-reg;
 }
 
+button, .app-button {
+  background: hsla(0, 0%, 0%, 0.3);
+  text-decoration: none;
+  padding: .5rem;
+  border-radius: .25rem;
+  color: var(--app-color-light);
+  border: none;
+}
 
+.app-video__cover {
+  display: block;
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+}
+
+.app-bg-dark {
+  color: var(--app-color-light);
+  background-color: var(--app-color-dark);
+}
+
+.app-aspect-ratio--1-1 {
+  aspect-ratio: 1/1;
+}
 
 //-------//
 
