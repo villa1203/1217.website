@@ -15,11 +15,9 @@
 
 // --------- IMAGES ----------
 let imgs = [];
-let idleImg = null;
 let fallbackImg;
 
 const IMGUR_IDS = ["EmMOLoF", "ThZMWir", "Izb4G8V", "aFUjiyK", "2wSjAnu", "78bH4oj"];
-const IDLE_IMGUR_ID = "v46QQB5";
 
 // --------- TEXT ----------
 const BASE_LINE = "Bureau 1217 is a design studio based in Geneva and Lyon.";
@@ -102,7 +100,7 @@ let quietQualified = false;         // …but only after 3s with no events
 let quietAnchorX = 0, quietAnchorY = 0;
 
 // p5 calls this when mouse moves (real browser mousemove). :contentReference[oaicite:1]{index=1}
-function mouseMoved(event) {
+function mouseMoved() {
   lastMouseEventAt = millis();
   // If there’s any mouse event, we invalidate "quiet qualified"
   // (because the deal is: NO event for 3 seconds).
@@ -120,7 +118,6 @@ function setup() {
 
   fallbackImg = makeFallbackGraphic();
 
-  loadImgurWithFallbacks(IDLE_IMGUR_ID, img => (idleImg = img));
   for (const id of IMGUR_IDS) loadImgurWithFallbacks(id, img => imgs.push(img));
 
   sx = mouseX;
@@ -326,7 +323,7 @@ function drawStopCardWithFlow(now) {
   const outDur = 260;
   const holdEnd = max(inDur, yellowDuration - outDur);
 
-  let a = 1;
+  let a;
   if (tt < inDur) {
     a = easeOutCubic(constrain(tt / inDur, 0, 1));
   } else if (tt > holdEnd) {
