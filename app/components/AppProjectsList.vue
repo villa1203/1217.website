@@ -34,14 +34,14 @@
           <div class="app-grid__col-6">
             <div class="app-grid">
               <template v-for="item of project.gallery">
-                <video v-if="item.small.url.endsWith('.mp4')"
+                <video class="app-grid__col-4 v-app-projects-list__visual"
+                       v-if="item.small.url.endsWith('.mp4')"
                        muted
                        autoplay
                        loop
                        :src="item.small.url"
-                       class="app-grid__col-4"
                 />
-                <img class="app-grid__col-4"
+                <img class="app-grid__col-4 v-app-projects-list__visual"
                      v-else
                      :src="item.small.url"
                 />
@@ -80,5 +80,10 @@ const props = defineProps<{
   padding-top: var(--app-gutter);
   color: inherit;
   text-decoration: inherit;
+}
+
+.v-app-projects-list__visual {
+  aspect-ratio: 16/9;
+  object-fit: cover;
 }
 </style>
