@@ -23,7 +23,9 @@
         >
           <p>
             <span class="app-text-strong">informations</span>
-            <br>Daisy Chain is a new motion studio co-directed by Harry Butt and Connor Campbell with a focus on playful, experimental, vibrant aesthetics.</p>
+            <br>Bureau 1217 is a design office working across identity, digital platforms, and interactive experiences.
+            <br>From interactive storytelling for the Winter Olympic Games to visual identity systems for educational institutions and immersive memorial experiences developed with public institutions, we design projects that connect people to ideas, places, and histories.
+          </p>
           <p>We work with 3D, 2D and generative animation to create music videos, brand identities and typography in motion.</p>
 
           <p>
