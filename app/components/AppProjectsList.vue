@@ -2,8 +2,10 @@
     <section class="v-app-projects-list"
     >
       <div class="v-app-projects-list__filters">
-        <button>All</button>
-        <button v-for="filter of filters">{{filter.title}}</button>
+        <AppButton :is_active="true">All</AppButton>
+
+        <AppButton :is_active="false" v-for="filter of filters"
+        >{{filter.title}}</AppButton>
       </div>
       <div class="v-app-projects-list__projects app-grid app-grid--direction-column">
 
@@ -32,7 +34,7 @@
           </div>
 
           <div class="app-grid__col-6">
-            <div class="app-grid">
+            <div class="app-grid app-grid--justify-end">
               <template v-for="item of project.gallery">
                 <video class="app-grid__col-4 v-app-projects-list__visual"
                        v-if="item.small.url.endsWith('.mp4')"
@@ -63,7 +65,7 @@
 import { defineProps } from 'vue'
 import type {CMS_API_Page_projet} from "#shared/cms_api";
 
-const props = defineProps<{
+defineProps<{
   filters: {title: string, slug: string}[]
   projects: CMS_API_Page_projet[]
 }>()
@@ -75,6 +77,11 @@ const props = defineProps<{
 
 
 <style lang="scss" scoped >
+.v-app-projects-list__filters {
+  padding-bottom: var(--app-gutter);
+  border-bottom: solid 1px var(--app-color-dark);
+}
+
 .v-app-projects-list__projects__item {
   border-top: solid 1px var(--app-color-dark);
   padding-top: var(--app-gutter);

@@ -3,11 +3,11 @@
 
     <div class="app-grid">
 
-      <div class="app-grid__col-6 app-rm-child-margin">
+      <div class="app-grid__col-5 app-rm-child-margin">
         <h2>{{block_data.content.title}}</h2>
       </div>
 
-      <div class="app-grid__col-6">
+      <div class="app-grid__col-7">
         <div class="app-block-client-list__clients app-grid app-grid--align-start app-grid--justify-start app-grid--wrap app-grid--no-gap">
           <div class="app-block-client-list__clients__item"
                v-for="client of data?.result?.content"

@@ -33,12 +33,20 @@ body {
 }
 
 button, .app-button {
-  background: hsla(0, 0%, 0%, 0.3);
+  background: hsla(0, 0%, 0%, 0.25);
   text-decoration: none;
-  padding: .5rem;
-  border-radius: .25rem;
+  padding: .75rem;
+  border-radius: .6rem;
   color: var(--app-color-light);
   border: none;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  user-select: none;
+
+  &.app-button--variant-primary {
+    color: var(--app-color-dark);
+    background: var(--app-color-primary);
+  }
 }
 
 .app-video__cover {
@@ -62,3 +70,32 @@ button, .app-button {
 
 
 
+.app-scroll__scrollable-container::-webkit-scrollbar {
+  width: 2rem;
+}
+
+.app-scroll__scrollable-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.app-scroll__scrollable-container::-webkit-scrollbar-thumb {
+  background: black;
+  border-radius: 4px;
+}
+
+/* Au survol du pouce */
+.app-scroll__scrollable-container::-webkit-scrollbar-thumb:hover {
+  background: var(--app-color-dark);
+}
+
+/* Pour Firefox */
+/* Activer la barre de défilement */
+.app-scroll__scrollable-container {
+  scrollbar-width: thin;
+  scrollbar-color: black #f1f1f1;
+}
+
+.app-scroll__scrollable-container {
+  overflow-x: scroll;
+  position: relative;
+}

@@ -41,6 +41,6 @@ defineProps<{
   width: 100%;
   object-fit: cover;
   aspect-ratio: 3/2;
-  padding-bottom: 1rem;
+  padding-bottom: .5rem;
 }
 </style>

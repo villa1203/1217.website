@@ -5,7 +5,9 @@
 
         <nuxt-link to="/" class="app-button">logo</nuxt-link>
 
-        <nav class="app-grid app-grid--justify-end">
+        <nav class="app-grid app-grid--justify-end"
+             style="gap: .5rem"
+        >
           <nuxt-link class="app-button" to="/works">works</nuxt-link>
           <nuxt-link class="app-button" to="/office">office</nuxt-link>
           <nuxt-link class="app-button" to="/research">research</nuxt-link>

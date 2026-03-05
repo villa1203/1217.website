@@ -78,7 +78,7 @@
 
 import type {CMS_API_ImageInstance, CMS_API_Response, CMS_BlockData, CMS_BlockDataBase} from "#shared/cms_api";
 import {formaterDate} from "#shared/date_formatter";
-import {KQL_QUERY_BLOCKS} from "#shared/KQLQueries";
+import {KQL_PROJECTS_SELECT, KQL_QUERY_BLOCKS} from "#shared/KQLQueries";
 
 type FetchData = CMS_API_Response & {
   "result": {
@@ -100,59 +100,12 @@ type FetchData = CMS_API_Response & {
 
 const route = useRoute()
 
-const {data, status} = await useFetch<FetchData>('/api/CMS_KQLRequest', {
+const {data} = await useFetch<FetchData>('/api/CMS_KQLRequest', {
   lazy: true,
   method: 'POST',
   body: {
     query: `page('projects/${route.params.slug}')`,
-    select: {
-      title: true,
-      slug: true,
-      baseline: true,
-
-      intro: true,
-
-      collaborators: {
-        query: 'page.collaborators.toPages',
-        select: {
-          title: true,
-        }
-      },
-      sectors: {
-        query: 'page.sectors.toPages',
-        select: {
-          title: true,
-        }
-      },
-      clients: {
-        query: 'page.clients.toPages',
-        select: {
-          title: true,
-        }
-      },
-      date: true,
-      services: {
-        query: 'page.services.toPages',
-        select: {
-          title: true,
-        }
-      },
-      localisation: true,
-      photo_credits: true,
-      cover: {
-        query: 'page.covers.toFiles.first',
-        select: {
-          alt: "file.alt.value",
-          tiny: 'file.resize(50, null, 10)',
-          small: 'file.resize(500)',
-          reg: 'file.resize(1280)',
-          large: 'file.resize(1920)',
-          xxl: 'file.resize(2500)',
-          focus: 'file.focus',
-        },
-      },
-      content: KQL_QUERY_BLOCKS,
-    }
+    select: KQL_PROJECTS_SELECT,
   }
 })
 

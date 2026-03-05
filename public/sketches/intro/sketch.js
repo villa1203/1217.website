@@ -1,23 +1,24 @@
 // --------------------------------------------------
 // STRAPONTIN TRAIL + RETRACT + STOP CARD + ROTATING TAGLINE
 //
-// ✅ ONE project image PER movement
-// ✅ NEW STRONG FIX (your request):
-//    Next project is allowed ONLY if there were NO mouse events
-//    for 3 seconds before the movement.
+// ✅ LOCAL ASSETS:
+//    - 1.png ... 10.png
+//    - font.otf
 //
-//    - We track last mouse event time via mouseMoved(event).
-//    - When we enter the still/stop-card cycle, we "arm" next project.
-//    - But we only actually switch if:
-//        (now - lastMouseEventAt) >= QUIET_BEFORE_NEXT_MS
-//      and cursor moved away from a small anchor.
+// ✅ ONE project image PER "movement start"
+// ✅ FIXED: quiet gate uses draw() movement (no mouseMoved trap)
+//    Next project is allowed ONLY if there was NO movement
+//    for 3 seconds before the movement start.
 // --------------------------------------------------
 
-// --------- IMAGES ----------
-let imgs = [];
-let fallbackImg;
+const PROJECT_COUNT = 10;
+const FONT_FILE = "font.otf";
 
-const IMGUR_IDS = ["EmMOLoF", "ThZMWir", "Izb4G8V", "aFUjiyK", "2wSjAnu", "78bH4oj"];
+// --------- ASSETS ----------
+let imgs = [];
+let imgReady = [];
+let fallbackImg;
+let uiFont = null;
 
 // --------- TEXT ----------
 const BASE_LINE = "Bureau 1217 is a design studio based in Geneva and Lyon.";
@@ -88,24 +89,46 @@ let currentMoveImg = null;
 let lastPickedIndex = -1;
 
 // --------------------------------------------------
-// QUIET-TIME GATE (3 seconds without mouse events)
+// QUIET-TIME GATE (3 seconds without movement)
 // --------------------------------------------------
-const QUIET_BEFORE_NEXT_MS = 3000;  // <-- your deal: 3 seconds
-const MOVE_START_DIST = 10;         // how far we must move after quiet time to count
+const QUIET_BEFORE_NEXT_MS = 3000;
+const MOVE_START_DIST = 10;
 
-let lastMouseEventAt = 0;
+// We track last movement time INSIDE draw()
+let lastMoveEventAt = 0;
 
-let nextProjectArmed = false;       // we WANT to go to next project on next move…
-let quietQualified = false;         // …but only after 3s with no events
+let nextProjectArmed = false;
+let quietQualified = false;
 let quietAnchorX = 0, quietAnchorY = 0;
 
-// p5 calls this when mouse moves (real browser mousemove). :contentReference[oaicite:1]{index=1}
-function mouseMoved() {
-  lastMouseEventAt = millis();
-  // If there’s any mouse event, we invalidate "quiet qualified"
-  // (because the deal is: NO event for 3 seconds).
-  quietQualified = false;
-  return false;
+// --------------------------------------------------
+// PRELOAD (ROBUST LOCAL LOADING)
+// --------------------------------------------------
+function preload() {
+  fallbackImg = makeFallbackGraphic();
+
+  uiFont = loadFont(
+    FONT_FILE,
+    () => {},
+    () => { uiFont = null; }
+  );
+
+  imgs = new Array(PROJECT_COUNT);
+  imgReady = new Array(PROJECT_COUNT).fill(false);
+
+  for (let i = 1; i <= PROJECT_COUNT; i++) {
+    const idx = i - 1;
+    const filename = `${i}.png`;
+
+    imgs[idx] = loadImage(
+      filename,
+      () => { imgReady[idx] = true; },
+      () => {
+        imgs[idx] = fallbackImg;
+        imgReady[idx] = true;
+      }
+    );
+  }
 }
 
 // --------------------------------------------------
@@ -116,9 +139,7 @@ function setup() {
   imageMode(CENTER);
   noStroke();
 
-  fallbackImg = makeFallbackGraphic();
-
-  for (const id of IMGUR_IDS) loadImgurWithFallbacks(id, img => imgs.push(img));
+  if (uiFont) textFont(uiFont);
 
   sx = mouseX;
   sy = mouseY;
@@ -129,11 +150,10 @@ function setup() {
 
   const now = millis();
   lastMoveTime = now;
+  lastMoveEventAt = now;
   lastSpawnTime = now;
   stateStart = now;
   taglineTransitionStart = now;
-
-  lastMouseEventAt = now;
 }
 
 // --------------------------------------------------
@@ -146,21 +166,23 @@ function draw() {
   sx = lerp(sx, mouseX, smoothAmt);
   sy = lerp(sy, mouseY, smoothAmt);
 
-  // "moved" for trail / state machine purposes (unchanged)
+  // movement seen by draw()
   const moved = (mouseX !== pmouseX) || (mouseY !== pmouseY);
 
+  // update last movement timestamp
+  if (moved) lastMoveEventAt = now;
+
   // --------- QUIET QUALIFICATION ----------
-  // If next project is armed, we only allow switching after 3s of NO mouse events.
+  // Only after 3 seconds without movement, while armed
   if (nextProjectArmed && !quietQualified) {
-    if (now - lastMouseEventAt >= QUIET_BEFORE_NEXT_MS) {
+    if (now - lastMoveEventAt >= QUIET_BEFORE_NEXT_MS) {
       quietQualified = true;
       quietAnchorX = mouseX;
       quietAnchorY = mouseY;
     }
   }
 
-  // If we are quiet-qualified, we switch project only when we move away from anchor
-  // (so tiny first pixel doesn’t instantly flip).
+  // Switch only when moving away from anchor AFTER quiet
   const canSwitchNow =
     nextProjectArmed &&
     quietQualified &&
@@ -169,13 +191,12 @@ function draw() {
   if (moved) {
     hasMovedOnce = true;
 
-    // ✅ the only place we actually switch project:
+    // ✅ Switch image on movement start after quiet
     if (canSwitchNow) {
       currentMoveImg = pickNextMovementImage();
       nextProjectArmed = false;
       quietQualified = false;
 
-      // clear trail for new movement
       stamps = [];
       emitX = sx;
       emitY = sy;
@@ -197,7 +218,6 @@ function draw() {
   }
 
   // -------- STATE MACHINE --------
-
   if (state === STATE_MOVE) {
     if (hasPath && (now - lastMoveTime > idleDelay)) {
       state = STATE_HOLD;
@@ -226,10 +246,9 @@ function draw() {
         state = STATE_YELLOW;
         stateStart = now;
 
-        // Arm project switching, but gated by 3s of NO mouse events.
+        // Arm next switch (quiet gate will qualify after 3s without movement)
         nextProjectArmed = true;
         quietQualified = false;
-        // don’t set anchor here; it gets set only once we pass quiet time.
 
         pendingTaglineSwap = true;
         taglineSwapAt = now + taglineSwapDelay;
@@ -251,7 +270,6 @@ function draw() {
     }
 
     if (now - stateStart >= yellowDuration) {
-      // ✅ Do NOT auto-advance project here.
       state = STATE_MOVE;
       emitX = sx;
       emitY = sy;
@@ -279,18 +297,30 @@ function draw() {
 // Pick NEXT movement image (avoid immediate repeat)
 // --------------------------------------------------
 function pickNextMovementImage() {
-  if (!imgs.length) return fallbackImg;
-  if (imgs.length === 1) return imgs[0];
+  const readyIdx = [];
+  for (let i = 0; i < imgs.length; i++) {
+    if (imgReady[i]) readyIdx.push(i);
+  }
 
-  let idx = floor(random(imgs.length));
-  if (idx === lastPickedIndex) idx = (idx + 1) % imgs.length;
+  if (!readyIdx.length) return fallbackImg;
+
+  if (readyIdx.length === 1) {
+    lastPickedIndex = readyIdx[0];
+    return imgs[readyIdx[0]] || fallbackImg;
+  }
+
+  let idx = readyIdx[floor(random(readyIdx.length))];
+  if (idx === lastPickedIndex) {
+    const k = readyIdx.indexOf(idx);
+    idx = readyIdx[(k + 1) % readyIdx.length];
+  }
   lastPickedIndex = idx;
 
-  return imgs[idx];
+  return imgs[idx] || fallbackImg;
 }
 
 // --------------------------------------------------
-// TRAIL DRAWING (CONSTANT CARD SIZE, CENTER-CROPPED)
+// TRAIL DRAWING
 // --------------------------------------------------
 function drawStampsFull() {
   for (const s of stamps) {
@@ -323,7 +353,7 @@ function drawStopCardWithFlow(now) {
   const outDur = 260;
   const holdEnd = max(inDur, yellowDuration - outDur);
 
-  let a;
+  let a = 1;
   if (tt < inDur) {
     a = easeOutCubic(constrain(tt / inDur, 0, 1));
   } else if (tt > holdEnd) {
@@ -437,7 +467,7 @@ function emitAlongPath(x0, y0, x1, y1, step) {
 }
 
 function spawnStamp(x, y) {
-  const img = currentMoveImg || (imgs.length ? imgs[0] : fallbackImg);
+  const img = currentMoveImg || fallbackImg;
   stamps.push({ x, y, img });
 
   hasPath = true;
@@ -477,18 +507,6 @@ function drawImageCroppedToAspect(img, x, y, dw, dh) {
 // --------------------------------------------------
 // UTILS
 // --------------------------------------------------
-function loadImgurWithFallbacks(id, onSuccess, onFail) {
-  const exts = ["png", "jpg", "jpeg", "gif"];
-  let idx = 0;
-
-  function tryNext() {
-    if (idx >= exts.length) return onFail?.();
-    const url = `https://i.imgur.com/${id}.${exts[idx++]}`;
-    loadImage(url, (img) => onSuccess?.(img), () => tryNext());
-  }
-  tryNext();
-}
-
 function makeFallbackGraphic() {
   const g = createGraphics(240, 160);
   g.background(240);

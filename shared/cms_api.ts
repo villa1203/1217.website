@@ -26,17 +26,39 @@ export type CMS_API_Image = {
 }
 
 export type CMS_API_Page_projet = {
-  id: string,
   title: string,
-  slug: string,
   baseline: string,
+  slug: string,
+  intro: string,
+  id: string,
   preview_full_size: 'true' | 'false',
-  cover: CMS_API_ImageInstance,
+  covers_video?: {
+    url: string,
+  },
+  cover?: CMS_API_ImageInstance,
   gallery: CMS_API_ImageInstance[],
   sectors: {
     title: string,
     slug: string,
   }[]
+  miniature: CMS_API_ImageInstance,
+  collaborators: {
+    title: string,
+    slug: string,
+  }[],
+  clients: {
+    title: string,
+    slug: string,
+  }[],
+
+  date: string,
+  services: {
+    title: string,
+    slug: string,
+  }[],
+  localisation: string,
+  photo_credits: string,
+  content: CMS_BlockData[],
 }
 
 export type CMS_BlockData =

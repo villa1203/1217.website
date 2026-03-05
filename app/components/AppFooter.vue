@@ -24,7 +24,7 @@
 <script setup lang="ts">
 import { defineProps } from 'vue'
 
-const props = defineProps<{
+defineProps<{
     message?: string
 }>()
 </script>
@@ -35,6 +35,7 @@ const props = defineProps<{
 
 <style lang="scss" scoped >
 .v-app-footer {
+  margin-top: 10rem;
   width: 100%;
 }
 

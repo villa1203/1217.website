@@ -1,7 +1,7 @@
 h1, .app-text-h1 {
   font-weight: 400;
   font-size: 36px;
-  line-height: 100%;
+  line-height: 1.25em;
 }
 
 h2, .app-text-h2 {
@@ -11,14 +11,14 @@ h2, .app-text-h2 {
 h3, .app-text-h3 {
   font-weight: 400;
   font-size: 24px;
-  line-height: 100%;
+  line-height: 1.25em;
 }
 
 p, .app-text-reg {
   font-weight: 400;
   font-size: 1rem;
-  line-height: 100%;
   max-width: 40em;
+  line-height: 1.25em;
 }
 
 strong, .app-text-strong {
