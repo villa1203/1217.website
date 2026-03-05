@@ -69,6 +69,7 @@ export type CMS_BlockData =
   CMS_BlockVideoData |
   CMS_BlockClientList |
   CMS_BlockProfiles |
+  CMS_BlockSketchText |
   CMS_BlockGalleryData
 
 export interface CMS_BlockDataBase {
@@ -126,6 +127,13 @@ export interface CMS_BlockTextData extends CMS_BlockDataBase {
   "isHidden": boolean,
   "type": "text"
 }
+
+export interface CMS_BlockSketchText extends CMS_BlockDataBase {
+  "id": string,
+  "isHidden": boolean,
+  "type": "sketch_text"
+}
+
 
 export interface CMS_BlockVideoData extends CMS_BlockDataBase {
   "content": {

@@ -1,5 +1,5 @@
 <template>
-	<section class="v-block-video"
+	<section class="block-video"
            :class="{
               'is-full':      block_data.content.toggle_is_full === 'true',
               'has-gap-left': block_data.content.toggle_gap_left === 'true',
@@ -62,7 +62,7 @@ const props = defineProps<{
 
 
 <style lang="scss" scoped>
-.v-block-video {
+.block-video {
   width: calc( ((100% + var(--app-grid-gap) ) / 2) - var(--app-grid-gap));
   box-sizing: border-box;
   overflow: hidden;

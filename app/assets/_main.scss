@@ -33,6 +33,8 @@ body {
   font-weight: 400;
   font-size: 1rem;
   line-height: 100%;
+  color: var(--app-color-dark);
+  background-color: var(--app-color-light);
 }
 
 button, .app-button {
@@ -40,14 +42,14 @@ button, .app-button {
   text-decoration: none;
   padding: .75rem;
   border-radius: .6rem;
-  color: var(--app-color-light);
+  color: white;
   border: none;
   backdrop-filter: blur(10px);
   cursor: pointer;
   user-select: none;
 
   &.app-button--variant-primary {
-    color: var(--app-color-dark);
+    color: black;
     background: var(--app-color-primary);
   }
 }

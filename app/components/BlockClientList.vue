@@ -1,5 +1,5 @@
 <template>
-  <div class="v-block-client-list app-with-padding--left-right">
+  <div class="block-client-list app-with-padding--left-right">
 
     <div class="app-grid">
 
@@ -13,12 +13,12 @@
                v-for="client of data?.result?.content"
           >
             <div class="app-grid app-grid--align-center app-grid--justify-center app-aspect-ratio--1-1">
-              <img class="v-block-client-list__logo"
+              <img class="block-client-list__logo"
                    v-if="client.logo?.reg.url"
                    :src="client.logo?.reg.url"
               />
               <div v-else
-                   class="v-block-client-list__name"
+                   class="block-client-list__name"
               >{{client.title}}</div>
             </div>
           </div>
@@ -90,18 +90,19 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
 }
 
 .app-block-client-list__clients__item {
-  border-right: 1px solid var(--app-color-dark);
-  border-bottom: 1px solid var(--app-color-dark);
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
   box-sizing: border-box;
   width: calc(100% / 4);
+  background: white;
 }
 
-.v-block-client-list__logo {
+.block-client-list__logo {
   display: block;
   width: 60%;
   height: auto;
 }
-.v-block-client-list__name {
+.block-client-list__name {
   text-align: center;
   font-size: 2vw;
 }

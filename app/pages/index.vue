@@ -35,21 +35,18 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
   }
 })
 
-// type ResolvedPage = {
-//   id: string,
-//   title: string,
-//   slug: string,
-//   url: string,
-// }
-//
-// const resolvedPagesMap: ComputedRef<Map<string, ResolvedPage[]>> = computed(() => {
-//   const map = new Map<string, ResolvedPage[]>()
-//
-//   for (const block of data.value?.result.home.pages_list_blocks ?? []) {
-//     map.set(block.id, block.resolved_pages)
-//   }
-//   return map
-// })
+const windowsScrollListener = () => {
+  const blocksInPage = document.querySelectorAll('[class^="block-"]')
+  console.log(blocksInPage)
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', windowsScrollListener)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', windowsScrollListener)
+})
 
 
 </script>
