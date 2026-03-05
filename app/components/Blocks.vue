@@ -11,6 +11,10 @@
         <BlockImage :block_data="block"/>
       </template>
 
+      <template v-else-if="block.type === 'gallery'">
+        <BlockGallery :block_data="block"/>
+      </template>
+
       <template v-else-if="block.type === 'text'">
         <BlockText :block_data="block"/>
       </template>

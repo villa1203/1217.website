@@ -13,6 +13,19 @@ export const KQL_QUERY_BLOCKS = {
         caption: true,
         credits: true,
 
+        images: {
+          query: "content.images.toFiles",
+          select: {
+            alt: "file.alt.value",
+            tiny: "file.resize(50, null, 10)",
+            small: "file.resize(500)",
+            reg: "file.resize(1280)",
+            large: "file.resize(1920)",
+            xxl: "file.resize(2500)",
+            focus: "file.focus",
+          },
+        },
+
         image: {
           query: "content.image.toFiles.first",
           select: {

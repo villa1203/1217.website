@@ -68,12 +68,13 @@ export type CMS_BlockData =
   CMS_BlockPages |
   CMS_BlockVideoData |
   CMS_BlockClientList |
-  CMS_BlockProfiles
+  CMS_BlockProfiles |
+  CMS_BlockGalleryData
 
 export interface CMS_BlockDataBase {
   "id": string,
   "isHidden": boolean,
-  "type": "article_heading" | "image" | "text" | "video" | "pages_list" | "clients_list" | "profiles" | 'sketch_text'
+  "type": "article_heading" | "image" | "text" | "video" | "pages_list" | "clients_list" | "profiles" | 'sketch_text' | 'gallery'
 }
 
 export interface CMS_BlockArticleHeadingData extends CMS_BlockDataBase {
@@ -101,6 +102,20 @@ export interface CMS_BlockImageData extends CMS_BlockDataBase {
   "isHidden": boolean,
   "type": "image"
 }
+
+export interface CMS_BlockGalleryData extends CMS_BlockDataBase {
+  "content": {
+    "title": string,
+    "text": string
+    images: CMS_API_ImageInstance[],
+    caption: string
+    credits: string
+  },
+  "id": string,
+  "isHidden": boolean,
+  "type": "gallery"
+}
+
 
 export interface CMS_BlockTextData extends CMS_BlockDataBase {
   "content": {

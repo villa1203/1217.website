@@ -1,6 +1,6 @@
 <template>
 	<section v-if="block_data.content.image"
-           class="section-image"
+           class="block-image"
            :class="{
               'is-full':      block_data.content.toggle_is_full === 'true',
               'has-gap-left': block_data.content.toggle_gap_left === 'true',
@@ -31,7 +31,7 @@ defineProps<{
 </script>
 
 <style scoped lang="scss">
-.section-image {
+.block-image {
   width: calc( ((100% + var(--app-grid-gap) ) / 2) - var(--app-grid-gap));
   box-sizing: border-box;
   overflow: hidden;
