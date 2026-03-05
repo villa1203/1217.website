@@ -41,7 +41,7 @@
       </template>
 
       <template v-else-if="block.type === 'sketch_text'">
-        <div style="margin-top: calc( -1 * var(--app-row-gap)); margin-bottom: calc( -1 * var(--app-row-gap))">
+        <div style="margin-top: calc( -1 * var(--app-row-gap)); margin-bottom: calc( -1 * var(--app-row-gap));width: 100%;">
           <iframe
             style="
               border: none;
