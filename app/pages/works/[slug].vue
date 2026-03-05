@@ -115,7 +115,7 @@ const {data} = await useFetch<FetchData>('/api/CMS_KQLRequest', {
 
 .v-projet-slug__intro {
   padding-top: var(--app-gutter);
-  padding-bottom: var(--app-gutter);
+  padding-bottom: var(--app-row-gap);
 }
 
 .v-projet-slug__collaborators {
