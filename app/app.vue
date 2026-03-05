@@ -20,6 +20,11 @@
 
 
 <style lang="scss" scoped>
+.v-app {
+  width: 100%;
+  overflow: hidden;
+}
+
 .v-app__header {
   position: fixed;
   top: 0;

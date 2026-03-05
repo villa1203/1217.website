@@ -57,7 +57,7 @@ function onScrollInGallery(e: Event) {
 .v-app-last-projects-preview--list {
   position: relative;
 
-  &.show-gradient::after {
+  &::after {
     z-index: 5;
     content: "";
     position: absolute;
@@ -65,7 +65,14 @@ function onScrollInGallery(e: Event) {
     right: 0;
     width: calc(100% / 5);
     height: 100%;
+    transition: all .25s ease-in-out;
     background: linear-gradient(to left, var(--app-color-light) 0%, hsla(0, 0%, 100%, 0) 100%);
+    transform: translateX(100%);
+    pointer-events: none;
+  }
+
+  &.show-gradient::after {
+    transform: translateX(0);
   }
 }
 

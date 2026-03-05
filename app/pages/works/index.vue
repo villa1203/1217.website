@@ -15,7 +15,7 @@
           {title: 'Web Development', slug: 'web-development'},
           {title: 'Web Design', slug: 'Web Design'},
         ]"
-        :projects="getProjectBySector('commercial' ,data.result.projects)"
+        :projects="data.result.projects"
       />
     </div>
 

@@ -96,11 +96,11 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
 
 .v-block-client-list__logo {
   display: block;
-  width: calc(100% - 7rem);
+  width: 60%;
   height: auto;
 }
 .v-block-client-list__name {
   text-align: center;
-  font-size: 2rem;
+  font-size: 2vw;
 }
 </style>
