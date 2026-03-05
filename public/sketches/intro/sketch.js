@@ -378,24 +378,25 @@ function drawStopCardWithFlow(now) {
 // TEXT + MASKED SLIDE
 // --------------------------------------------------
 function drawDifferenceText() {
-  const maxW = min(560, width - 80);
+  const maxW = min(560 * 2, width - 80);
   const x = width / 2 - maxW / 2;
   const y = height / 2;
 
   const prev = TAGLINES[prevTaglineIndex];
   const next = TAGLINES[taglineIndex];
+  const fontRapport = 1.5
 
   push();
   blendMode(DIFFERENCE);
   fill(255);
-  textSize(20);
-  textLeading(28);
+  textSize(20 * fontRapport);
+  textLeading(28 * fontRapport);
   textAlign(LEFT, CENTER);
 
-  text(BASE_LINE, x, y - 14, maxW);
+  text(BASE_LINE, x, y - 12 * fontRapport, maxW);
 
   if (!hasSwappedOnce) {
-    text(next, x, y + 14, maxW);
+    text(next, x, y + 12 * fontRapport, maxW);
     blendMode(BLEND);
     pop();
     return;
