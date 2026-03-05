@@ -88,6 +88,14 @@ export interface CMS_BlockImageData extends CMS_BlockDataBase {
   "content": {
     "title": string,
     "text": string
+
+    image: CMS_API_ImageInstance,
+    toggle_gap_left: 'true' | 'false',
+    toggle_ratio_1_1: 'true' | 'false',
+    toggle_is_large: 'true' | 'false',
+    toggle_is_full: 'true' | 'false',
+    caption: string
+    credits: string
   },
   "id": string,
   "isHidden": boolean,
@@ -108,6 +116,10 @@ export interface CMS_BlockVideoData extends CMS_BlockDataBase {
   "content": {
     title?: string,
     url?: string
+    toggle_gap_left: 'true' | 'false',
+    toggle_is_large: 'true' | 'false',
+    toggle_is_full: 'true' | 'false',
+    toggle_ratio_1_1: 'true' | 'false',
     video_file?: {
       url: string,
       id: string,

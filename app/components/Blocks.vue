@@ -67,7 +67,9 @@
 <style scoped lang="scss">
 .app-blocks {
   display: flex;
-  flex-direction: column;
-  gap: var(--app-row-gap);
+  flex-direction: row;
+  row-gap: var(--app-row-gap);
+  column-gap: var(--app-grid-gap);
+  flex-wrap: wrap;
 }
 </style>

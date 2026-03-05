@@ -40,6 +40,7 @@
 <style scoped lang="scss">
 .block-article-heading {
   width: 100%;
+  box-sizing: border-box;
   min-height: calc(100vh - 20rem);
   display: flex;
   justify-content: center;

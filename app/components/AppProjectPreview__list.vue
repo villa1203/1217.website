@@ -4,8 +4,8 @@
     >
       <button class="v-app-project-preview--list__title">{{title}}</button>
       <img class="v-app-project-preview--list__cover"
-           v-if="image?.reg.url"
-           :src="image.reg.url"
+           v-if="image?.large.url"
+           :src="image.large.url"
       />
     </nuxt-link>
 </template>

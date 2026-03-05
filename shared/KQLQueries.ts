@@ -12,6 +12,25 @@ export const KQL_QUERY_BLOCKS = {
         url: true,
         caption: true,
         credits: true,
+
+        image: {
+          query: "content.image.toFiles.first",
+          select: {
+            alt: "file.alt.value",
+            tiny: "file.resize(50, null, 10)",
+            small: "file.resize(500)",
+            reg: "file.resize(1280)",
+            large: "file.resize(1920)",
+            xxl: "file.resize(2500)",
+            focus: "file.focus",
+          },
+        },
+        toggle_gap_left: true,
+        toggle_is_large: true,
+        toggle_is_full: true,
+        toggle_ratio_1_1: true,
+
+
         is_style_list: {
           query: "content.is_style_list.toBool",
         },

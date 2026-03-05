@@ -83,6 +83,8 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
 
 <style lang="scss" scoped>
 .app-block-client-list__clients {
+  width: 100%;
+  box-sizing: border-box;
   border-top: 1px solid var(--app-color-dark);
   border-left: 1px solid var(--app-color-dark);
 }

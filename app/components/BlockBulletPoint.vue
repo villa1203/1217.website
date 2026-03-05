@@ -39,6 +39,7 @@
 
 <style scoped lang="scss">
 .block-bullet-point {
+  box-sizing: border-box;
   width: 100%;
   min-height: calc(100vh - 20rem);
   display: flex;

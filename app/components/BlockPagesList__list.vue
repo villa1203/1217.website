@@ -17,3 +17,11 @@ defineProps<{
   block_data: CMS_BlockPages,
 }>()
 </script>
+
+
+<style scoped lang="scss">
+.block-page-list--list {
+  width: 100%;
+  box-sizing: border-box;
+}
+</style>
