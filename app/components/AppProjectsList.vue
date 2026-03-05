@@ -43,14 +43,14 @@
                  @scroll="onScrollInGallery"
             >
               <template v-for="item of project.gallery">
-                <video class="app-grid__col-4 v-app-projects-list__visual"
+                <video class="app-grid__col-4 v-app-projects-list__visual app-grid__shrink-0"
                        v-if="item.small.url.endsWith('.mp4')"
                        muted
                        autoplay
                        loop
                        :src="item.small.url"
                 />
-                <img class="app-grid__col-4 v-app-projects-list__visual"
+                <img class="app-grid__col-4 v-app-projects-list__visual app-grid__shrink-0"
                      v-else
                      :src="item.small.url"
                 />
