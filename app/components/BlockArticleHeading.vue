@@ -1,5 +1,5 @@
 <template>
-	<section class="block-article-heading app-grid app-grid--align-start" >
+	<section class="v-block block-article-heading app-grid app-grid--align-start" >
 
     <div class="app-grid app-grid--align-start app-grid--justify-center">
       <header v-if="block_data.content.title"

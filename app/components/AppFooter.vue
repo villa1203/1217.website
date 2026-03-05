@@ -1,5 +1,5 @@
 <template>
-    <footer class="v-app-footer app-bg-dark app-with-padding--left-right app-with-padding--top-bottom"
+    <footer class="v-app-footer app-with-padding--left-right app-with-padding--top-bottom"
     >
       <div style="width: 100%; height: 1px; background: white; margin-bottom: var(--app-gutter)"/>
 
@@ -62,7 +62,6 @@
 
 <script setup lang="ts">
 import { defineProps } from 'vue'
-import UIOpen from "~/components/UIOpen.vue";
 
 defineProps<{
     message?: string
@@ -77,6 +76,8 @@ defineProps<{
 .v-app-footer {
   margin-top: 10rem;
   width: 100%;
+  color: white;
+  background: black;
 }
 
 .v-app-footer__container {

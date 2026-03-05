@@ -6,7 +6,9 @@
       :projects="data.result.projects"
     />
 
-    <div v-if="data?.result?.projects" class="app-with-padding--left-right">
+    <div v-if="data?.result?.projects"
+         class="app-with-padding--left-right v-works__container"
+    >
       <AppProjectsList
         :filters="[
           {title: 'Art Direction', slug: 'art-direction'},
@@ -56,6 +58,28 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
     }
   }
 })
+
+const windowsScrollListener = () => {
+  const blocksInPage = document.querySelectorAll('.v-works__container')
+
+  const blockForToggleColor = blocksInPage[0]
+
+  const landmarkValue = blockForToggleColor?.getBoundingClientRect().top ?  blockForToggleColor?.getBoundingClientRect().top - (window.innerHeight / 2) : null
+
+  if( !landmarkValue ) return
+
+  if(landmarkValue < 0) document.body?.classList.add('v-block--is-visible')
+  else document.body?.classList.remove('v-block--is-visible')
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', windowsScrollListener)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', windowsScrollListener)
+})
+
 </script>
 
 

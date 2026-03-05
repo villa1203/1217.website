@@ -1,5 +1,5 @@
 <template>
-	<section class="block-text">
+	<section class="v-block block-text">
 		<div v-if="block_data.content.title">
 			<h2>{{ block_data.content.title }}</h2>
 		</div>

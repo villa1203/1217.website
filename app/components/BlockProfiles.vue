@@ -1,5 +1,5 @@
 <template>
-  <div class="block-profiles">
+  <div class="v-block block-profiles">
     {{block_data.content.profiles_list}}
     <div v-for="profile of block_data.content.profiles_list">
       <img

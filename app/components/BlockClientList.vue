@@ -1,5 +1,5 @@
 <template>
-  <div class="block-client-list app-with-padding--left-right">
+  <div class="v-block block-client-list app-with-padding--left-right">
 
     <div class="app-grid">
 

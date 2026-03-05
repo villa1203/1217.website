@@ -1,6 +1,6 @@
 <template>
 	<section v-if="block_data.content.image"
-           class="block-image"
+           class="v-block block-image"
            :class="{
               'is-full':      block_data.content.toggle_is_full === 'true',
               'has-gap-left': block_data.content.toggle_gap_left === 'true',

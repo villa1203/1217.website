@@ -36,8 +36,16 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
 })
 
 const windowsScrollListener = () => {
-  const blocksInPage = document.querySelectorAll('[class^="block-"]')
-  console.log(blocksInPage)
+  const blocksInPage = document.querySelectorAll('.v-block')
+
+  const blockForToggleColor = blocksInPage[2]
+
+  const landmarkValue = blockForToggleColor?.getBoundingClientRect().top ?  blockForToggleColor?.getBoundingClientRect().top - window.innerHeight : null
+
+  if( !landmarkValue ) return
+
+  if(landmarkValue < 0) document.body?.classList.add('v-block--is-visible')
+  else document.body?.classList.remove('v-block--is-visible')
 }
 
 onMounted(() => {

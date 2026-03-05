@@ -22,6 +22,10 @@
   --app-row-gap: 15rem;
 }
 
+* {
+  transition: background 1s ease, color 1s ease;
+}
+
 html {
   font-family: 'ES Allianz', sans-serif;
   font-size: 16px;
@@ -35,6 +39,11 @@ body {
   line-height: 100%;
   color: var(--app-color-dark);
   background-color: var(--app-color-light);
+
+  &.v-block--is-visible {
+    --app-color-light: #000;
+    --app-color-dark: #FFF;
+  }
 }
 
 button, .app-button {
