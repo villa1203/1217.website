@@ -33,7 +33,7 @@
             <br>N1 5JX
           </p>
 
-          <div style="margin-top: 10rem; padding-bottom: 1rem;">
+          <div style="margin-top: 10rem;" class="app-grid">
             <span class="app-button app-button--negative">Instagram</span>
             <span class="app-button app-button--negative">LinkedIn</span>
           </div>
