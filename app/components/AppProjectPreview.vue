@@ -4,7 +4,7 @@
     >
       <button class="v-app-project-preview__tags">
         <template v-for="(service, index) in services">
-          <template v-if="index > 0" > / </template>{{service}}
+          <template v-if="index > 0" > · </template>{{service}}
         </template>
       </button>
       <template v-if="covers_video">

@@ -113,9 +113,9 @@ const {data} = await useFetch<FetchData>('/api/CMS_KQLRequest', {
 
 
 const windowsScrollListener = () => {
-  const blocksInPage = document.querySelectorAll('.v-block')
+  const blocksInPage = document.querySelectorAll('.block-page-list--list')
 
-  const blockForToggleColor = blocksInPage[2]
+  const blockForToggleColor = blocksInPage[0]
 
   const landmarkValue = blockForToggleColor?.getBoundingClientRect().top ?  blockForToggleColor?.getBoundingClientRect().top - window.innerHeight : null
 
