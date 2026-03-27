@@ -2,6 +2,11 @@
     <nuxt-link class="v-app-project-preview app-rm-child-margin"
                :to="`works/${slug}`"
     >
+      <button class="v-app-project-preview__tags">
+        <template v-for="(service, index) in services">
+          <template v-if="index > 0" > / </template>{{service}}
+        </template>
+      </button>
       <template v-if="covers_video">
         <video class="v-app-project-preview__cover"
                muted loop autoplay
@@ -32,6 +37,7 @@ defineProps<{
   title: string,
   baseline: string,
   slug: string,
+  services?: string[],
 }>()
 </script>
 
@@ -43,6 +49,13 @@ defineProps<{
 .v-app-project-preview {
   color: inherit;
   text-decoration: inherit;
+  position: relative;
+}
+
+.v-app-project-preview__tags {
+  position: absolute;
+  top: var(--app-gutter);
+  left: var(--app-gutter);
 }
 
 .v-app-project-preview__cover {

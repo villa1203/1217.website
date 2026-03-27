@@ -1,20 +1,17 @@
 <template>
   <nuxt-link :to="`/works/${project.slug}`"
-             class="v-app-projects-list__projects__item app-grid"
+             class="v-app-projects-list__projects__item app-grid app-grid-reg--wrap"
   >
-    <div class="app-grid__col-6">
-      <div class="app-grid">
-        <div class="app-grid__col-4" >
+    <div class="app-grid__col-6 app-grid-reg__col-12">
+      <div class="app-grid app-grid-reg--wrap">
+        <div class="app-grid__col-4 app-grid-reg__col-12" >
           <div class="app-text-strong">{{project.title}}</div>
         </div>
-        <div class="app-grid__col-4" >
+        <div class="app-grid__col-4 app-grid-reg__col-12" >
           <div class="app-text-strong">services</div>
-          <div v-for="sector of project.services" :key="sector.title">{{sector.title}} / {{sector.slug}}</div>
+          <div v-for="service of project.services" :key="service.title">{{ service.title }}</div>
         </div>
-        <div class="app-grid__col-4" >
-          <div class="app-text-strong">sector</div>
-          <div v-for="sector of project.sectors" :key="sector.title">{{sector.title}}</div>
-        </div>
+
       </div>
 
       <div>
@@ -22,24 +19,25 @@
       </div>
     </div>
 
-    <div class="app-grid__col-6 v-app-projects-list__gallery"
+    <div class="app-grid__col-6 v-app-projects-list__gallery app-grid-reg__col-12"
          :class="{
           'has-scroll': project.gallery.length > 3,
+          'reg-has-scroll': project.gallery.length > 1,
           'hide-gradient': hideGradient
          }"
     >
-      <div class="app-grid app-grid--justify-end v-app-projects-list__gallery__container"
+      <div class="app-grid app-grid--justify-end v-app-projects-list__gallery__container app-grid-reg--justify-start"
            @scroll="onScrollInGallery"
       >
         <template v-for="(item, index) of project.gallery" :key="index">
-          <video class="app-grid__col-4 v-app-projects-list__visual app-grid__shrink-0"
+          <video class="app-grid__col-4 v-app-projects-list__visual app-grid__shrink-0 app-grid__col-7"
                  v-if="item.small.url.endsWith('.mp4')"
                  muted
                  autoplay
                  loop
                  :src="item.small.url"
           />
-          <img class="app-grid__col-4 v-app-projects-list__visual app-grid__shrink-0"
+          <img class="app-grid__col-4 v-app-projects-list__visual app-grid__shrink-0 app-grid__col-7"
                v-else
                :src="item.small.url"
           />
@@ -66,6 +64,8 @@ function onScrollInGallery(e: Event) {
 </script>
 
 <style lang="scss" scoped>
+@use "../assets/_params";
+
 .v-app-projects-list__projects__item {
   border-top: solid 1px var(--app-color-dark);
   padding-top: var(--app-gutter);
@@ -107,6 +107,12 @@ function onScrollInGallery(e: Event) {
   .has-scroll & {
     overflow: scroll;
     justify-content: flex-start;
+  }
+
+  @media (max-width: params.$break-point-reg) {
+    .reg-has-scroll & {
+      overflow: scroll;
+    }
   }
 }
 </style>

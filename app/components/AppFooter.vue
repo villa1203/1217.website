@@ -5,22 +5,22 @@
 
       <div class="v-app-footer__container app-grid app-grid--justify-between app-grid--direction-column">
 
-        <div class="app-grid app-grid--justify-between">
+        <div class="app-grid app-grid--justify-between app-grid-reg--wrap">
           <div class="v-app-footer__left-content">
             <div class="app-text-h1">
               We are always happy to meet new people. Give us a call, email or come visit us.
             </div>
           </div>
 
-          <div>
+          <div class="app-grid-reg__col-12 app-reg-display-none">
             <img class="v-app-footer__logo--anim"
                  src="/logo__anime.gif"
             />
           </div>
         </div>
 
-        <div class="app-grid app-grid--justify-between">
-          <div>
+        <div class="app-grid app-grid--justify-between app-grid-reg--wrap">
+          <div class="app-grid-reg__col-12">
             <img class="v-app-footer__logo"
                  src="/logo.svg" />
           </div>
@@ -73,6 +73,8 @@ defineProps<{
 
 
 <style lang="scss" scoped >
+@use "../assets/_params";
+
 .v-app-footer {
   margin-top: 10rem;
   width: 100%;
@@ -82,10 +84,19 @@ defineProps<{
 
 .v-app-footer__container {
   height: calc(100vh - 7rem);
+
+  @media (max-width: params.$break-point-reg) {
+    height: auto;
+    row-gap: var(--app-row-gap-small);
+  }
 }
 
 .v-app-footer__left-content {
   max-width: 40em;
+
+  @media (max-width: params.$break-point-reg) {
+    max-width: 100%;
+  }
 }
 
 .v-app-footer__logo {

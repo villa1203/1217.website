@@ -1,23 +1,31 @@
 <template>
   <div class="v-block block-client-list app-with-padding--left-right">
 
-    <div class="app-grid">
+    <div class="app-grid app-grid--wrap">
 
-      <div class="app-grid__col-5 app-rm-child-margin">
+      <div class="app-grid__col-5 app-rm-child-margin app-grid-reg__col-12">
         <h2>{{block_data.content.title}}</h2>
       </div>
 
-      <div class="app-grid__col-7">
+      <div class="app-grid__col-7 app-grid-reg__col-12">
         <div class="app-block-client-list__clients app-grid app-grid--align-start app-grid--justify-start app-grid--wrap app-grid--no-gap">
           <div class="app-block-client-list__clients__item"
+               :class="{
+                'app-block-client-list__clients__item--without-logo': !client.logo,
+                'app-block-client-list__clients__item--without-logo-negative': !client.logo_negative,
+               }"
                v-for="client of data?.result?.content"
           >
-            <div class="app-grid app-grid--align-center app-grid--justify-center app-aspect-ratio--1-1">
+            <div class="app-grid app-grid--align-center app-grid--justify-center app-aspect-ratio--1-1 app-block-client-list__clients__item__wrap">
               <img class="block-client-list__logo"
                    v-if="client.logo?.reg.url"
                    :src="client.logo?.reg.url"
               />
-              <div v-else
+              <img class="block-client-list__logo block-client-list__logo--negative"
+                   v-if="client.logo_negative?.reg.url"
+                   :src="client.logo_negative?.reg.url"
+              />
+              <div v-if=" !client.logo_negative || !client.logo"
                    class="block-client-list__name"
               >{{client.title}}</div>
             </div>
@@ -44,6 +52,7 @@ type FetchData = CMS_API_Response & {
     content?: {
       title?: string,
       logo?: CMS_API_ImageInstance
+      logo_negative?: CMS_API_ImageInstance
     }[],
   }
 }
@@ -71,7 +80,19 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
               xxl: 'file.resize(2500)',
               focus: 'file.focus',
             }
-          }
+          },
+          logo_negative: {
+            query: `page.logo_negative.toFiles.first`,
+            select: {
+              alt: "file.alt.value",
+              tiny: 'file.resize(50, null, 10)',
+              small: 'file.resize(500)',
+              reg: 'file.resize(1280)',
+              large: 'file.resize(1920)',
+              xxl: 'file.resize(2500)',
+              focus: 'file.focus',
+            }
+          },
         }
       },
     },
@@ -90,20 +111,54 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
 }
 
 .app-block-client-list__clients__item {
-  border-right: 1px solid black;
-  border-bottom: 1px solid black;
+  border-right: 1px solid var(--app-color-dark);
+  border-bottom: 1px solid var(--app-color-dark);
   box-sizing: border-box;
   width: calc(100% / 4);
-  background: white;
+  background: var(--app-color-light);
+}
+
+.app-block-client-list__clients__item__wrap {
+  position: relative;
 }
 
 .block-client-list__logo {
   display: block;
   width: 60%;
   height: auto;
+  opacity: 1;
+
+  .v-block--is-visible & {
+    opacity: 0;
+  }
+
+  &.block-client-list__logo--negative {
+    position: absolute;
+    opacity: 0;
+
+    .v-block--is-visible & {
+      opacity: 1;
+    }
+  }
 }
 .block-client-list__name {
   text-align: center;
   font-size: 2vw;
+  line-height: 1.05em;
+  color: black;
+  position: absolute;
+  display: none;
+
+  .v-block--is-visible & {
+    color: white;
+  }
+
+  .app-block-client-list__clients__item--without-logo & {
+    display: block;
+  }
+
+  .v-block--is-visible .app-block-client-list__clients__item--without-logo-negative & {
+    display: block;
+  }
 }
 </style>

@@ -70,12 +70,13 @@ export type CMS_BlockData =
   CMS_BlockClientList |
   CMS_BlockProfiles |
   CMS_BlockSketchText |
-  CMS_BlockGalleryData
+  CMS_BlockGalleryData |
+  CMS_BlockUseCase
 
 export interface CMS_BlockDataBase {
   "id": string,
   "isHidden": boolean,
-  "type": "article_heading" | "image" | "text" | "video" | "pages_list" | "clients_list" | "profiles" | 'sketch_text' | 'gallery'
+  "type": "article_heading" | "image" | "text" | "video" | "pages_list" | "clients_list" | "profiles" | 'sketch_text' | 'gallery' | 'use_case'
 }
 
 export interface CMS_BlockArticleHeadingData extends CMS_BlockDataBase {
@@ -132,6 +133,12 @@ export interface CMS_BlockSketchText extends CMS_BlockDataBase {
   "id": string,
   "isHidden": boolean,
   "type": "sketch_text"
+}
+
+export interface CMS_BlockUseCase extends CMS_BlockDataBase {
+  "id": string,
+  "isHidden": boolean,
+  "type": "use_case"
 }
 
 

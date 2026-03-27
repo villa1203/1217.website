@@ -40,6 +40,10 @@
         <BlockProfiles :block_data="block"/>
       </template>
 
+      <template v-else-if="block.type === 'use_case'">
+        <BlockUseCase/>
+      </template>
+
       <template v-else-if="block.type === 'sketch_text'">
         <div class="block-sketch-text" style="margin-top: calc( -1 * var(--app-row-gap)); margin-bottom: calc( -1 * var(--app-row-gap));width: 100%;">
           <iframe

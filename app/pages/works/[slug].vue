@@ -16,6 +16,14 @@
                    v-for="collaborator of data.result.collaborators">
                 {{collaborator.title}}</div>
             </div>
+            <div v-if="data.result.link_to_project">
+              <a :href="data.result.link_to_project"
+                 class="app-button app-button--variant-primary"
+                 target="_blank"
+              >
+                View website
+              </a>
+            </div>
           </div>
           <div class="app-grid__col-2">
             <div class="app-grid app-grid--direction-column">
@@ -88,6 +96,7 @@ type FetchData = CMS_API_Response & {
     date: string
     localisation: string
     photo_credits: string
+    link_to_project: string
   }
 }
 
@@ -100,6 +109,28 @@ const {data} = await useFetch<FetchData>('/api/CMS_KQLRequest', {
     query: `page('projects/${route.params.slug}')`,
     select: KQL_PROJECTS_SELECT,
   }
+})
+
+
+const windowsScrollListener = () => {
+  const blocksInPage = document.querySelectorAll('.v-block')
+
+  const blockForToggleColor = blocksInPage[2]
+
+  const landmarkValue = blockForToggleColor?.getBoundingClientRect().top ?  blockForToggleColor?.getBoundingClientRect().top - window.innerHeight : null
+
+  if( !landmarkValue ) return
+
+  if(landmarkValue < 0) document.body?.classList.add('v-block--is-visible')
+  else document.body?.classList.remove('v-block--is-visible')
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', windowsScrollListener)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', windowsScrollListener)
 })
 
 </script>

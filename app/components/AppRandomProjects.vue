@@ -59,6 +59,8 @@ function getRandomImageOrVideoImageOfProject(project: CMS_API_Page_projet): stri
 
 
 <style lang="scss" >
+@use '../assets/_params';
+
 .v-app-random-projects {
   width: 100%;
   height: calc( 100vh - 10rem);
@@ -67,7 +69,7 @@ function getRandomImageOrVideoImageOfProject(project: CMS_API_Page_projet): stri
 
 
 .v-app-random-projects__list {
-  animation: slide-in 10s linear infinite;
+  animation: slide-in 30s linear infinite;
 
   &:hover {
     animation-play-state: paused;
@@ -90,6 +92,10 @@ function getRandomImageOrVideoImageOfProject(project: CMS_API_Page_projet): stri
     display: block;
     width: 20vw;
     aspect-ratio: 3/2;
+
+    @media (max-width: params.$break-point-reg) {
+      width: 75vw;
+    }
   }
 }
 </style>

@@ -79,6 +79,13 @@ export const KQL_QUERY_BLOCKS = {
             slug: true,
             baseline: true,
             preview_full_size: true,
+            services: {
+              query: 'page.services.toPages',
+              select: {
+                title: true,
+                slug: true,
+              }
+            },
             covers_video: {
               query: "page.covers_video.toFiles.first",
               select: {
@@ -123,6 +130,7 @@ export const KQL_PROJECTS_SELECT = {
     query: "page.covers_video.toFiles.first",
     url: true,
   },
+  link_to_project: true,
   sectors: {
     query: "page.sectors.toPages",
     select: {

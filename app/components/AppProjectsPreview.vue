@@ -8,7 +8,7 @@
                 'app-grid__col-7': (page_index + 1) % 5 === 2 || (page_index + 1) % 5 === 3,
                 'is-full': (page_index + 1) % 5 === 0
              }"
-             class="v-app-last-projects-preview__projects__item"
+             class="v-app-last-projects-preview__projects__item app-grid-reg__col-12"
         >
           <AppProjectPreview
             :image="page.cover"
@@ -16,6 +16,7 @@
             :title="page.title"
             :baseline="page.baseline"
             :slug="page.slug"
+            :services="page.services?.map(service => service.title)"
           />
         </div>
       </div>
@@ -40,8 +41,14 @@ defineProps<{
 
 
 <style lang="scss" scoped >
+@use '../assets/_params';
+
 .v-app-last-projects-preview__projects {
   row-gap: var(--app-row-gap);
+
+  @media (max-width: params.$break-point-reg) {
+    --app-row-gap: 5rem;
+  }
 }
 
 .v-app-last-projects-preview__projects__item {

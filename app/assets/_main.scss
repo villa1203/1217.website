@@ -1,4 +1,5 @@
 @use '../../node_modules/normalize.css/normalize.css';
+@use "./_params";
 @use "./font-loading";
 @use "./grid";
 @use "./typo";
@@ -20,6 +21,8 @@
   --app-gutter: 1rem;
 
   --app-row-gap: 15rem;
+  --app-row-gap-small: 10rem;
+  --app-row-gap-xs: 5rem;
 }
 
 * {
