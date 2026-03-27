@@ -12,17 +12,20 @@
     </div>
   </div>
 
-<!--  <iframe-->
-<!--    v-if="showIframe"-->
-<!--    @click="showIframe = false"-->
-<!--    class="v-app__sketch"-->
-<!--    style="-->
-<!--              border: none;-->
-<!--              width: 100%;-->
-<!--              height: 100vh;-->
-<!--              background: transparent;-->
-<!--            "-->
-<!--    src="/sketches/sketch_over/index.html"/>-->
+  <div class="v-app__sketch"
+        @click="showIframe = false"
+  >
+    <iframe
+      v-if="showIframe"
+      style="
+                border: none;
+                width: 100%;
+                height: 100%;
+                background: transparent;
+                pointer-events: none;
+              "
+      src="/sketches/sketch_over/index.html"/>
+  </div>
 </template>
 
 
@@ -57,6 +60,9 @@ const showIframe = ref(true)
   top: 0;
   left: 0;
   width: 100%;
-  height: 100vh;
+  height: 100%;
+  cursor: crosshair;
+  z-index: 1000;
+  pointer-events: auto;
 }
 </style>
