@@ -31,6 +31,7 @@
 import type {CMS_API_Page_projet, CMS_API_Response, CMS_BlockData} from "#shared/cms_api";
 import {KQL_PROJECTS_SELECT, KQL_QUERY_BLOCKS} from "#shared/KQLQueries";
 import {getProjectBySector} from "#shared/projects_utils";
+import {windowsScrollListener} from "~/utils/windowsScrollListener";
 
 type FetchData = CMS_API_Response & {
   "result": {
@@ -59,25 +60,14 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
   }
 })
 
-const windowsScrollListener = () => {
-  const blocksInPage = document.querySelectorAll('.v-works__container')
-
-  const blockForToggleColor = blocksInPage[0]
-
-  const landmarkValue = blockForToggleColor?.getBoundingClientRect().top ?  blockForToggleColor?.getBoundingClientRect().top - (window.innerHeight / 2) : null
-
-  if( !landmarkValue ) return
-
-  if(landmarkValue < 0) document.body?.classList.add('app-body-drak-view')
-  else document.body?.classList.remove('app-body-drak-view')
-}
+const listener = () => windowsScrollListener('.v-works__container')
 
 onMounted(() => {
-  window.addEventListener('scroll', windowsScrollListener)
+  window.addEventListener('scroll', listener)
 })
 
 onBeforeUnmount(() => {
-  window.removeEventListener('scroll', windowsScrollListener)
+  window.removeEventListener('scroll', listener)
 })
 
 </script>

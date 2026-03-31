@@ -1,7 +1,7 @@
 <template>
     <nav class="v-nav app-with-padding--left-right app-with-padding--top-bottom"
     >
-      <div class="app-grid app-grid--justify-between">
+      <div class="app-grid app-grid--justify-between app-grid-reg--wrap app-grid-reg--justify-end">
 
         <div class="app-button app-button--reverse-with-dark-view" style="z-index: 10"
              :class="{'infos-is-open': infosIsOpen}"
@@ -10,10 +10,10 @@
             <nuxt-link to="/">
               <img src="/logo.svg" role="button"/>
             </nuxt-link>
-            <div @click="infosIsOpen = !infosIsOpen">
-              <div class="toggle-infos">
-                <UIOpen/>
-              </div>
+            <div class="toggle-infos"
+                 @click="infosIsOpen = !infosIsOpen"
+            >
+              <UIOpen/>
             </div>
           </div>
         </div>
@@ -42,7 +42,7 @@
 
         </div>
 
-        <nav class="app-grid app-grid--justify-end"
+        <nav class="app-grid app-grid--justify-end v-nav__links"
              style="gap: .5rem"
         >
           <nuxt-link class="app-button app-button--reverse-with-dark-view" to="/works">works</nuxt-link>
@@ -72,6 +72,8 @@ const infosIsOpen = ref(false)
 
 
 <style lang="scss" scoped >
+@use "~/assets/_params";
+
 .v-nav {
   width: 100%;
   position: relative;
@@ -96,6 +98,23 @@ const infosIsOpen = ref(false)
 
   .toggle-infos {
     transform: rotate(45deg);
+  }
+}
+
+.toggle-infos {
+  @media (max-width: params.$break-point-reg) {
+    display: none;
+  }
+}
+
+.v-nav__links {
+  @media (max-width: params.$break-point-reg) {
+    opacity: 1;
+    transition: opacity .25s ease-in-out;
+    .app-scroll-down & {
+      opacity: 0;
+      pointer-events: none;
+    }
   }
 }
 </style>
