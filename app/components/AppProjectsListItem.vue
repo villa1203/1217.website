@@ -14,7 +14,7 @@
 
       </div>
 
-      <div>
+      <div class="v-app-projects-list__projects__item__baseline v-app-projects-list__projects__item__baseline--large">
         <p class="app-color-grey">{{project.baseline}}</p>
       </div>
     </div>
@@ -43,6 +43,10 @@
           />
         </template>
       </div>
+    </div>
+
+    <div class="v-app-projects-list__projects__item__baseline v-app-projects-list__projects__item__baseline--reg app-rm-child-margin">
+      <p class="app-color-grey">{{project.baseline}}</p>
     </div>
   </nuxt-link>
 </template>
@@ -112,6 +116,25 @@ function onScrollInGallery(e: Event) {
   @media (max-width: params.$break-point-reg) {
     .reg-has-scroll & {
       overflow: scroll;
+    }
+  }
+}
+
+.v-app-projects-list__projects__item__baseline {
+
+  &.v-app-projects-list__projects__item__baseline--reg {
+    display: none;
+
+    @media (max-width: params.$break-point-reg) {
+      display: block;
+    }
+  }
+
+  &.v-app-projects-list__projects__item__baseline--large {
+    display: block;
+
+    @media (max-width: params.$break-point-reg) {
+      display: none;
     }
   }
 }
