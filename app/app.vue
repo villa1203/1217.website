@@ -12,20 +12,20 @@
     </div>
   </div>
 
-<!--  <div class="v-app__sketch"-->
-<!--        @click="showIframe = false"-->
-<!--        v-if="showIframe"-->
-<!--       @keydown.delete="showIframe = false"-->
-<!--  >-->
-<!--    <iframe-->
-<!--      style="-->
-<!--                border: none;-->
-<!--                width: 100%;-->
-<!--                height: 100%;-->
-<!--                background: transparent;-->
-<!--              "-->
-<!--      src="/sketches/sketch_over/index.html"/>-->
-<!--  </div>-->
+  <div class="v-app__sketch"
+        @click="showIframe = false"
+        v-if="showIframe"
+       @keydown.delete="showIframe = false"
+  >
+    <iframe
+      style="
+                border: none;
+                width: 100%;
+                height: 100%;
+                background: transparent;
+              "
+      src="/sketches/sketch_over/index.html"/>
+  </div>
 </template>
 
 
@@ -36,6 +36,20 @@ useRouter().afterEach(() => {
 })
 
 const showIframe = ref(true)
+
+onMounted( () => {
+  window.addEventListener('message', (event) => {
+
+    console.log(event.data)
+
+    const data = event.data
+
+    if( data.from === 'P5js' && data.value === 'click') {
+      console.log('clicked')
+      showIframe.value = false
+    }
+  })
+})
 
 </script>
 
@@ -61,8 +75,6 @@ const showIframe = ref(true)
   left: 0;
   width: 100%;
   height: 100%;
-  cursor: crosshair;
   z-index: 1000;
-  pointer-events: auto;
 }
 </style>

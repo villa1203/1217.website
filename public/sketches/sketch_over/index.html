@@ -3,16 +3,21 @@
   <head>
     <script src="https://cdn.jsdelivr.net/npm/p5@1.11.11/lib/p5.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/p5@1.11.11/lib/addons/p5.sound.min.js"></script>
-    
-    
-    
+
+
+
     <link rel="stylesheet" type="text/css" href="style.css">
     <meta charset="utf-8" />
 
   </head>
-  <body>
+  <body style="cursor: crosshair;">
     <main>
     </main>
     <script src="sketch.js"></script>
+    <script>
+        window.addEventListener("click", () => {
+            window.parent.postMessage({ from: 'P5js', value: 'click'}, "*")
+        })
+    </script>
   </body>
 </html>
