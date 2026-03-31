@@ -128,7 +128,7 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
   height: auto;
   opacity: 1;
 
-  .v-block--is-visible & {
+  .app-body-drak-view & {
     opacity: 0;
   }
 
@@ -136,7 +136,7 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
     position: absolute;
     opacity: 0;
 
-    .v-block--is-visible & {
+    .app-body-drak-view & {
       opacity: 1;
     }
   }
@@ -149,7 +149,7 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
   position: absolute;
   display: none;
 
-  .v-block--is-visible & {
+  .app-body-drak-view & {
     color: white;
   }
 
@@ -157,7 +157,7 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
     display: block;
   }
 
-  .v-block--is-visible .app-block-client-list__clients__item--without-logo-negative & {
+  .app-body-drak-view .app-block-client-list__clients__item--without-logo-negative & {
     display: block;
   }
 }

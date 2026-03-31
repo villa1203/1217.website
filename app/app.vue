@@ -32,7 +32,7 @@
 <script setup lang="ts">
 
 useRouter().afterEach(() => {
-  document.body.classList.remove('v-block--is-visible')
+  document.body.classList.remove('app-body-drak-view')
 })
 
 const showIframe = ref(true)

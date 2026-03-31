@@ -44,8 +44,8 @@ const windowsScrollListener = () => {
 
   if( !landmarkValue ) return
 
-  if(landmarkValue < 0) document.body?.classList.add('v-block--is-visible')
-  else document.body?.classList.remove('v-block--is-visible')
+  if(landmarkValue < 0) document.body?.classList.add('app-body-drak-view')
+  else document.body?.classList.remove('app-body-drak-view')
 }
 
 onMounted(() => {

@@ -39,8 +39,8 @@
 
           <div>
             <div>Contact</div>
-            <div>hello@bureau1217.com</div>
-            <div>+41 705 80 87 90</div>
+            <div>hello@mail.mail</div>
+            <div>+41 000 00 00 00</div>
           </div>
 
           <div>

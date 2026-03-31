@@ -43,7 +43,7 @@ body {
   color: var(--app-color-dark);
   background-color: var(--app-color-light);
 
-  &.v-block--is-visible {
+  &.app-body-drak-view {
     --app-color-light: #000;
     --app-color-dark: #FFF;
   }
@@ -68,6 +68,10 @@ button, .app-button {
   &.app-button--negative {
     border: 1px solid white;
     background: transparent;
+  }
+
+  .app-body-drak-view &.app-button--reverse-with-dark-view {
+    background: hsla(0, 100%, 100%, 0.25);
   }
 }
 

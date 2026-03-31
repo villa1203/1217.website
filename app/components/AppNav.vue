@@ -3,7 +3,7 @@
     >
       <div class="app-grid app-grid--justify-between">
 
-        <div class="app-button" style="z-index: 10"
+        <div class="app-button app-button--reverse-with-dark-view" style="z-index: 10"
              :class="{'infos-is-open': infosIsOpen}"
         >
           <div class="app-grid app-grid--align-center">
@@ -45,9 +45,9 @@
         <nav class="app-grid app-grid--justify-end"
              style="gap: .5rem"
         >
-          <nuxt-link class="app-button" to="/works">works</nuxt-link>
+          <nuxt-link class="app-button app-button--reverse-with-dark-view" to="/works">works</nuxt-link>
 <!--          <nuxt-link class="app-button" to="/office">office</nuxt-link>-->
-          <nuxt-link class="app-button" to="/research">research</nuxt-link>
+          <nuxt-link class="app-button app-button--reverse-with-dark-view" to="/research">research</nuxt-link>
         </nav>
 
       </div>
