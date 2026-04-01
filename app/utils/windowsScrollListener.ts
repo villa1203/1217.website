@@ -1,12 +1,12 @@
-export const windowsScrollListener = (containerQuerySelector: string) => {
-  viewDarkVersionToggleOnScroll(containerQuerySelector)
+export const windowsScrollListener = (containerQuerySelector: string, counterContainer = 0) => {
+  viewDarkVersionToggleOnScroll(containerQuerySelector, counterContainer)
   scrollDirectionState.setBodyClassname()
 }
 
-function viewDarkVersionToggleOnScroll(containerQuerySelector: string) {
+function viewDarkVersionToggleOnScroll(containerQuerySelector: string, counterContainer = 0) {
   const blocksInPage = document.querySelectorAll(containerQuerySelector)
 
-  const blockForToggleColor = blocksInPage[2]
+  const blockForToggleColor = blocksInPage[counterContainer]
 
   const landmarkValue = blockForToggleColor?.getBoundingClientRect().top ?  blockForToggleColor?.getBoundingClientRect().top - window.innerHeight : null
 
