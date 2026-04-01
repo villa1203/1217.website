@@ -108,6 +108,12 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
   box-sizing: border-box;
   border-top: 1px solid var(--app-color-dark);
   border-left: 1px solid var(--app-color-dark);
+
+  &:hover {
+    .app-block-client-list__clients__item {
+      opacity: 0.5;
+    }
+  }
 }
 
 .app-block-client-list__clients__item {
@@ -116,6 +122,12 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
   box-sizing: border-box;
   width: calc(100% / 4);
   background: var(--app-color-light);
+  user-select: none;
+  transition: opacity .5s cubic-bezier(0,.5,1,1);
+
+  &:hover {
+    opacity: 1 !important;
+  }
 }
 
 .app-block-client-list__clients__item__wrap {

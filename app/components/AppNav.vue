@@ -28,13 +28,6 @@
           </p>
           <p>We work with 3D, 2D and generative animation to create music videos, brand identities and typography in motion.</p>
 
-          <p>
-            <span class="app-text-strong">Get in touch</span>
-            <br>295 Hoxton Street
-            <br>London
-            <br>N1 5JX
-          </p>
-
           <div style="margin-top: 10rem;" class="app-grid">
             <span class="app-button app-button--negative">Instagram</span>
             <span class="app-button app-button--negative">LinkedIn</span>

@@ -50,6 +50,12 @@ defineProps<{
   color: inherit;
   text-decoration: inherit;
   position: relative;
+
+  &:hover {
+    .v-app-project-preview__cover {
+      border-radius: 0;
+    }
+  }
 }
 
 .v-app-project-preview__tags {
@@ -63,7 +69,9 @@ defineProps<{
   width: 100%;
   object-fit: cover;
   aspect-ratio: 3/2;
-  padding-bottom: .5rem;
+  margin-bottom: .5rem;
   max-height: calc( 100vh - 2rem);
+  transition: border-radius .25s ease-in-out;
+  border-radius: 1rem;
 }
 </style>
