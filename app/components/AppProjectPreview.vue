@@ -7,17 +7,19 @@
           <template v-if="index > 0" > · </template>{{service}}
         </template>
       </button>
-      <template v-if="covers_video">
-        <video class="v-app-project-preview__cover"
-               muted loop autoplay
-               :src="covers_video"
-        />
-      </template>
-      <template v-else>
-        <img class="v-app-project-preview__cover"
-             :src="image?.reg.url"
-        />
-      </template>
+      <div class="v-app-project-preview__wrapper">
+        <template v-if="covers_video">
+          <video class="v-app-project-preview__wrapper__cover"
+                 muted loop autoplay
+                 :src="covers_video"
+          />
+        </template>
+        <template v-else>
+          <img class="v-app-project-preview__wrapper__cover"
+               :src="image?.reg.url"
+          />
+        </template>
+      </div>
       <div>
         <h2 class="app-text-reg app-text-strong app-no-margin">{{title}}</h2>
         <p class="app-text-reg app-no-margin">{{baseline}}</p>
@@ -50,28 +52,37 @@ defineProps<{
   color: inherit;
   text-decoration: inherit;
   position: relative;
-
-  &:hover {
-    .v-app-project-preview__cover {
-      border-radius: 0;
-    }
-  }
 }
 
 .v-app-project-preview__tags {
   position: absolute;
   top: var(--app-gutter);
   left: var(--app-gutter);
+  z-index: 1;
 }
 
-.v-app-project-preview__cover {
+.v-app-project-preview__wrapper {
+  margin-bottom: .5rem;
+  border-radius: 1rem;
+  overflow: hidden;
+  transition: border-radius 15s cubic-bezier(0, .25, 0, 1);
+
+  .v-app-project-preview:hover & {
+    border-radius: 0;
+  }
+}
+
+.v-app-project-preview__wrapper__cover {
   display: block;
   width: 100%;
   object-fit: cover;
   aspect-ratio: 3/2;
-  margin-bottom: .5rem;
   max-height: calc( 100vh - 2rem);
-  transition: border-radius .25s ease-in-out;
+  transition: transform 15s cubic-bezier(0, .25, 0, 1);
   border-radius: 1rem;
+
+  .v-app-project-preview:hover & {
+    transform: scale(1.05);
+  }
 }
 </style>
