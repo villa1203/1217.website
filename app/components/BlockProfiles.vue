@@ -1,6 +1,6 @@
 <template>
   <div class="v-block block-profiles">
-    {{block_data.content.profiles_list}}
+      <h2>{{block_data.content.title}}</h2>
     <div v-for="profile of block_data.content.profiles_list">
       <img
         v-if="profile.photo"
