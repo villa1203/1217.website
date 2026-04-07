@@ -187,8 +187,8 @@ export interface CMS_BlockProfiles extends CMS_BlockDataBase {
       function: string
       roles: string
       id: string
-      title: string
     }[]
+    title: string
   },
   "type": "profiles"
 }

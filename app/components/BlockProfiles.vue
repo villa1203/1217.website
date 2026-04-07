@@ -1,19 +1,29 @@
 <template>
   <div class="v-block block-profiles">
-      <h2>{{block_data.content.title}}</h2>
-    <div v-for="profile of block_data.content.profiles_list">
-      <img
-        v-if="profile.photo"
-        :src="profile.photo.reg.url"
-        :alt="profile.photo.alt ?? ''"
-      />
+    <h2>{{ block_data.content.title }}</h2>
+    <div class="app-grid">
 
-      <div>{{ profile.first_name }} {{ profile.last_name }}</div>
-      <div>{{ profile.function }}</div>
+        <div v-for="profile of block_data.content.profiles_list"
+             class="block-profiles__profile-card app-grid__col-4"
+        >
+            <div class="block-profiles__profile-card__profiles">
+                <div class="app-grid">
+                    <div class="app-button">{{ profile.first_name }} {{ profile.last_name }}</div>
+                </div>
+            </div>
 
-      <div v-if="profile.roles"
-           v-html="profile.roles"
-      />
+            <img class="block-profiles__profile-card__img"
+                 v-if="profile.photo"
+                 :src="profile.photo.reg.url"
+                 :alt="profile.photo.alt ?? ''"
+            />
+
+            <div>{{ profile.function }}</div>
+
+            <div v-if="profile.roles"
+                 v-html="profile.roles"
+            />
+        </div>
     </div>
   </div>
 </template>
@@ -30,5 +40,20 @@ defineProps<{
 .block-profiles {
   width: 100%;
   box-sizing: border-box;
+}
+
+.block-profiles__profile-card {
+    position: relative;
+}
+
+.block-profiles__profile-card__profiles {
+    position: absolute;
+    top:    var(--app-grid-gap-xs);
+    left:   var(--app-grid-gap-xs);
+}
+
+.block-profiles__profile-card__img {
+    width: 100%;
+    border-radius: 1rem;
 }
 </style>

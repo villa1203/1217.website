@@ -15,10 +15,9 @@
   --app-footer-height: 5rem;
 
   --app-grid-gap: 1rem;
-  --app-grid-gap-small: 1rem;
   --app-grid-gap-xs: .5rem;
 
-  --app-gutter: 1rem;
+  --app-gutter: var(--app-grid-gap);
 
   --app-row-gap: 15rem;
   --app-row-gap-small: 10rem;
