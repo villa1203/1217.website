@@ -20,9 +20,15 @@
           />
         </template>
       </div>
-      <div>
-        <h2 class="app-text-reg app-text-strong app-no-margin">{{title}}</h2>
-        <p class="app-text-reg app-no-margin">{{baseline}}</p>
+      <div class="v-app-project-preview__text-container">
+        <h2 class="v-app-project-preview__text-container__title app-text-reg app-text-strong app-no-margin">
+          <span v-for="(char, index) in title.split('')" :key="index" :style="{ transitionDelay: `${index * 20}ms` }" >
+            {{ char.replace(' ', '\u00A0') }}
+          </span>
+        </h2>
+        <p  class="v-app-project-preview__text-container__baseline app-text-reg app-no-margin">
+          {{baseline}}
+        </p>
       </div>
     </nuxt-link>
 </template>
@@ -65,7 +71,7 @@ defineProps<{
   margin-bottom: .5rem;
   border-radius: 1rem;
   overflow: hidden;
-  transition: border-radius 15s cubic-bezier(0, .25, 0, 1);
+  transition: border-radius 5s cubic-bezier(0, .25, 0, 1);
 
   .v-app-project-preview:hover & {
     border-radius: 0;
@@ -83,6 +89,31 @@ defineProps<{
 
   .v-app-project-preview:hover & {
     transform: scale(1.05);
+  }
+}
+
+.v-app-project-preview__text-container__title > span {
+  display: inline-block;
+  transition: transform 0.3s ease;
+
+  .v-app-project-preview:hover & {
+    transform: translateY(-.25em);
+
+    &:hover {
+      transform: translateY(-.35em);
+      transition-delay: 0s !important;
+    }
+  }
+}
+
+
+
+.v-app-project-preview__text-container__baseline {
+  transition: transform 0.3s ease;
+
+  .v-app-project-preview:hover & {
+    transform: translateY(-5px);
+    transition-delay: .15s;
   }
 }
 </style>
