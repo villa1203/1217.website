@@ -39,7 +39,7 @@
              style="gap: .5rem"
         >
           <nuxt-link class="app-button app-button--reverse-with-dark-view" to="/works">works</nuxt-link>
-<!--          <nuxt-link class="app-button" to="/office">office</nuxt-link>-->
+          <nuxt-link class="app-button app-button--reverse-with-dark-view" to="/office">office</nuxt-link>
           <nuxt-link class="app-button app-button--reverse-with-dark-view" to="/research">research</nuxt-link>
         </nav>
 
