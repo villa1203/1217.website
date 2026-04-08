@@ -45,7 +45,7 @@
       </template>
 
       <template v-else-if="block.type === 'collaborators_list'">
-        <BlockClientList :block_data="block" />
+        <BlockCollaboratorsList :block_data="block" />
       </template>
 
       <template v-else-if="block.type === 'sketch_text'">
@@ -69,6 +69,7 @@
 	import type {CMS_BlockData} from "#shared/cms_api";
   import BlockPagesList__list from "~/components/BlockPagesList__list.vue";
   import BlockClientList from "~/components/BlockClientList.vue";
+  import BlockCollaboratorsList from "~/components/BlockCollaboratorsList.vue";
 
 	defineProps<{
 		content: CMS_BlockData[]
