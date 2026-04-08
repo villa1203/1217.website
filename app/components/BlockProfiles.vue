@@ -1,5 +1,5 @@
 <template>
-  <div class="v-block block-profiles">
+  <div class="v-block block-profiles app-with-padding--left-right">
     <h2>{{ block_data.content.title }}</h2>
     <div class="app-grid">
 
@@ -18,9 +18,11 @@
                  :alt="profile.photo.alt ?? ''"
             />
 
-            <div>{{ profile.function }}</div>
+            <div class="block-profiles__profile-card__function"
+            >{{ profile.function }}</div>
 
-            <div v-if="profile.roles"
+            <div class="block-profiles__profile-card__roles"
+                 v-if="profile.roles"
                  v-html="profile.roles"
             />
         </div>
@@ -56,4 +58,16 @@ defineProps<{
     width: 100%;
     border-radius: 1rem;
 }
+
+.block-profiles__profile-card__function {
+  margin-top: .5rem;
+}
+
+:global(.block-profiles__profile-card__roles ul) {
+  padding: 0;
+}
+:global(.block-profiles__profile-card__roles li) {
+  display: block;
+}
+
 </style>

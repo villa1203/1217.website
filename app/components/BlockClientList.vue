@@ -111,7 +111,7 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
 
   &:hover {
     .app-block-client-list__clients__item {
-      opacity: 0.5;
+      opacity: 0.25;
     }
   }
 }
