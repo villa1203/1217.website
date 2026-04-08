@@ -65,6 +65,7 @@ defineProps<{
 
 :global(.block-profiles__profile-card__roles ul) {
   padding: 0;
+  margin-top: var(--app-grid-gap-xs);
 }
 :global(.block-profiles__profile-card__roles li) {
   display: block;

@@ -1,8 +1,10 @@
 <template>
 	<section class="v-block block-gallery"
   >
-		<header v-if="block_data.content.title">
-			<h2 class="h2 purple">{{ block_data.content.title }}</h2>
+		<header v-if="block_data.content.title"
+            class="block-gallery__header"
+    >
+			<h2>{{ block_data.content.title }}</h2>
 		</header>
 
     <div class="app-grid app-grid--wrap">
@@ -31,6 +33,20 @@ defineProps<{
   width: 100%;
   box-sizing: border-box;
   overflow: hidden;
+  container-type: inline-size;
+  container-name: block-gallery;
+}
+
+.block-gallery__header {
+  width: 50%;
+
+  @container block-gallery (width < 1300px) {
+    width: calc(100% / 12 * 9);
+  }
+
+  @container block-gallery (width < 900px) {
+    width: calc(100% / 12 * 12);
+  }
 }
 
 img {

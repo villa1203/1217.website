@@ -9,14 +9,14 @@
            }"
   >
 		<header v-if="block_data.content.title">
-			<h2 class="h2 purple">{{ block_data.content.title }}</h2>
+			<h2>{{ block_data.content.title }}</h2>
 		</header>
 		<figure>
 			<img :src="block_data.content.image.large.url" :alt="block_data.content.image.alt || 'image'">
 			<figcaption v-if="block_data.content.caption || block_data.content.credits"
       >
-				<div v-if="block_data.content.caption" class="app-text-strong" v-html="block_data.content.caption"></div>
-				<div v-if="block_data.content.credits" v-html="block_data.content.credits"></div>
+				<div v-if="block_data.content.caption" class="block-image__caption app-button" v-html="block_data.content.caption"></div>
+				<div v-if="block_data.content.credits" class="block-image__credit" v-html="block_data.content.credits"></div>
 			</figcaption>
 		</figure>
 	</section>
@@ -35,6 +35,7 @@ defineProps<{
   width: calc( ((100% + var(--app-grid-gap) ) / 2) - var(--app-grid-gap));
   box-sizing: border-box;
   overflow: hidden;
+  position: relative;
 
   &.has-gap-left {
     margin-left: 50%;
@@ -56,6 +57,16 @@ figure {
   display: block;
   width: 100%;
   margin: 0;
+}
+
+.block-image__caption {
+  position: absolute;
+  top: var(--app-grid-gap-xs);
+  left: var(--app-grid-gap-xs);
+}
+
+.block-image__credit {
+  margin-top: var(--app-grid-gap-xs);
 }
 
 img {
