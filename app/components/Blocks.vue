@@ -44,6 +44,10 @@
         <BlockUseCase/>
       </template>
 
+      <template v-else-if="block.type === 'collaborators_list'">
+        <BlockClientList :block_data="block" />
+      </template>
+
       <template v-else-if="block.type === 'sketch_text'">
         <div class="block-sketch-text" style="margin-top: calc( -1 * var(--app-row-gap)); margin-bottom: calc( -1 * var(--app-row-gap));width: 100%;">
           <iframe

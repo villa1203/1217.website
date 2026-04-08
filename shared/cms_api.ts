@@ -71,12 +71,13 @@ export type CMS_BlockData =
   CMS_BlockProfiles |
   CMS_BlockSketchText |
   CMS_BlockGalleryData |
-  CMS_BlockUseCase
+  CMS_BlockUseCase |
+  CMS_CollaboratorsList
 
 export interface CMS_BlockDataBase {
   "id": string,
   "isHidden": boolean,
-  "type": "article_heading" | "image" | "text" | "video" | "pages_list" | "clients_list" | "profiles" | 'sketch_text' | 'gallery' | 'use_case'
+  "type": "article_heading" | "image" | "text" | "video" | "pages_list" | "clients_list" | "profiles" | 'sketch_text' | 'gallery' | 'use_case' | 'collaborators_list'
 }
 
 export interface CMS_BlockArticleHeadingData extends CMS_BlockDataBase {
@@ -176,6 +177,13 @@ export interface CMS_BlockClientList extends CMS_BlockDataBase {
     title?: string,
   },
   "type": "clients_list"
+}
+
+export interface CMS_CollaboratorsList extends CMS_BlockDataBase {
+  "content": {
+    title?: string,
+  },
+  "type": "collaborators_list"
 }
 
 export interface CMS_BlockProfiles extends CMS_BlockDataBase {
