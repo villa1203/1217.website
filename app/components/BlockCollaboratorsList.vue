@@ -94,6 +94,7 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
 .block-collaborators-list__collaborators__item {
   border-bottom: 1px solid var(--app-color-dark);
   padding: 2rem 0;
+  user-select: none;
 }
 
 .block-collaborators-list__collaborators__first_name {

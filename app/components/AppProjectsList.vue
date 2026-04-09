@@ -14,11 +14,24 @@
         </AppButton>
       </div>
       <div class="v-app-projects-list__projects app-grid app-grid--direction-column">
-        <AppProjectsListItem
-          v-for="project of filteredProjects"
-          :key="project.slug"
-          :project="project"
-        />
+        <template
+          v-if="variante"
+        >
+          <AppProjectsListItemVariante
+            v-for="project of filteredProjects"
+            :key="project.slug"
+            :project="project"
+          />
+        </template>
+        <template
+            v-else
+        >
+          <AppProjectsListItem
+            v-for="project of filteredProjects"
+            :key="project.slug"
+            :project="project"
+          />
+        </template>
       </div>
     </section>
 </template>
@@ -29,6 +42,7 @@ import type { CMS_API_Page_projet } from "#shared/cms_api";
 const props = defineProps<{
   filters: {title: string, slug: string}[]
   projects: CMS_API_Page_projet[]
+  variante?: boolean
 }>()
 
 const activeTag = ref<string>('all')

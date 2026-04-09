@@ -30,9 +30,13 @@
 
 html {
   font-family: 'ES Allianz', sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+    @media (max-width: params.$break-point-reg) {
+        font-size: 16px;
+    }
 }
 
 body {
