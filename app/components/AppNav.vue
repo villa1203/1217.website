@@ -3,20 +3,20 @@
     >
       <div class="app-grid app-grid--justify-between app-grid-reg--wrap app-grid-reg--justify-end">
 
-        <div class="app-button app-button--reverse-with-dark-view" style="z-index: 10"
-             :class="{'infos-is-open': infosIsOpen}"
-        >
-          <div class="app-grid app-grid--align-center">
-            <nuxt-link to="/">
-              <img src="/logo.svg" role="button"/>
-            </nuxt-link>
-            <div class="toggle-infos"
-                 @click="infosIsOpen = !infosIsOpen"
-            >
-              <UIOpen/>
-            </div>
-          </div>
-        </div>
+<!--        <div class="app-button app-button&#45;&#45;reverse-with-dark-view" style="z-index: 10"-->
+<!--             :class="{'infos-is-open': infosIsOpen}"-->
+<!--        >-->
+<!--          <div class="app-grid app-grid&#45;&#45;align-center">-->
+<!--            <nuxt-link to="/">-->
+<!--              <img src="/logo.svg" role="button"/>-->
+<!--            </nuxt-link>-->
+<!--            <div class="toggle-infos"-->
+<!--                 @click="infosIsOpen = !infosIsOpen"-->
+<!--            >-->
+<!--              <UIOpen/>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
 
         <div v-if="infosIsOpen"
              class="app-rm-child-margin v-nav__infos"
