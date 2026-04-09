@@ -183,7 +183,7 @@ export interface CMS_CollaboratorsList extends CMS_BlockDataBase {
   "content": {
     title?: string,
   },
-  "type": "collaborators_list"
+"type": "collaborators_list"
 }
 
 export interface CMS_BlockProfiles extends CMS_BlockDataBase {
