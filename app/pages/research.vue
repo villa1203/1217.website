@@ -61,5 +61,6 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
 
 <style lang="scss" scoped>
 .v-research {
+  padding-top: var(--app-header-height);
 }
 </style>

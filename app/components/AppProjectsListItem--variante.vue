@@ -1,53 +1,71 @@
 <template>
   <nuxt-link :to="`/works/${project.slug}`"
-             class="v-app-projects-list__projects__item--variante app-grid app-grid-reg--wrap"
+             class="v-app-projects-list-item--variante app-grid app-grid-reg--wrap"
   >
-    <div class="app-grid__col-6 app-grid-reg__col-12">
-      <div class="app-grid app-grid-reg--wrap">
-        <div class="app-grid__col-4 app-grid-reg__col-12" >
+    <div class="app-grid__col-4 app-grid-reg__col-12 app-rm-child-margin">
           <h3>{{project.title}}</h3>
+    </div>
+
+    <div class="app-grid__col-8 app-grid-reg__col-12">
+
+      <div class="app-grid app-grid--direction-column">
+        <div class="v-app-projects-list-item--variante__cover">
+          <img :src="project.gallery[0]?.large.url" alt="" />
+        </div>
+
+
+        <div class="v-app-projects-list-item--variante__gallery">
+          <div class="v-app-projects-list-item--variante__gallery"
+               :class="{
+            'has-scroll': project.gallery.length > 3,
+            'reg-has-scroll': project.gallery.length > 1,
+            'hide-gradient': hideGradient
+           }"
+          >
+            <div class="app-grid app-grid--justify-end v-app-projects-list-item--variante__gallery__container app-grid-reg--justify-start"
+                 @scroll="onScrollInGallery"
+            >
+              <template v-for="(item, index) of project.gallery" :key="index">
+                <video class="v-app-projects-list-item--variante__visual app-grid__shrink-0"
+                       v-if="item.small.url.endsWith('.mp4')"
+                       muted
+                       autoplay
+                       loop
+                       :src="item.small.url"
+                />
+                <img class="v-app-projects-list-item--variante__visual app-grid__shrink-0"
+                     v-else
+                     :src="item.small.url"
+                />
+              </template>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="v-app-projects-list-item--variante__cover app-grid">
+          <div class="app-grid__col-6 app-grid-reg__col-12">
+            <p class="app-color-grey">{{ project.baseline }}</p>
+          </div>
+
+          <div class="app-grid__col-3 app-grid-reg__col-12">
+            <div class="app-text-strong">services</div>
+            <div v-for="service of project.services" :key="service.title">{{ service.title }}</div>
+          </div>
+
+          <div class="app-grid__col-3 app-grid-reg__col-12">
+            <div class="app-text-strong">autre</div>
+            <div v-for="service of project.services" :key="service.title">{{ service.title }}</div>
+          </div>
         </div>
       </div>
+
+
+
+
+
     </div>
 
-    <div class="app-grid__col-6 v-app-projects-list__gallery app-grid-reg__col-12"
-         :class="{
-          'has-scroll': project.gallery.length > 3,
-          'reg-has-scroll': project.gallery.length > 1,
-          'hide-gradient': hideGradient
-         }"
-    >
-      <div class="app-grid app-grid--justify-end v-app-projects-list__gallery__container app-grid-reg--justify-start"
-           @scroll="onScrollInGallery"
-      >
-        <template v-for="(item, index) of project.gallery" :key="index">
-          <video class="app-grid__col-4 v-app-projects-list__visual app-grid__shrink-0 app-grid__col-7"
-                 v-if="item.small.url.endsWith('.mp4')"
-                 muted
-                 autoplay
-                 loop
-                 :src="item.small.url"
-          />
-          <img class="app-grid__col-4 v-app-projects-list__visual app-grid__shrink-0 app-grid__col-7"
-               v-else
-               :src="item.small.url"
-          />
-        </template>
-      </div>
-
-      <div class="v-app-projects-list__projects__item--variante__baseline v-app-projects-list__projects__item--variante__baseline--large">
-        <p class="app-color-grey">{{project.baseline}}</p>
-      </div>
-
-      <div class="app-grid__col-4 app-grid-reg__col-12" >
-        <div class="app-text-strong">services</div>
-        <div v-for="service of project.services" :key="service.title">{{ service.title }}</div>
-      </div>
-    </div>
-
-    <div class="v-app-projects-list__projects__item--variante__baseline v-app-projects-list__projects__item--variante__baseline--reg app-rm-child-margin">
-      <p class="app-color-grey">{{project.baseline}}</p>
-    </div>
   </nuxt-link>
 </template>
 
@@ -70,19 +88,26 @@ function onScrollInGallery(e: Event) {
 <style lang="scss" scoped>
 @use "../assets/_params";
 
-.v-app-projects-list__projects__item--variante {
+.v-app-projects-list-item--variante {
   border-top: solid 1px var(--app-color-dark);
   padding-top: var(--app-gutter);
   color: inherit;
   text-decoration: inherit;
 }
 
-.v-app-projects-list__visual {
+.v-app-projects-list-item--variante__visual {
   aspect-ratio: 16/9;
   object-fit: cover;
+  width: calc(100% / 5);
 }
 
-.v-app-projects-list__gallery {
+.v-app-projects-list-item--variante__cover {
+  img {
+    width: 100%;
+  }
+}
+
+.v-app-projects-list-item--variante__gallery {
   position: relative;
 
   &.has-scroll {
@@ -104,7 +129,7 @@ function onScrollInGallery(e: Event) {
   }
 }
 
-.v-app-projects-list__gallery__container {
+.v-app-projects-list-item--variante__gallery__container {
   width: 100%;
   overflow: hidden;
 
@@ -116,25 +141,6 @@ function onScrollInGallery(e: Event) {
   @media (max-width: params.$break-point-reg) {
     .reg-has-scroll & {
       overflow: scroll;
-    }
-  }
-}
-
-.v-app-projects-list__projects__item--variante__baseline {
-
-  &.v-app-projects-list__projects__item--variante__baseline--reg {
-    display: none;
-
-    @media (max-width: params.$break-point-reg) {
-      display: block;
-    }
-  }
-
-  &.v-app-projects-list__projects__item--variante__baseline--large {
-    display: block;
-
-    @media (max-width: params.$break-point-reg) {
-      display: none;
     }
   }
 }

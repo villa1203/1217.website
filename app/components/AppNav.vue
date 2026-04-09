@@ -1,22 +1,28 @@
 <template>
     <nav class="v-nav app-with-padding--left-right app-with-padding--top-bottom"
     >
+      <div class="toggle-infos toggle-infos--mobile app-button"
+           @click="infosIsOpen = !infosIsOpen"
+      >
+        <UIOpen/>
+      </div>
+
       <div class="app-grid app-grid--justify-between app-grid-reg--wrap app-grid-reg--justify-end">
 
-<!--        <div class="app-button app-button&#45;&#45;reverse-with-dark-view" style="z-index: 10"-->
-<!--             :class="{'infos-is-open': infosIsOpen}"-->
-<!--        >-->
-<!--          <div class="app-grid app-grid&#45;&#45;align-center">-->
-<!--            <nuxt-link to="/">-->
-<!--              <img src="/logo.svg" role="button"/>-->
-<!--            </nuxt-link>-->
-<!--            <div class="toggle-infos"-->
-<!--                 @click="infosIsOpen = !infosIsOpen"-->
-<!--            >-->
-<!--              <UIOpen/>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
+        <div class="app-button app-button--reverse-with-dark-view" style="z-index: 10"
+             :class="{'infos-is-open': infosIsOpen}"
+        >
+          <div class="app-grid app-grid--align-center">
+            <nuxt-link to="/">
+              <img src="/logo.svg" role="button"/>
+            </nuxt-link>
+            <div class="toggle-infos"
+                 @click="infosIsOpen = !infosIsOpen"
+            >
+              <UIOpen/>
+            </div>
+          </div>
+        </div>
 
         <div v-if="infosIsOpen"
              class="app-rm-child-margin v-nav__infos"
@@ -78,27 +84,50 @@ const infosIsOpen = ref(false)
   left: var(--app-gutter);
   width: 30rem;
   background: hsla(0, 0%, 0%, 0.25);
+  backdrop-filter: blur(10px);
   border-radius: .75rem;
   color: white;
   padding: 5rem .75rem .75rem;
   z-index: 0;
+
+  > * {
+    opacity: 1;
+  }
+
+  @media (max-width: params.$break-point-reg) {
+    top: 8rem;
+    width: calc( 100% - var(--app-gutter) * 2);
+    box-sizing: border-box;
+  }
 }
 
 .infos-is-open {
   background: transparent;
   transition: none;
   backdrop-filter: none;
-
-  .toggle-infos {
-    transform: rotate(45deg);
-  }
 }
 
 .toggle-infos {
+  .infos-is-open & {
+    transform: rotate(45deg);
+  }
+
   @media (max-width: params.$break-point-reg) {
     display: none;
   }
+
+  &.toggle-infos--mobile {
+    position: fixed;
+    top: var(--app-gutter);
+    left: var(--app-gutter);
+    display: none;
+
+    @media (max-width: params.$break-point-reg) {
+      display: block;
+    }
+  }
 }
+
 
 .v-nav__links {
   @media (max-width: params.$break-point-reg) {
