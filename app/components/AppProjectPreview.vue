@@ -4,7 +4,7 @@
     >
       <button class="v-app-project-preview__tags">
         <template v-for="(service, index) in services">
-          <template v-if="index > 0" > · </template>{{service}}
+          <template v-if="index > 0" > · </template><span class="v-app-project-preview__tags__text" >{{service}}</span>
         </template>
       </button>
       <div class="v-app-project-preview__wrapper">
@@ -54,6 +54,8 @@ defineProps<{
 
 
 <style lang="scss" scoped >
+@use '../assets/_params';
+
 .v-app-project-preview {
   color: inherit;
   text-decoration: inherit;
@@ -65,6 +67,15 @@ defineProps<{
   top: var(--app-gutter);
   left: var(--app-gutter);
   z-index: 1;
+  margin-right: var(--app-gutter);
+}
+
+.v-app-project-preview__tags__text {
+  white-space: nowrap;
+
+  @media (max-width: 300px) {
+    white-space: normal;
+  }
 }
 
 .v-app-project-preview__wrapper {

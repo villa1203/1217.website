@@ -53,6 +53,7 @@ body {
 }
 
 button, .app-button {
+  text-align: left;
   background: hsla(0, 0%, 0%, 0.25);
   text-decoration: none;
   padding: .75rem;
@@ -71,6 +72,12 @@ button, .app-button {
   &.app-button--negative {
     border: 1px solid white;
     background: transparent;
+  }
+
+  &.app-button--transparent {
+    border: 1px solid white;
+    background: transparent;
+    backdrop-filter: none;
   }
 
   .app-body-drak-view &.app-button--reverse-with-dark-view {
@@ -132,4 +139,65 @@ button, .app-button {
 
 img {
     display: block;
+}
+
+//component transitions
+
+.animation-1-enter-active {
+  transition: all .25s cubic-bezier(0, .25, 0, 1);
+  transform-origin: top left;
+
+  > * {
+    transition: all .25s .25s cubic-bezier(0, .25, 0, 1);
+    transform-origin: top left;
+
+    &:nth-child(1n) {  transition-delay: calc(.1s * 1);  }
+    &:nth-child(2n) {  transition-delay: calc(.1s * 2);  }
+    &:nth-child(3n) {  transition-delay: calc(.1s * 3);  }
+  }
+}
+
+.animation-1-leave-active {
+  transition: all .25s .25s cubic-bezier(0, .25, 0, 1);
+  transform-origin: top left;
+
+  > * {
+    transition: all .25s 0s cubic-bezier(0, .25, 0, 1);
+    transform-origin: top left;
+  }
+}
+
+.animation-1-enter-from {
+  scale: .8;
+  opacity: 0;
+
+  > * {
+    opacity: 0 !important;
+  }
+}
+.animation-1-enter-to {
+  scale: 1;
+  opacity: 1;
+
+  > * {
+    opacity: 1 !important;
+  }
+}
+
+
+.animation-1-leave-from {
+  scale: 1;
+  opacity: 1;
+
+  > * {
+    opacity: 1 !important;
+  }
+}
+.animation-1-leave-to {
+  scale: .8;
+  opacity: 0;
+
+  > * {
+    opacity: 0 !important;
+  }
 }

@@ -9,7 +9,8 @@
 
       <div class="app-grid app-grid--justify-between app-grid-reg--wrap app-grid-reg--justify-end">
 
-        <div class="app-button app-button--reverse-with-dark-view" style="z-index: 10"
+        <div class="app-button app-button--reverse-with-dark-view"
+             style="z-index: 10; transition-delay: .25s;"
              :class="{'infos-is-open': infosIsOpen}"
         >
           <div class="app-grid app-grid--align-center">
@@ -24,22 +25,24 @@
           </div>
         </div>
 
-        <div v-if="infosIsOpen"
-             class="app-rm-child-margin v-nav__infos"
-        >
-          <p>
-            <span class="app-text-strong">informations</span>
-            <br>Bureau 1217 is a design office working across identity, digital platforms, and interactive experiences.
-            <br>From interactive storytelling for the Winter Olympic Games to visual identity systems for educational institutions and immersive memorial experiences developed with public institutions, we design projects that connect people to ideas, places, and histories.
-          </p>
-          <p>We work with 3D, 2D and generative animation to create music videos, brand identities and typography in motion.</p>
+        <transition name="animation-1" :duration="1000">
+          <div v-if="infosIsOpen"
+               class="app-rm-child-margin v-nav__infos"
+          >
+            <p>
+              <span class="app-text-strong">informations</span>
+              <br>Bureau 1217 is a design office working across identity, digital platforms, and interactive experiences.
+              <br>From interactive storytelling for the Winter Olympic Games to visual identity systems for educational institutions and immersive memorial experiences developed with public institutions, we design projects that connect people to ideas, places, and histories.
+            </p>
+            <p>We work with 3D, 2D and generative animation to create music videos, brand identities and typography in motion.</p>
 
-          <div style="margin-top: 10rem;" class="app-grid">
-            <span class="app-button app-button--negative">Instagram</span>
-            <span class="app-button app-button--negative">LinkedIn</span>
+            <div style="margin-top: 10rem;" class="app-grid">
+              <span class="app-button app-button--transparent">Instagram</span>
+              <span class="app-button app-button--transparent">LinkedIn</span>
+            </div>
+
           </div>
-
-        </div>
+        </transition>
 
         <nav class="app-grid app-grid--justify-end v-nav__links"
              style="gap: .5rem"
@@ -108,6 +111,8 @@ const infosIsOpen = ref(false)
 }
 
 .toggle-infos {
+  transition: transform 1s cubic-bezier(0, .25, 0, 1);
+
   .infos-is-open & {
     transform: rotate(45deg);
   }

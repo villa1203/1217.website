@@ -12,20 +12,20 @@
     </div>
   </div>
 
-  <div class="v-app__sketch"
-        @click="showIframe = false"
-        v-if="showIframe"
-       @keydown.delete="showIframe = false"
-  >
-    <iframe
-      style="
-                border: none;
-                width: 100%;
-                height: 100%;
-                background: transparent;
-              "
-      src="/sketches/sketch_over/index.html"/>
-  </div>
+<!--  <div class="v-app__sketch"-->
+<!--        @click="showIframe = false"-->
+<!--        v-if="showIframe"-->
+<!--       @keydown.delete="showIframe = false"-->
+<!--  >-->
+<!--    <iframe-->
+<!--      style="-->
+<!--                border: none;-->
+<!--                width: 100%;-->
+<!--                height: 100%;-->
+<!--                background: transparent;-->
+<!--              "-->
+<!--      src="/sketches/sketch_over/index.html"/>-->
+<!--  </div>-->
 </template>
 
 
