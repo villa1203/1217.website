@@ -38,12 +38,41 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
 
 const listener = () => windowsScrollListener('.v-block', 2)
 
+let hasScrollingToBottom = false
+
+const handleWheelAtTop = (event: WheelEvent) => {
+
+  if(hasScrollingToBottom) {
+    if (window.scrollY === 0) {
+      hasScrollingToBottom = false
+    }
+  } else {
+    if (window.scrollY > 50 && window.scrollY < 100) {
+      const firstBlock = document.querySelector('.v-block')
+
+      const topPosition = window.innerHeight
+
+      if (firstBlock) {
+        event.preventDefault()
+        window.scrollTo({
+          behavior: 'smooth',
+          top: topPosition,
+        })
+        hasScrollingToBottom = true
+      }
+    }
+  }
+
+}
+
 onMounted(() => {
   window.addEventListener('scroll', listener)
+  window.addEventListener('wheel', handleWheelAtTop, { passive: false })
 })
 
 onBeforeUnmount(() => {
   window.removeEventListener('scroll', listener)
+  window.removeEventListener('wheel', handleWheelAtTop)
 })
 
 
