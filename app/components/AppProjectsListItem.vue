@@ -21,7 +21,7 @@
 
     <div class="app-grid__col-6 v-app-projects-list__gallery app-grid-reg__col-12"
          :class="{
-          'has-scroll': project.gallery.length > 3,
+          'has-scroll': project.gallery.length > 1,
           'reg-has-scroll': project.gallery.length > 1,
           'hide-gradient': hideGradient
          }"
