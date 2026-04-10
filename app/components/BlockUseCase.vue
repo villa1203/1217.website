@@ -61,7 +61,7 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
 <style lang="scss" scoped >
 .v-block-use-case {
   box-sizing: border-box;
-  height: 80vh;
+  height: calc(100vh - (var(--app-row-gap) * 2) );
   text-align: center;
   position: relative;
 }
