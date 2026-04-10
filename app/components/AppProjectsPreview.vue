@@ -52,6 +52,12 @@ defineProps<{
 }
 
 .v-app-last-projects-preview__projects__item {
+  border-radius: 1rem;
+
+  .app-body-drak-view & {
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 1);
+  }
+
   &.is-full {
     width: 100%;
   }

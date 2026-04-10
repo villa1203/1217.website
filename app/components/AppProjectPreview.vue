@@ -117,7 +117,14 @@ defineProps<{
   }
 }
 
+.v-app-project-preview__text-container {
 
+  .app-body-drak-view & {
+    padding-left: .5rem;
+    padding-right: .5rem;
+    padding-bottom: .5rem;
+  }
+}
 
 .v-app-project-preview__text-container__baseline {
   transition: transform 0.3s ease;
