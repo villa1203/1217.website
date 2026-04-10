@@ -28,6 +28,8 @@ defineProps<{
 <style lang="scss" scoped >
 .v-app-image-or-video {
   width: 100%;
+  border-radius: 1rem;
+  overflow: hidden;
 }
 
 img, video {
