@@ -9,7 +9,7 @@
 
     <div class="app-grid app-grid--wrap">
 			<img v-for="image of block_data.content.images"
-           class="app-grid__col-6"
+           class="app-grid__col-6 block-gallery__img"
            :src="image.large.url"
            :alt="image.alt || 'image'"
       >
@@ -35,6 +35,8 @@ defineProps<{
   overflow: hidden;
   container-type: inline-size;
   container-name: block-gallery;
+  padding-left: var(--app-grid-gap);
+  padding-right: var(--app-grid-gap);
 }
 
 .block-gallery__header {
@@ -55,6 +57,7 @@ img {
   margin: 0;
   max-height: calc(100vh - 4rem);
   object-fit: cover;
+  border-radius: 1rem;
 }
 
 </style>

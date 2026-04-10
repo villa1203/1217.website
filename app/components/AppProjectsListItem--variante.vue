@@ -94,6 +94,7 @@ function onScrollInGallery(e: Event) {
   aspect-ratio: 10/13;
   object-fit: cover;
   width: calc(100% / 5);
+  border-radius: 1rem;
 }
 
 .v-app-projects-list-item--variante__cover {
@@ -101,6 +102,7 @@ function onScrollInGallery(e: Event) {
     width: 100%;
     aspect-ratio: 16/7;
     object-fit: cover;
+    border-radius: 1rem;
   }
 }
 

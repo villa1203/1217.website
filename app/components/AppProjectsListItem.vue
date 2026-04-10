@@ -80,6 +80,7 @@ function onScrollInGallery(e: Event) {
 .v-app-projects-list__visual {
   aspect-ratio: 16/9;
   object-fit: cover;
+  border-radius: 1rem;
 }
 
 .v-app-projects-list__gallery {
@@ -107,6 +108,7 @@ function onScrollInGallery(e: Event) {
 .v-app-projects-list__gallery__container {
   width: 100%;
   overflow: hidden;
+  border-radius: 1rem;
 
   .has-scroll & {
     overflow: scroll;
