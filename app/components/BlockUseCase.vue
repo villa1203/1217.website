@@ -6,14 +6,6 @@
         <br><span>Baseline</span>
       </h2>
 
-      <div v-if="data" class="v-block-use-case__projects">
-        <template v-for="useCaseProject of getProjectBySector('use-case' ,data.result.projects)">
-          <div class="v-block-use-case__projects__title app-button app-button--variant-primary">{{useCaseProject.title}}</div>
-          <img :src="useCaseProject.miniature.reg.url" alt="">
-        </template>
-      </div>
-
-
     </section>
 </template>
 
