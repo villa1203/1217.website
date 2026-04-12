@@ -36,6 +36,7 @@ defineProps<{
   box-sizing: border-box;
   overflow: hidden;
   position: relative;
+  border-radius: 1rem;
 
   &.has-gap-left {
     margin-left: 50%;
@@ -45,6 +46,7 @@ defineProps<{
     width: calc( 100% + var(--app-gutter) * 2);
     margin-left: calc( -1 * var(--app-gutter));
     margin-right: calc( -1 * var(--app-gutter));
+    border-radius: 0;
   }
 
   &.is-large {
