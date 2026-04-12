@@ -1,10 +1,17 @@
 <template>
     <section class="v-block-use-case app-grid app-grid--align-center app-grid--justify-center"
     >
-      <h2>
-        Bureau 1217 is design studio based on Geneva and Lyon
-        <br><span>Baseline</span>
-      </h2>
+      <div>
+        <h2 class="v-block-use-case__title">
+          Bureau 1217 is design studio based on Geneva and Lyon
+          <br>
+        </h2>
+        <h2 class="v-block-use-case__baseline-wrapper">
+          <Transition name="roll">
+            <div :key="currentIndex" class="v-block-use-case__baseline">{{ baselines[currentIndex] }}</div>
+          </Transition>
+        </h2>
+      </div>
 
     </section>
 </template>
@@ -16,7 +23,6 @@
 <script setup lang="ts">
 import type {CMS_API_Page_projet, CMS_API_Response, CMS_BlockData} from "#shared/cms_api";
 import {KQL_PROJECTS_SELECT, KQL_QUERY_BLOCKS} from "#shared/KQLQueries";
-import {getProjectBySector} from "#shared/projects_utils";
 
 type FetchData = CMS_API_Response & {
   "result": {
@@ -44,6 +50,20 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
     }
   }
 })
+
+const baselines = [
+    'baseline 1',
+    'baseline 2',
+    'baseline 3',
+]
+
+const currentIndex = ref(0)
+
+onMounted(() => {
+  setInterval(() => {
+    currentIndex.value = (currentIndex.value + 1) % baselines.length
+  }, 2_000)
+})
 </script>
 
 
@@ -67,6 +87,44 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
   img {
     height: 15vh;
   }
+}
+
+.v-block-use-case__title {
+  margin-bottom: 0;
+}
+
+.v-block-use-case__baseline-wrapper {
+  margin-top: 0;
+  overflow: hidden;
+  vertical-align: bottom;
+  position: relative;
+}
+
+.v-block-use-case__baseline {
+  display: inline-block;
+}
+
+.roll-enter-active {
+  transition: transform 0.4s ease;
+}
+.roll-enter-from {
+  transform: translateY(100%);
+}
+.roll-enter-to {
+  transform: translateY(0);
+}
+
+.roll-leave-active {
+  transition: transform 0.4s ease;
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+.roll-leave-from {
+  transform: translateY(0);
+}
+.roll-leave-to {
+  transform: translateY(-100%);
 }
 
 .v-block-use-case__projects__title {
