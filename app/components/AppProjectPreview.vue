@@ -81,11 +81,15 @@ defineProps<{
 .v-app-project-preview__wrapper {
   margin-bottom: .5rem;
   border-radius: 1rem;
-  //overflow: hidden;
+  overflow: hidden;
   transition: border-radius 5s cubic-bezier(0, .25, 0, 1);
 
   .v-app-project-preview:hover & {
     border-radius: 0;
+  }
+
+  .app-body-drak-view & {
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 1);
   }
 }
 
@@ -98,9 +102,6 @@ defineProps<{
   transition: transform 15s cubic-bezier(0, .25, 0, 1);
   border-radius: 1rem;
 
-  .app-body-drak-view & {
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 1);
-  }
 
   .v-app-project-preview:hover & {
     transform: scale(1.05);
