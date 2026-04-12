@@ -27,31 +27,41 @@
           </div>
           <div class="app-grid__col-2">
             <div class="app-grid app-grid--direction-column">
-              <div v-if="data.result.clients">
+              <div v-if="data.result.clients"
+                   class="v-projet-slug__infos-list"
+              >
                 <h4 style="margin: 0">Client</h4>
                 <div v-for="client of data.result.clients">
                   {{ client.title }}
                 </div>
               </div>
 
-              <div v-if="data.result.date">
+              <div v-if="data.result.date"
+                   class="v-projet-slug__infos-list"
+              >
                 <h4 style="margin: 0">Period</h4>
                 {{ formaterDate(data.result.date)  }}
               </div>
 
-              <div v-if="data.result.services">
+              <div v-if="data.result.services"
+                   class="v-projet-slug__infos-list"
+              >
                 <h4 style="margin: 0">Expertise</h4>
                 <div v-for="service of data.result.services">
                   {{ service.title }}
                 </div>
               </div>
 
-              <div v-if="data.result.localisation">
+              <div v-if="data.result.localisation"
+                   class="v-projet-slug__infos-list"
+              >
                 <h4 style="margin: 0">Localisation</h4>
                 {{ data.result.localisation }}
               </div>
 
-              <div v-if="data.result.photo_credits">
+              <div v-if="data.result.photo_credits"
+                   class="v-projet-slug__infos-list"
+              >
                 <h4 style="margin: 0">photo credits</h4>
                 {{ data.result.photo_credits }}
               </div>
@@ -141,5 +151,11 @@ onBeforeUnmount(() => {
 
 .v-projet-slug__collaborators {
   max-width: 30rem;
+}
+
+.v-projet-slug__infos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 </style>
