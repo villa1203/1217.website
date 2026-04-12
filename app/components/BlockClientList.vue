@@ -110,7 +110,7 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
   border-left: 1px solid var(--app-color-dark);
 
   &:hover {
-    .app-block-client-list__clients__item {
+    .app-block-client-list__clients__item__wrap {
       opacity: 0.25;
     }
   }
@@ -123,15 +123,15 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
   width: calc(100% / 4);
   background: var(--app-color-light);
   user-select: none;
+}
+
+.app-block-client-list__clients__item__wrap {
+  position: relative;
   transition: opacity .5s cubic-bezier(0,.5,1,1);
 
   &:hover {
     opacity: 1 !important;
   }
-}
-
-.app-block-client-list__clients__item__wrap {
-  position: relative;
 }
 
 .block-client-list__logo {
