@@ -1,5 +1,5 @@
 <template>
-	<section class="v-block block-bullet-point app-grid app-grid--align-start app-with-padding--left-right" >
+	<section class="v-block block-bullet-point app-grid app-grid--align-start" >
 
     <div class="app-grid app-grid--align-start app-grid--justify-center app-grid-reg--wrap">
       <header class="app-grid__col-4 app-grid-reg__col-12">

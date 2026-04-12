@@ -42,7 +42,9 @@ defineProps<{
   }
 
   &.is-full {
-    width: 100%;
+    width: calc( 100% + var(--app-gutter) * 2);
+    margin-left: calc( -1 * var(--app-gutter));
+    margin-right: calc( -1 * var(--app-gutter));
   }
 
   &.is-large {

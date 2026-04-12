@@ -1,5 +1,5 @@
 <template>
-	<section class="v-block block-text app-with-padding--left-right">
+	<section class="v-block block-text">
 		<div class="app-child-no-margin"
          v-if="block_data.content.title"
     >

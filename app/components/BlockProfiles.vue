@@ -1,5 +1,5 @@
 <template>
-  <div class="v-block block-profiles app-with-padding--left-right">
+  <div class="v-block block-profiles">
     <h2>{{ block_data.content.title }}</h2>
     <div class="app-grid">
 

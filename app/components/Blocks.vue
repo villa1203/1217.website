@@ -1,5 +1,5 @@
 <template>
-  <div class="app-blocks">
+  <div class="app-blocks app-with-padding--left-right">
     <template v-for="block of content" :key="block.id">
       <template v-if="block.type === 'article_heading'">
         <BlockArticleHeading

@@ -35,8 +35,6 @@ defineProps<{
   overflow: hidden;
   container-type: inline-size;
   container-name: block-gallery;
-  padding-left: var(--app-grid-gap);
-  padding-right: var(--app-grid-gap);
 }
 
 .block-gallery__header {

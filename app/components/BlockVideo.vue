@@ -81,9 +81,9 @@ const props = defineProps<{
   }
 
   &.is-large {
-    width: 100%;
-    padding-left:   calc(var(--app-grid-gap) + 100% / 12 * 1);
-    padding-right:  calc(var(--app-grid-gap) + 100% / 12 * 1);
+    width: calc( 100% + var(--app-gutter) * 2);
+    margin-right: calc( -1 * var(--app-gutter));
+    margin-left: calc( -1 * var(--app-gutter));
   }
 }
 

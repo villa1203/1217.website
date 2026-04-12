@@ -1,5 +1,5 @@
 <template>
-  <div class="v-block block-collaborators-list app-with-padding--left-right">
+  <div class="v-block block-collaborators-list">
 
     <div class="app-grid app-grid--wrap">
 

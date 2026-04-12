@@ -1,5 +1,5 @@
 <template>
-  <div class="v-block block-page-list--list app-with-padding--left-right app-rm-child-margin">
+  <div class="v-block block-page-list--list app-rm-child-margin">
     <h2>{{block_data.content.title}}</h2>
 
     <AppProjectsPreview__list
