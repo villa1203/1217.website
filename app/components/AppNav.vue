@@ -1,17 +1,19 @@
 <template>
     <nav class="v-nav app-with-padding--left-right app-with-padding--top-bottom"
+         :class="{'infos-is-open': infosIsOpen}"
     >
       <div class="toggle-infos toggle-infos--mobile app-button"
            @click="infosIsOpen = !infosIsOpen"
       >
-        <UIOpen/>
+        <div>
+          <UIOpen/>
+        </div>
       </div>
 
       <div class="app-grid app-grid--justify-between app-grid-reg--wrap app-grid-reg--justify-end">
 
-        <div class="app-button app-button--reverse-with-dark-view"
+        <div class="app-button app-button--reverse-with-dark-view v-nav__logo"
              style="z-index: 10; transition-delay: .25s;"
-             :class="{'infos-is-open': infosIsOpen}"
         >
           <div class="app-grid app-grid--align-center">
             <nuxt-link to="/">
@@ -104,17 +106,22 @@ const infosIsOpen = ref(false)
   }
 }
 
-.infos-is-open {
-  background: transparent;
-  transition: none;
-  backdrop-filter: none;
+.infos-is-open .v-nav__logo {
+  @media (min-width: params.$break-point-reg) {
+    background: transparent;
+    transition: none;
+    backdrop-filter: none;
+  }
 }
 
 .toggle-infos {
-  transition: transform 1s cubic-bezier(0, .25, 0, 1);
 
-  .infos-is-open & {
-    transform: rotate(45deg);
+  > * {
+    transition: transform 1s cubic-bezier(0, .25, 0, 1);
+
+    .infos-is-open & {
+      transform: rotate(45deg);
+    }
   }
 
   @media (max-width: params.$break-point-reg) {
@@ -136,11 +143,12 @@ const infosIsOpen = ref(false)
 
 .v-nav__links {
   @media (max-width: params.$break-point-reg) {
-    opacity: 1;
     transition: opacity .25s ease-in-out;
-    .app-scroll-down & {
-      opacity: 0;
-      pointer-events: none;
+    opacity: 0;
+    pointer-events: none;
+
+    .infos-is-open & {
+      opacity: 1;
     }
   }
 }
