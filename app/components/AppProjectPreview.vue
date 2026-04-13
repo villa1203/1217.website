@@ -10,7 +10,7 @@
       <div class="v-app-project-preview__wrapper">
         <template v-if="covers_video">
           <video class="v-app-project-preview__wrapper__cover"
-                 muted loop autoplay
+                 muted loop autoplay playsinline
                  :src="covers_video"
           />
         </template>

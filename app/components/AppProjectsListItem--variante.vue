@@ -31,6 +31,7 @@
                        muted
                        autoplay
                        loop
+                       playsinline
                        :src="item.small.url"
                 />
                 <img class="v-app-projects-list-item--variante__visual app-grid__shrink-0"

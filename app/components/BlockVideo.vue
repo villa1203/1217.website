@@ -29,8 +29,9 @@
         <video loop
                muted
                autoplay
+               playsinline
                :src="block_data.content.video_file[0].url"
-        ></video>
+        />
       </div>
 
 			<figcaption v-if="block_data.content.caption || block_data.content.credits" class="section-caption">
@@ -73,7 +74,7 @@ const props = defineProps<{
   }
 
   &.is-full {
-    width: 100%;
+    width: calc( 100% + var(--app-gutter) * 2);
     margin-right: calc( -1 * var(--app-gutter));
     margin-left: calc( -1 * var(--app-gutter));
     border-radius: 0;

@@ -1,7 +1,7 @@
 <template>
     <div class="v-app-image-or-video"
     >
-      <video v-if="src.endsWith('.mp4')" :src="src" autoplay loop muted />
+      <video v-if="src.endsWith('.mp4')" :src="src" autoplay loop muted playsinline />
       <img v-else
            :src="src"
            :alt="src"
