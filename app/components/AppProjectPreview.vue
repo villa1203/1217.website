@@ -22,7 +22,7 @@
       </div>
       <div class="v-app-project-preview__text-container">
         <h2 class="v-app-project-preview__text-container__title app-text-reg app-text-strong app-no-margin">
-          <span v-for="(char, index) in title.split('')" :key="index" :style="{ transitionDelay: `${index * 20}ms` }" >
+          <span v-for="(char, index) in title.split('')" :key="index" :style="{ transitionDelay: `${index * 2.5}ms` }" >
             {{ char.replace(' ', '\u00A0') }}
           </span>
         </h2>
@@ -132,11 +132,11 @@ defineProps<{
 }
 
 .v-app-project-preview__text-container__baseline {
-  transition: transform 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.25, 0, 0, 1);
 
   .v-app-project-preview:hover & {
     transform: translateY(-5px);
-    transition-delay: .15s;
+    transition-timing-function: cubic-bezier(0.25, 0, 0, 1);
   }
 }
 </style>
