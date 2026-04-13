@@ -7,8 +7,8 @@
         <img class="v-projet-slug__img"
              :src="data.result.cover.xxl.url">
 
-        <div class="v-projet-slug__intro app-grid app-with-padding--left-right app-max-width-reg app-margin-left-right-auto">
-          <div class="app-grid__col-10 app-child-no-margin">
+        <div class="v-projet-slug__intro app-grid app-grid--wrap app-with-padding--left-right app-max-width-reg app-margin-left-right-auto">
+          <div class="app-grid__col-10 app-child-no-margin app-grid-reg__col-12">
             <h1>{{ data.result.title }}</h1>
             <div v-html="data.result.intro" />
             <div class="app-grid app-grid--wrap v-projet-slug__collaborators">
@@ -25,10 +25,10 @@
               </a>
             </div>
           </div>
-          <div class="app-grid__col-2">
-            <div class="app-grid app-grid--direction-column">
+          <div class="app-grid__col-2 app-grid-reg__col-12">
+            <div class="app-grid app-grid--wrap app-grid--direction-column app-grid-reg--direction-row">
               <div v-if="data.result.clients"
-                   class="v-projet-slug__infos-list"
+                   class="v-projet-slug__infos-list app-grid-reg__col-6"
               >
                 <h4 style="margin: 0">Client</h4>
                 <div v-for="client of data.result.clients">
@@ -37,14 +37,14 @@
               </div>
 
               <div v-if="data.result.date"
-                   class="v-projet-slug__infos-list"
+                   class="v-projet-slug__infos-list app-grid-reg__col-6"
               >
                 <h4 style="margin: 0">Period</h4>
                 {{ formaterDate(data.result.date)  }}
               </div>
 
               <div v-if="data.result.services"
-                   class="v-projet-slug__infos-list"
+                   class="v-projet-slug__infos-list app-grid-reg__col-6"
               >
                 <h4 style="margin: 0">Expertise</h4>
                 <div v-for="service of data.result.services">
