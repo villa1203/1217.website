@@ -45,6 +45,7 @@ body {
   line-height: 100%;
   color: var(--app-color-dark);
   background-color: var(--app-color-light);
+  font-variant-numeric: tabular-nums;
 
   &.app-body-drak-view {
     --app-color-light: #000;
