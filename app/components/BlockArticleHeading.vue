@@ -1,13 +1,14 @@
 <template>
 	<section class="v-block block-article-heading app-grid app-grid--align-start" >
 
-    <div class="app-grid app-grid--align-start app-grid--justify-center">
+    <div class="app-grid app-grid--wrap app-grid--align-start app-grid--justify-center">
       <header v-if="block_data.content.title"
               :class="{
                 'app-grid__col-6': block_data.content.text
               }"
+              class="app-grid-reg__col-12"
       >
-        <div class="app-grid app-grid--align-start app-grid--justify-center app-rm-child-margin">
+        <div class="app-grid app-grid--align-start app-grid--justify-center app-rm-child-margin app-grid-reg--justify-start">
           <h2
             :class="{
                 'app-text-align-center': !block_data.content.text
@@ -21,6 +22,7 @@
               'app-grid__col-6': block_data.content.title,
               'app-grid__col-12': !block_data.content.title,
             }"
+           class="app-grid-reg__col-12"
       >
         <div v-html="block_data.content.text"/>
       </div>
