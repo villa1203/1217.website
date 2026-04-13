@@ -35,21 +35,18 @@ useRouter().afterEach(() => {
   document.body.classList.remove('app-body-drak-view')
 })
 
-const showIframe = ref(true)
-
-onMounted( () => {
-  window.addEventListener('message', (event) => {
-
-    console.log(event.data)
-
-    const data = event.data
-
-    if( data.from === 'P5js' && data.value === 'click') {
-      console.log('clicked')
-      showIframe.value = false
-    }
-  })
-})
+// const showIframe = ref(true)
+//
+// onMounted( () => {
+//   window.addEventListener('message', (event) => {
+//
+//     const data = event.data
+//
+//     if( data.from === 'P5js' && data.value === 'click') {
+//       showIframe.value = false
+//     }
+//   })
+// })
 
 </script>
 
