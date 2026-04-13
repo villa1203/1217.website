@@ -66,6 +66,7 @@ const props = defineProps<{
   width: calc( ((100% + var(--app-grid-gap) ) / 2) - var(--app-grid-gap));
   box-sizing: border-box;
   overflow: hidden;
+  border-radius: 1rem;
 
   &.has-gap-left {
     margin-left: 50%;
@@ -73,6 +74,9 @@ const props = defineProps<{
 
   &.is-full {
     width: 100%;
+    margin-right: calc( -1 * var(--app-gutter));
+    margin-left: calc( -1 * var(--app-gutter));
+    border-radius: 0;
 
     video {
       height: 100vh;
@@ -82,8 +86,6 @@ const props = defineProps<{
 
   &.is-large {
     width: calc( 100% + var(--app-gutter) * 2);
-    margin-right: calc( -1 * var(--app-gutter));
-    margin-left: calc( -1 * var(--app-gutter));
   }
 }
 
