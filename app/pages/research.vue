@@ -7,12 +7,11 @@
     <div v-if="data?.result?.projects" class="app-with-padding--left-right">
       <AppProjectsList
         :filters="[
-          {title: 'Art Direction', slug: 'art-direction'},
-          {title: 'Visual Identity', slug: 'visual-identity'},
-          {title: 'Motion Design', slug: 'motion-design'},
-          {title: 'Brand Strategy', slug: 'brand-strategy'},
-          {title: 'Web Development', slug: 'web-development'},
-          {title: 'Web Design', slug: 'web-design'},
+          {title: 'Academic publication', slug: 'academic-publication'},
+          {title: 'Design Research', slug: 'design-research'},
+
+          {title: 'Design Venture', slug: 'design-venture'},
+          {title: 'Workshop', slug: 'workshop'},
         ]"
         variante
         :projects="getProjectBySector('research' ,data.result.projects)"
