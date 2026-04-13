@@ -148,6 +148,7 @@ const infosIsOpen = ref(false)
     pointer-events: none;
 
     .infos-is-open & {
+      pointer-events: auto;
       opacity: 1;
     }
   }
