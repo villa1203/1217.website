@@ -73,6 +73,37 @@ export const KQL_QUERY_BLOCKS = {
           },
         },
 
+        client_list: {
+          query: "content.client_list.toPages",
+          select: {
+            title: true,
+            logo: {
+              query: `page.logo.toFiles.first`,
+              select: {
+                alt: "file.alt.value",
+                tiny: 'file.resize(50, null, 10)',
+                small: 'file.resize(500)',
+                reg: 'file.resize(1280)',
+                large: 'file.resize(1920)',
+                xxl: 'file.resize(2500)',
+                focus: 'file.focus',
+              }
+            },
+            logo_negative: {
+              query: `page.logo_negative.toFiles.first`,
+              select: {
+                alt: "file.alt.value",
+                tiny: 'file.resize(50, null, 10)',
+                small: 'file.resize(500)',
+                reg: 'file.resize(1280)',
+                large: 'file.resize(1920)',
+                xxl: 'file.resize(2500)',
+                focus: 'file.focus',
+              }
+            },
+          },
+        },
+
         pages_liste: {
           query: "content.pages_liste.toPages",
           select: {
