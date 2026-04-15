@@ -3,7 +3,7 @@
     >
       <div style="width: 100%; height: 1px; background: white; margin-bottom: var(--app-gutter)"/>
 
-      <div class="v-app-footer__container app-grid app-grid--justify-between app-grid--direction-column">
+      <div class="v-app-footer__projects-list app-grid app-grid--justify-between app-grid--direction-column">
 
         <div class="app-grid app-grid--justify-between app-grid-reg--wrap">
           <div class="v-app-footer__left-content">
@@ -82,7 +82,7 @@ defineProps<{
   background: black;
 }
 
-.v-app-footer__container {
+.v-app-footer__projects-list {
   height: calc(100vh - 7rem);
 
   @media (max-width: params.$break-point-reg) {

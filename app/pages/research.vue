@@ -4,7 +4,7 @@
 
     <BlockBulletPoint />
 
-    <div v-if="data?.result?.projects" class="app-with-padding--left-right">
+    <div v-if="data?.result?.projects" class="app-with-padding--left-right v-research__container">
       <AppProjectsList
         :filters="[
           {title: 'Academic publication', slug: 'academic-publication'},
@@ -60,6 +60,10 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
 
 <style lang="scss" scoped>
 .v-research {
+  padding-top: var(--app-header-height);
+}
+
+.v-app-footer__projects-list {
   padding-top: var(--app-header-height);
 }
 </style>
