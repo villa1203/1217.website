@@ -4,7 +4,7 @@
 
     <BlockBulletPoint />
 
-    <div v-if="data?.result?.projects" class="app-with-padding--left-right v-research__container">
+    <div v-if="data?.result?.projects" class="app-with-padding--left-right v-app-footer__projects-list">
       <AppProjectsList
         :filters="[
           {title: 'Academic publication', slug: 'academic-publication'},
