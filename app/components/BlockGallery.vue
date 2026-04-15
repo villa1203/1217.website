@@ -2,9 +2,9 @@
 	<section class="v-block block-gallery"
   >
 		<header v-if="block_data.content.title"
-            class="block-gallery__header"
-    >
-			<h2>{{ block_data.content.title }}</h2>
+            class="block-gallery__header app-rm-child-margin"
+        >
+			<h2 class="app-text-h3">{{ block_data.content.title }}</h2>
 		</header>
 
     <div class="app-grid app-grid--wrap">
@@ -39,6 +39,7 @@ defineProps<{
 
 .block-gallery__header {
   width: 50%;
+  margin-bottom: .5rem;
 
   @container block-gallery (width < 1300px) {
     width: calc(100% / 12 * 9);

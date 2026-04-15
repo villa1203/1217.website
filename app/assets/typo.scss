@@ -16,6 +16,12 @@ h3, .app-text-h3 {
   font-size: 1.5rem;
   line-height: 1.25em;
   opacity: 1;
+
+  &.app-text-h3--with-horizontal-correction {
+    position: relative;
+    top: -.35em;
+  }
+
 }
 
 p, .app-text-reg {

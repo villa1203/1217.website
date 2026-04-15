@@ -4,7 +4,7 @@
     <div class="app-grid app-grid--wrap">
 
       <div class="app-grid__col-5 app-rm-child-margin app-grid-reg__col-12">
-        <h2>{{block_data.content.title}}</h2>
+        <h2 class="app-text-h3 app-text-h3--with-horizontal-correction">{{block_data.content.title}}</h2>
       </div>
 
       <div class="app-grid__col-7 app-grid-reg__col-12">

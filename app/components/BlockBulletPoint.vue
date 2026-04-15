@@ -4,7 +4,8 @@
     <div class="app-grid app-grid--align-start app-grid--justify-center app-grid-reg--wrap">
       <header class="app-grid__col-4 app-grid-reg__col-12">
         <div class="app-grid app-grid--align-start app-grid--justify-center app-rm-child-margin app-grid-reg--justify-start">
-          <h2>Research</h2>
+          <h2 class="app-text-h3 app-text-h3--with-horizontal-correction"
+          >Research</h2>
         </div>
       </header>
 

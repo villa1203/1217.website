@@ -13,6 +13,7 @@
             :class="{
                 'app-text-align-center': !block_data.content.text
             }"
+            class="app-text-h3 app-text-h3--with-horizontal-correction"
           >{{ block_data.content.title }}</h2>
         </div>
       </header>
@@ -22,7 +23,7 @@
               'app-grid__col-6': block_data.content.title,
               'app-grid__col-12': !block_data.content.title,
             }"
-           class="app-grid-reg__col-12"
+           class="app-grid-reg__col-12 app-rm-child-margin"
       >
         <div v-html="block_data.content.text"/>
       </div>
