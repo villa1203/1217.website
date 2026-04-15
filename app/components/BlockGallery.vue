@@ -5,6 +5,9 @@
             class="block-gallery__header app-rm-child-margin"
         >
 			<h2 class="app-text-h3">{{ block_data.content.title }}</h2>
+			<p class="app-text-h2"
+         v-html="block_data.content.text"
+      />
 		</header>
 
     <div class="app-grid app-grid--wrap">
