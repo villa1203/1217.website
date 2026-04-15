@@ -23,6 +23,8 @@ export const KQL_QUERY_BLOCKS = {
             large: "file.resize(1920)",
             xxl: "file.resize(2500)",
             focus: "file.focus",
+            title: "file.title.value",
+            credit: "file.credit.value",
           },
         },
 

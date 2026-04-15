@@ -11,11 +11,17 @@
 		</header>
 
     <div class="app-grid app-grid--wrap">
-			<img v-for="image of block_data.content.images"
-           class="app-grid__col-6 block-gallery__img"
-           :src="image.large.url"
-           :alt="image.alt || 'image'"
+      <div class="app-grid__col-6 block-gallery__img-wrapper"
+           v-for="image of block_data.content.images"
       >
+        <div class="block-gallery__img-wrapper__text app-button">
+          {{image.title}}
+        </div>
+          <img class="block-gallery__img-wrapper__img"
+               :src="image.large.url"
+               :alt="image.alt || 'image'"
+          >
+      </div>
 
     </div>
     <div v-if="block_data.content.caption" class="app-text-strong" v-html="block_data.content.caption"></div>
@@ -53,6 +59,10 @@ defineProps<{
   }
 }
 
+.block-gallery__img-wrapper {
+  position: relative;
+}
+
 img {
   box-sizing: border-box;
   display: block;
@@ -60,6 +70,13 @@ img {
   max-height: calc(100vh - 4rem);
   object-fit: cover;
   border-radius: 1rem;
+  width: 100%;
+}
+
+.block-gallery__img-wrapper__text {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
 }
 
 </style>

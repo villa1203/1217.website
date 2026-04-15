@@ -10,6 +10,8 @@ export type CMS_API_ImageInstance = {
   "reg":    CMS_API_Image,
   "large":  CMS_API_Image,
   "xxl":    CMS_API_Image,
+  title?: string,
+  credit?: string,
 }
 
 export type CMS_API_Image = {
