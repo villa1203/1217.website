@@ -28,6 +28,7 @@ import type {CMS_API_Page_projet, CMS_API_Response, CMS_BlockData} from "#shared
 import {KQL_PROJECTS_SELECT, KQL_QUERY_BLOCKS} from "#shared/KQLQueries";
 import {getProjectBySector} from "#shared/projects_utils";
 import BlockBulletPoint from "~/components/BlockBulletPoint.vue";
+import {windowsScrollListener} from "~/utils/windowsScrollListener";
 
 type FetchData = CMS_API_Response & {
   "result": {
@@ -54,6 +55,16 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
       content: KQL_QUERY_BLOCKS
     }
   }
+})
+
+const listener = () => windowsScrollListener('.v-app-footer')
+
+onMounted(() => {
+  window.addEventListener('scroll', listener)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', listener)
 })
 </script>
 
