@@ -30,6 +30,7 @@ defineProps<{
   width: 100%;
   border-radius: 1rem;
   overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, .25);
 }
 
 img, video {
