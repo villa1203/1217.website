@@ -48,6 +48,8 @@ defineProps<{
 
 
 <style lang="scss" scoped>
+@use "~/assets/_params";
+
 .app-block-client-list__clients {
   width: 100%;
   box-sizing: border-box;
@@ -68,6 +70,10 @@ defineProps<{
   width: calc(100% / 4);
   background: var(--app-color-light);
   user-select: none;
+
+  @media (max-width: params.$break-point-reg) {
+    width: calc(100% / 2);
+  }
 }
 
 .app-block-client-list__clients__item__wrap {
