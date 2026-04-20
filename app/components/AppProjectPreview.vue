@@ -89,7 +89,7 @@ defineProps<{
   }
 
   .app-body-drak-view & {
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 1);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, .25);
   }
 }
 
