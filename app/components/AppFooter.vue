@@ -19,7 +19,7 @@
           </div>
         </div>
 
-        <div class="app-grid app-grid--justify-between app-grid-reg--wrap">
+        <div class="app-grid app-grid--justify-between app-grid-reg--wrap app-grid-reg--justify-start">
           <div class="app-grid-reg__col-12">
             <img class="v-app-footer__logo"
                  src="/logo.svg" />
@@ -44,7 +44,7 @@
           </div>
 
           <div>
-            <div class="app-grid app-grid--justify-end app-grid--align-center">
+            <div class="app-grid app-grid--justify-end app-grid--align-center" style="gap: .5rem">
               <button class="app-button app-button--variant-primary">Linkedin</button>
               <button class="app-button app-button--variant-primary">Instagram</button>
             </div>
