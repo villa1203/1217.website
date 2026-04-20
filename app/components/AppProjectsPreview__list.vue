@@ -5,11 +5,11 @@
                 'no-gradient': pages.length < 5,
              }"
     >
-      <div class="app-grid app-grid--align-start app-grid--justify-start v-app-last-projects-preview--list__scroll"
+      <div class="app-grid app-grid--align-start app-grid--justify-start v-app-last-projects-preview--list__scroll app-grid-reg--wrap"
            @scroll="onScrollInGallery"
       >
         <div v-for="project of pages"
-             class="app-grid__col-3 app-grid-reg__col-10"
+             class="app-grid__col-3 app-grid-reg__col-6"
              style="flex-shrink: 0"
         >
           <AppProjectPreview__list
@@ -55,6 +55,8 @@ function onScrollInGallery(e: Event) {
 
 
 <style lang="scss" scoped >
+@use '../assets/_params';
+
 .v-app-last-projects-preview--list {
   position: relative;
 
@@ -70,6 +72,10 @@ function onScrollInGallery(e: Event) {
     background: linear-gradient(to left, var(--app-color-light) 0%, hsla(0, 0%, 100%, 0) 100%);
     transform: translateX(100%);
     pointer-events: none;
+
+    @media (max-width: params.$break-point-reg) {
+      content: none;
+    }
   }
   &.no-gradient::after {
     content: none;
@@ -81,7 +87,11 @@ function onScrollInGallery(e: Event) {
 }
 
 .v-app-last-projects-preview--list__scroll {
-  overflow: scroll;
+  overflow: auto;
+
+  @media (max-width: params.$break-point-reg) {
+    overflow: hidden;
+  }
 }
 
 .v-app-last-projects-preview--list__button {
