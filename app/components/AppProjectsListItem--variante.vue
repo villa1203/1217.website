@@ -96,6 +96,10 @@ function onScrollInGallery(e: Event) {
   object-fit: cover;
   width: calc(100% / 5);
   border-radius: 1rem;
+
+  @media (max-width: params.$break-point-reg) {
+    width: calc(100% / 2.5);
+  }
 }
 
 .v-app-projects-list-item--variante__cover {
