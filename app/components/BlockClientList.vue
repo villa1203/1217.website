@@ -1,13 +1,27 @@
 <template>
   <div class="v-block block-client-list">
 
-    <div class="app-grid app-grid--wrap">
+    <div class="app-grid app-grid--wrap"
+         :class="{
+              'app-grid--justify-center': ! ( block_data.content.client_list.length < 9 ),
+           }"
+    >
 
-      <div class="app-grid__col-5 app-rm-child-margin app-grid-reg__col-12">
+      <div class="app-rm-child-margin app-grid-reg__col-12"
+           :class="{
+              'app-grid__col-5':      block_data.content.client_list.length < 9,
+              'app-grid__col-12': ! ( block_data.content.client_list.length < 9 ),
+           }"
+      >
         <h2 class="app-text-h3 app-text-h3--with-horizontal-correction">{{block_data.content.title}}</h2>
       </div>
 
-      <div class="app-grid__col-7 app-grid-reg__col-12">
+      <div class="app-grid-reg__col-12"
+           :class="{
+              'app-grid__col-7':      block_data.content.client_list.length < 9,
+              'app-grid__col-8': ! ( block_data.content.client_list.length < 9 ),
+           }"
+      >
         <div class="app-block-client-list__clients app-grid app-grid--align-start app-grid--justify-start app-grid--wrap app-grid--no-gap">
           <div class="app-block-client-list__clients__item"
                :class="{
