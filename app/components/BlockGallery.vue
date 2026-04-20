@@ -1,10 +1,10 @@
 <template>
 	<section class="v-block block-gallery"
   >
-		<header v-if="block_data.content.title"
-            class="block-gallery__header app-rm-child-margin"
-        >
-			<h2 class="app-text-h3">{{ block_data.content.title }}</h2>
+		<header class="block-gallery__header app-rm-child-margin">
+			<h2 class="app-text-h3"
+          v-if="block_data.content.title"
+      >{{ block_data.content.title }}</h2>
 			<p class="app-text-h2"
          v-html="block_data.content.text"
       />
