@@ -1,6 +1,5 @@
 <template>
-  <nuxt-link :to="`/works/${project.slug}`"
-             class="v-app-projects-list-item--variante app-grid app-grid-reg--wrap"
+  <div class="v-app-projects-list-item--variante app-grid app-grid-reg--wrap"
   >
     <div class="app-grid__col-4 app-grid-reg__col-12 app-rm-child-margin">
           <h3>{{project.title}}</h3>
@@ -55,14 +54,8 @@
           </div>
         </div>
       </div>
-
-
-
-
-
     </div>
-
-  </nuxt-link>
+  </div>
 </template>
 
 <script setup lang="ts">
