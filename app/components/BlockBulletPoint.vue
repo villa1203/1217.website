@@ -1,17 +1,17 @@
 <template>
 	<section class="v-block block-bullet-point app-grid app-grid--align-start" >
 
-    <div class="app-grid app-grid--align-start app-grid--justify-center app-grid-reg--wrap">
+    <div class="app-grid app-grid--align-start app-grid--justify-center app-grid-reg--wrap app-with-padding--left-right">
       <header class="app-grid__col-4 app-grid-reg__col-12">
-        <div class="app-grid app-grid--align-start app-grid--justify-center app-rm-child-margin app-grid-reg--justify-start">
+        <div class="app-grid app-grid--align-start app-rm-child-margin app-grid-reg--justify-start">
           <h2 class="app-text-h3 app-text-h3--with-horizontal-correction"
           >Research</h2>
         </div>
       </header>
 
-      <div class="app-grid__col-7 app-grid-reg__col-12">
+      <div class="app-grid__col-8 app-grid-reg__col-12">
         <div class="app-grid app-grid--align-start app-grid-reg--wrap">
-          <div class="block-bullet-point__coll">
+          <div class="block-bullet-point__coll app-grid app-grid--direction-column">
             <div>
               <div class="block-bullet-point__coll__title">Workshop</div>
               <div class="app-rm-child-margin">
@@ -23,7 +23,7 @@
                 <p>Publications document and share the studio’s research. Through essays, research papers, and visual materials, they allow ideas to circulate beyond the studio and contribute to broader discussions in design. Writing and publishing also provide a way to reflect critically on design practices.</p></div>
             </div>
           </div>
-          <div class="block-bullet-point__coll">
+          <div class="block-bullet-point__coll app-grid app-grid--direction-column">
             <div>
               <div class="block-bullet-point__coll__title">Venture Design</div>
               <div class="app-rm-child-margin">
@@ -55,9 +55,7 @@
 }
 
 .block-bullet-point__coll {
-  display: flex;
-  flex-direction: column;
-  gap: 4rem;
+  gap: 2rem;
 
   @media (max-width: params.$break-point-reg) {
     gap: 1rem;
