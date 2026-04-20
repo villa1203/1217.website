@@ -47,5 +47,7 @@ defineProps<{
   object-fit: cover;
   aspect-ratio: 4/5;
   border-radius: 1rem;
+  border: solid 1px rgba(255, 255, 255, .25);
+  box-sizing: border-box;
 }
 </style>
