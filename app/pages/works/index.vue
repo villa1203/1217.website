@@ -60,7 +60,7 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
   }
 })
 
-const listener = () => windowsScrollListener('.v-app-footer')
+const listener = () => windowsScrollListener('.v-app-projects-list__projects__item', 2)
 
 onMounted(() => {
   window.addEventListener('scroll', listener)
