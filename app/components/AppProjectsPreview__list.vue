@@ -5,7 +5,7 @@
                 'no-gradient': pages.length < 5,
              }"
     >
-      <div class="app-grid app-grid--align-start app-grid--justify-start v-app-last-projects-preview--list__scroll app-scroll__scrollable-container"
+      <div class="app-grid app-grid--align-start app-grid--justify-start v-app-last-projects-preview--list__scroll"
            @scroll="onScrollInGallery"
       >
         <div v-for="project of pages"
