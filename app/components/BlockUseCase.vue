@@ -3,8 +3,7 @@
     >
       <div>
         <h2 class="v-block-use-case__title">
-          Bureau 1217 is a creative office specializing in visual identity and web&nbsp;development.
-          <br>
+          Bureau 1217 is a creative&nbsp;office.
         </h2>
         <h2 class="v-block-use-case__baseline-wrapper">
           <Transition name="roll">
