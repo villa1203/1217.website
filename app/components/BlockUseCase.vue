@@ -3,7 +3,7 @@
     >
       <div>
         <h2 class="v-block-use-case__title">
-          Bureau 1217 is design studio based on Geneva and Lyon
+          Bureau 1217 is a creative office specializing in visual identity and web&nbsp;development.
           <br>
         </h2>
         <h2 class="v-block-use-case__baseline-wrapper">
@@ -52,9 +52,9 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
 })
 
 const baselines = [
-    'baseline 1',
-    'baseline 2',
-    'baseline 3',
+    'We craft visual systems for jazz schools and venues.',
+    'We shape identities for cultural organizations.',
+    'We craft platforms for Swiss graphic design festivals.',
 ]
 
 const currentIndex = ref(0)
@@ -91,6 +91,7 @@ onMounted(() => {
 
 .v-block-use-case__title {
   margin-bottom: 0;
+  max-width: 25em;
 }
 
 .v-block-use-case__baseline-wrapper {
