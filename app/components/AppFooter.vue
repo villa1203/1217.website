@@ -26,27 +26,19 @@
           </div>
 
           <div>
-            <div>Rue de Lyon 22</div>
-            <div>Genève 1203</div>
-            <div>Switzerland</div>
-          </div>
-
-          <div>
-            <div>24 Rue Royale</div>
-            <div>Lyon 69001</div>
-            <div>France</div>
-          </div>
-
-          <div>
             <div>Contact</div>
-            <div>hello@mail.mail</div>
-            <div>+41 000 00 00 00</div>
+            <a style="color: inherit; text-decoration: none"
+               href="mailto:hello@bureau1217.com">hello@bureau1217.com</a>
           </div>
 
           <div>
             <div class="app-grid app-grid--justify-end app-grid--align-center" style="gap: .5rem">
-              <button class="app-button app-button--variant-primary">Linkedin</button>
-              <button class="app-button app-button--variant-primary">Instagram</button>
+              <a href="https://fr.linkedin.com/company/bureau-1217"
+                 target="_blank"
+                 class="app-button app-button--variant-primary"
+              >Linkedin</a>
+              <a  href="https://www.instagram.com/bureau_1217/"
+                  class="app-button app-button--variant-primary">Instagram</a>
             </div>
           </div>
         </div>
