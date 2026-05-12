@@ -12,8 +12,14 @@ function viewDarkVersionToggleOnScroll(containerQuerySelector: string, counterCo
 
   if( !landmarkValue ) return
 
-  if(landmarkValue < 0) document.body?.classList.add('app-body-drak-view')
-  else document.body?.classList.remove('app-body-drak-view')
+  if(landmarkValue < 0) {
+    document.documentElement.classList.add('app-body-drak-view')
+    document.body?.classList.add('app-body-drak-view')
+  }
+  else {
+      document.documentElement.classList.remove('app-body-drak-view')
+    document.body?.classList.remove('app-body-drak-view')
+  }
 }
 
 

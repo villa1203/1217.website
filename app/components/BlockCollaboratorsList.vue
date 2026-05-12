@@ -15,14 +15,25 @@
       <div class="app-grid__col-12 block-collaborators-list__collaborators"
            v-if="data?.result?.content"
       >
-        <div class="app-grid app-grid--align-start app-grid--justify-start app-grid--no-gap block-collaborators-list__collaborators__item"
+        <div class="app-grid app-grid--wrap app-grid--align-start app-grid--justify-start block-collaborators-list__collaborators__item"
              v-for="collaborator of data?.result?.content"
         >
-          <div class="block-collaborators-list__collaborators__first_name">{{collaborator.first_name}} - {{collaborator.name}}</div>
-          <div class="block-collaborators-list__collaborators__competences">{{collaborator.competences}}</div>
-          <div class="block-collaborators-list__collaborators__roles">{{collaborator.roles}}</div>
-          <div class="block-collaborators-list__collaborators__city">{{collaborator.ville}}</div>
-          <div class="block-collaborators-list__collaborators__date">{{collaborator.date}}</div>
+          <div class="app-grid__col-9 app-grid-reg__col-10">
+            <div class="app-grid app-grid--wrap">
+              <div class="app-grid__col-4 app-grid__shrink-1 app-grid-reg__col-4 app-grid-small__col-12 block-collaborators-list__collaborators__first_name">
+                <div>{{collaborator.first_name}}</div>
+                <div>{{collaborator.name}}</div>
+              </div>
+              <div class="app-grid__col-4 app-grid__shrink-1 app-grid-reg__col-4 app-grid-small__col-12 block-collaborators-list__collaborators__competences">{{collaborator.competences}}</div>
+              <div class="app-grid__col-4 app-grid__shrink-1 app-grid-reg__col-4 app-grid-small__col-12 block-collaborators-list__collaborators__roles">{{collaborator.roles}}</div>
+            </div>
+          </div>
+          <div class="app-grid__col-3 app-grid-reg__col-2">
+            <div class="app-grid app-grid-reg--wrap app-grid--without-row-gap">
+              <div class="app-grid__col-12 app-grid-reg__col-12 app--reg-text-align-right block-collaborators-list__collaborators__city">{{collaborator.ville}}</div>
+              <div class="app-grid__shrink-0  app-text-align-right block-collaborators-list__collaborators__date">{{collaborator.date}}</div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -82,6 +93,7 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
 
 
 <style lang="scss" scoped>
+@use "../../app/assets/_params";
 
 .block-collaborators-list {
   width: 100%;
@@ -97,30 +109,12 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
   user-select: none;
 }
 
-.block-collaborators-list__collaborators__first_name {
-  width: calc(100%/4*1);
-  flex-shrink: 1;
-}
-
-.block-collaborators-list__collaborators__competences {
-  width: calc(100%/4*1);
-  flex-shrink: 1;
-}
-
-.block-collaborators-list__collaborators__roles {
-  width: calc(100%/4*1);
-  flex-shrink: 1;
-}
-
-.block-collaborators-list__collaborators__city {
-  width: calc(100%/4*1);
-  flex-shrink: 1;
-}
-
 .block-collaborators-list__collaborators__date {
-  text-align: right;
   width: 4rem;
-  flex-shrink: 1;
+
+  @media (max-width: params.$break-point-reg) {
+    width: 100%;
+  }
 }
 
 

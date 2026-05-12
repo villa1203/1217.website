@@ -67,6 +67,10 @@ import UIOpen from "~/components/UIOpen.vue";
 
 const infosIsOpen = ref(false)
 
+useRouter().beforeEach(() => {
+  infosIsOpen.value = false
+})
+
 
 
 </script>

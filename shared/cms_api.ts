@@ -153,6 +153,12 @@ export interface CMS_BlockVideoData extends CMS_BlockDataBase {
     toggle_is_large: 'true' | 'false',
     toggle_is_full: 'true' | 'false',
     toggle_ratio_1_1: 'true' | 'false',
+    video_file_mobil?: {
+      url: string,
+      id: string,
+      filename: string,
+      mime: string,
+    }[] | null,
     video_file?: {
       url: string,
       id: string,

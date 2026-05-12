@@ -22,7 +22,7 @@
               'app-grid__col-8': ! ( block_data.content.client_list.length < 9 ),
            }"
       >
-        <div class="app-block-client-list__clients app-grid app-grid--align-start app-grid--justify-start app-grid--wrap app-grid--no-gap">
+        <div class="app-block-client-list__clients app-grid app-grid--align-start app-grid--justify-start app-grid--wrap app-grid--without-gap">
           <div class="app-block-client-list__clients__item"
                :class="{
                 'app-block-client-list__clients__item--without-logo': !client.logo,
@@ -96,6 +96,7 @@ defineProps<{
 
   &:hover {
     opacity: 1 !important;
+    background: hsla(0, 0%, 100%, 0.05);
   }
 }
 

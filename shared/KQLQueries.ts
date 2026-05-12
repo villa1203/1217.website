@@ -149,6 +149,16 @@ export const KQL_QUERY_BLOCKS = {
             mime: true,
           },
         },
+
+        video_file_mobil: {
+          query: "content.video_file_mobil.toFiles",
+          select: {
+            url: true,
+            id: true,
+            filename: true,
+            mime: true,
+          },
+        }
       },
     },
   },

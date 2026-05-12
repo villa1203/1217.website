@@ -16,7 +16,9 @@
                    v-for="collaborator of data.result.collaborators">
                 {{collaborator.title}}</div>
             </div>
-            <div v-if="data.result.link_to_project">
+            <div v-if="data.result.link_to_project"
+                 style="padding-top: 1rem; padding-bottom: 1rem;"
+            >
               <a :href="data.result.link_to_project"
                  class="app-button app-button--variant-primary"
                  target="_blank"

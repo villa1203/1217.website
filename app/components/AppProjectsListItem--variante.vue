@@ -45,7 +45,7 @@
 
         <div class="v-app-projects-list-item--variante__cover app-grid">
           <div class="app-grid__col-8 app-rm-child-margin">
-            <p class="app-color-grey">{{ project.baseline }}</p>
+            <p>{{ project.baseline }}</p>
           </div>
 
           <div class="app-grid__col-4">

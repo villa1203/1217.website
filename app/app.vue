@@ -32,6 +32,7 @@
 <script setup lang="ts">
 
 useRouter().afterEach(() => {
+  document.documentElement.classList.remove('app-body-drak-view')
   document.body.classList.remove('app-body-drak-view')
 })
 

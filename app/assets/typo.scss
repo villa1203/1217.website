@@ -1,4 +1,4 @@
-
+@use "../assets/_params";
 
 h1, .app-text-h1 {
   font-weight: 400;
@@ -30,6 +30,11 @@ p, .app-text-reg {
   max-width: 40em;
   line-height: 1.25em;
   opacity: 0.6;
+
+  .app-body-drak-view & {
+    opacity: 1;
+  }
+
 }
 
 ul {
@@ -43,9 +48,23 @@ strong, .app-text-strong {
 }
 
 .app-color-grey {
-  color: hsl(0, 0%, 50%);
+  color: var(--app-color-dark);
+  opacity: 0.6;
 }
 
-.app-text-align-center { text-align: center; }
+.app-text-align-left    { text-align: left; }
+.app-text-align-center  { text-align: center; }
+.app-text-align-right   { text-align: right; }
 
+@media (max-width: params.$break-point-reg) {
+  .app--reg-text-align-left    { text-align: left; }
+  .app--reg-text-align-center  { text-align: center; }
+  .app--reg-text-align-right   { text-align: right; }
+}
+
+@media (max-width: params.$break-point-small) {
+  .app--small-text-align-left    { text-align: left; }
+  .app--small-text-align-center  { text-align: center; }
+  .app--small-text-align-right   { text-align: right; }
+}
 

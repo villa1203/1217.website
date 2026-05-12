@@ -25,7 +25,28 @@
         />
 			</div>
 
-      <div v-if="block_data.content.video_file && block_data.content.video_file[0]">
+      <!-- [START] video mobil / desktop gestion-->
+      <div v-if="block_data.content.video_file?.[0] && block_data.content.video_file_mobil?.[0]"
+           class="block-video__video-wrapper"
+      >
+        <video loop
+               muted
+               autoplay
+               playsinline
+               :src="block_data.content.video_file[0].url"
+               class="block-video__video-wrapper__video-desktop"
+        />
+        <video loop
+               muted
+               autoplay
+               playsinline
+               :src="block_data.content.video_file_mobil[0].url"
+               class="block-video__video-wrapper__video-mobil"
+        />
+      </div>
+      <div v-else-if="block_data.content.video_file?.[0]"
+           class="block-video__video-wrapper"
+      >
         <video loop
                muted
                autoplay
@@ -33,6 +54,17 @@
                :src="block_data.content.video_file[0].url"
         />
       </div>
+      <div v-else-if="block_data.content.video_file_mobil?.[0]"
+           class="block-video__video-wrapper"
+      >
+        <video loop
+               muted
+               autoplay
+               playsinline
+               :src="block_data.content.video_file_mobil[0].url"
+        />
+      </div>
+      <!-- [END] video mobil / desktop gestion-->
 
 			<figcaption v-if="block_data.content.caption || block_data.content.credits" class="section-caption">
 				<div v-if="block_data.content.caption" class="text small" v-html="block_data.content.caption"></div>
@@ -63,6 +95,8 @@ const props = defineProps<{
 
 
 <style lang="scss" scoped>
+@use "@/assets/_params";
+
 .block-video {
   width: calc( ((100% + var(--app-grid-gap) ) / 2) - var(--app-grid-gap));
   box-sizing: border-box;
@@ -106,6 +140,21 @@ video {
   .has-ratio-1-1 & {
     aspect-ratio: 1/1;
     object-fit: cover;
+  }
+
+  &.block-video__video-wrapper__video-desktop {
+    display: block;
+
+    @media (max-width: params.$break-point-reg) {
+      display: none;
+    }
+  }
+
+  &.block-video__video-wrapper__video-mobil {
+    display: none;
+    @media (max-width: params.$break-point-reg) {
+      display: block;
+    }
   }
 }
 </style>

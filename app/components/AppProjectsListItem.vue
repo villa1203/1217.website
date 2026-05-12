@@ -4,10 +4,10 @@
   >
     <div class="app-grid__col-6 app-grid-reg__col-12">
       <div class="app-grid app-grid-reg--wrap">
-        <div class="app-grid__col-4 app-grid-reg__col-12" >
+        <div class="app-grid__col-4 app-grid-reg__col-4" >
           <div class="app-text-strong">{{project.title}}</div>
         </div>
-        <div class="app-grid__col-4 app-grid-reg__col-12" >
+        <div class="app-grid__col-4 app-grid-reg__col-8" >
           <div class="app-text-strong">services</div>
           <div v-for="service of project.services" :key="service.title">{{ service.title }}</div>
         </div>
@@ -15,7 +15,7 @@
       </div>
 
       <div class="v-app-projects-list__projects__item__baseline v-app-projects-list__projects__item__baseline--large">
-        <p class="app-color-grey">{{project.baseline}}</p>
+        <p>{{project.baseline}}</p>
       </div>
     </div>
 
@@ -47,7 +47,7 @@
     </div>
 
     <div class="v-app-projects-list__projects__item__baseline v-app-projects-list__projects__item__baseline--reg app-rm-child-margin">
-      <p class="app-color-grey">{{project.baseline}}</p>
+      <p>{{project.baseline}}</p>
     </div>
   </nuxt-link>
 </template>

@@ -110,6 +110,11 @@ button, .app-button {
 * {
   scrollbar-width: thin;
   scrollbar-color: black transparent;
+
+  .app-body-drak-view &,
+  &.app-body-drak-view {
+    scrollbar-color: var(--app-color-primary) transparent;
+  }
 }
 
 /* Chrome, Edge, and Safari */
@@ -127,6 +132,11 @@ button, .app-button {
   border-radius: 10px;
   border: 2px solid transparent;
   background-clip: content-box;
+
+  .app-body-drak-view &,
+  &.app-body-drak-view {
+    background-color: var(--app-color-primary);
+  }
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -196,4 +206,18 @@ img {
   > * {
     opacity: 0 !important;
   }
+}
+
+// text selection
+
+::selection {
+  background: var(--app-color-primary);
+  color: black;
+  //opacity: 1 !important; todo: opacity can't be forced force selection text part
+}
+
+::-moz-selection {
+  background: var(--app-color-primary);
+  color: black;
+  //opacity: 1 !important;  todo: opacity can't be forced force selection text part
 }

@@ -28,7 +28,7 @@
           <div>
             <div>Contact</div>
             <a style="color: inherit; text-decoration: none"
-               href="mailto:hello@bureau1217.com">hello@bureau1217.com</a>
+               :href="`mailto:${mail}`">{{mail}}</a>
           </div>
 
           <div>
@@ -53,11 +53,13 @@
 
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
+const mail = ref('hello[at]')
 
-defineProps<{
-    message?: string
-}>()
+
+onMounted(() => {
+  window.setTimeout(() => mail.value = mail.value.replaceAll('[at]', '@bureau1217.com'), 5_000)
+})
+
 </script>
 
 
@@ -76,6 +78,7 @@ defineProps<{
 
 .v-app-footer__projects-list {
   height: calc(100vh - 7rem);
+  min-height: 500px;
 
   @media (max-width: params.$break-point-reg) {
     height: auto;

@@ -3,12 +3,14 @@
       <div class="v-app-projects-list__filters">
         <AppButton @click="setActiveTag('all')"
                    :is_active="activeTag === 'all'"
+                   style="padding-bottom: .5rem; padding-top: .5rem;"
         >All</AppButton>
         <AppButton
           :is_active="activeTag === filter.slug"
           v-for="filter of filters"
           :key="filter.slug"
           @click="setActiveTag(filter.slug)"
+          style="padding-bottom: .5rem; padding-top: .5rem;"
         >
           {{filter.title}}
         </AppButton>

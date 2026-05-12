@@ -4,7 +4,7 @@
     <div class="app-grid app-grid--wrap">
 
         <div v-for="profile of block_data.content.profiles_list"
-             class="block-profiles__profile-card app-grid__col-4 app-grid-reg__col-6"
+             class="block-profiles__profile-card app-grid__col-4 app-grid-reg__col-6 app-grid-small__col-12"
         >
             <div class="block-profiles__profile-card__profiles">
                 <div class="app-grid">
