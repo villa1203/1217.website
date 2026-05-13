@@ -1,6 +1,6 @@
 <template>
     <section class="v-app-projects-list">
-      <div class="v-app-projects-list__filters">
+      <div v-if="!hideFilters" class="v-app-projects-list__filters">
         <AppButton @click="setActiveTag('all')"
                    :is_active="activeTag === 'all'"
                    style="padding-bottom: .5rem; padding-top: .5rem;"
@@ -45,6 +45,7 @@ const props = defineProps<{
   filters: {title: string, slug: string}[]
   projects: CMS_API_Page_projet[]
   variante?: boolean
+  hideFilters?: boolean
 }>()
 
 const activeTag = ref<string>('all')

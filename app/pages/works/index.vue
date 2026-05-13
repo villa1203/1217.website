@@ -10,10 +10,10 @@
          class="app-with-padding--left-right v-works__container"
     >
       <AppProjectsList
+        :hide-filters="true"
         :filters="[
           {title: 'Art Direction', slug: 'art-direction'},
           {title: 'Visual Identity', slug: 'visual-identity'},
-          // {title: 'Motion Design', slug: 'motion-design'},
           {title: 'Brand Strategy', slug: 'brand-strategy'},
           {title: 'Web Development', slug: 'web-development'},
           {title: 'Web Design', slug: 'web-design'},
@@ -60,7 +60,7 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
   }
 })
 
-const listener = () => windowsScrollListener('.v-app-projects-list__projects__item', 2)
+const listener = () => windowsScrollListener('.v-app-projects-list__item', 2)
 
 onMounted(() => {
   window.addEventListener('scroll', listener)
