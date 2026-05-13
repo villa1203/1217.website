@@ -2,7 +2,7 @@
     <nuxt-link class="v-app-project-preview app-rm-child-margin"
                :to="`works/${slug}`"
     >
-      <button class="v-app-project-preview__tags">
+      <button class="v-app-project-preview__tags" :class="{ 'v-app-project-preview__tags--dark-bg': tag_dark_bg }">
         <template v-for="(service, index) in services">
           <template v-if="index > 0" > · </template><span class="v-app-project-preview__tags__text" >{{service}}</span>
         </template>
@@ -46,6 +46,7 @@ defineProps<{
   baseline: string,
   slug: string,
   services?: string[],
+  tag_dark_bg?: boolean,
 }>()
 </script>
 
@@ -68,6 +69,11 @@ defineProps<{
   left: var(--app-gutter);
   z-index: 1;
   margin-right: var(--app-gutter);
+
+  &--dark-bg {
+    --tag-glass-bg: hsla(0, 0%, 45%, 0.409);
+    background: var(--tag-glass-bg);
+  }
 }
 
 .v-app-project-preview__tags__text {
@@ -80,7 +86,7 @@ defineProps<{
 
 .v-app-project-preview__wrapper {
   margin-bottom: .5rem;
-  border-radius: 1rem;
+  border-radius: var(--app-media-radius);
   overflow: hidden;
   transition: border-radius 5s cubic-bezier(0, .25, 0, 1);
 
@@ -100,7 +106,7 @@ defineProps<{
   aspect-ratio: 3/2;
   max-height: calc( 100vh - 2rem);
   transition: transform 15s cubic-bezier(0, .25, 0, 1);
-  border-radius: 1rem;
+  border-radius: var(--app-media-radius);
 
 
   .v-app-project-preview:hover & {

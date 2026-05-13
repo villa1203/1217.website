@@ -34,6 +34,7 @@ export type CMS_API_Page_projet = {
   intro: string,
   id: string,
   preview_full_size: 'true' | 'false',
+  tag_dark_bg?: boolean,
   covers_video?: {
     url: string,
   },

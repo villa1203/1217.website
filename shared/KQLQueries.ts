@@ -170,6 +170,9 @@ export const KQL_PROJECTS_SELECT = {
   baseline: true,
   slug: true,
   intro: true,
+  tag_dark_bg: {
+    query: 'content.tag_dark_bg.toBool',
+  },
   covers_video: {
     query: "page.covers_video.toFiles.first",
     url: true,

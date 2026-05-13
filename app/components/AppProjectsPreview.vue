@@ -17,6 +17,7 @@
             :baseline="page.baseline"
             :slug="page.slug"
             :services="page.services?.map(service => service.title)"
+            :tag_dark_bg="page.tag_dark_bg"
           />
         </div>
       </div>
@@ -29,7 +30,6 @@
 
 <script setup lang="ts">
 import type {CMS_API_Page_projet} from "#shared/cms_api";
-import {defineProps} from "vue";
 
 defineProps<{
   pages: CMS_API_Page_projet[]
@@ -52,7 +52,7 @@ defineProps<{
 }
 
 .v-app-last-projects-preview__projects__item {
-  border-radius: 1rem;
+  border-radius: var(--app-media-radius);
 
   &.is-full {
     width: 100%;
