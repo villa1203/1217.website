@@ -3,10 +3,12 @@
                :to="`/works/${slug}`"
     >
       <button class="v-app-project-preview--list__title">{{title}}</button>
-      <img class="v-app-project-preview--list__cover"
-           v-if="image?.large.url"
-           :src="image.large.url"
-      />
+      <div class="v-app-project-preview--list__wrapper">
+        <img class="v-app-project-preview--list__cover"
+             v-if="image?.large.url"
+             :src="image.large.url"
+        />
+      </div>
     </nuxt-link>
 </template>
 
@@ -39,6 +41,18 @@ defineProps<{
   position: absolute;
   top: var(--app-gutter);
   left: var(--app-gutter);
+  z-index: 1;
+}
+
+.v-app-project-preview--list__wrapper {
+  border-radius: var(--app-media-radius);
+  overflow: hidden;
+  border: solid 1px rgba(255, 255, 255, .25);
+  transition: border-radius 5s cubic-bezier(0, .25, 0, 1);
+
+  .v-app-project-preview--list:hover & {
+    border-radius: 0;
+  }
 }
 
 .v-app-project-preview--list__cover {
@@ -46,8 +60,11 @@ defineProps<{
   width: 100%;
   object-fit: cover;
   aspect-ratio: 4/5;
-  border-radius: 1rem;
-  border: solid 1px rgba(255, 255, 255, .25);
   box-sizing: border-box;
+  transition: transform 15s cubic-bezier(0, .25, 0, 1);
+
+  .v-app-project-preview--list:hover & {
+    transform: scale(1.05);
+  }
 }
 </style>

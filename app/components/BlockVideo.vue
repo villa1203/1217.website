@@ -101,7 +101,7 @@ const props = defineProps<{
   width: calc( ((100% + var(--app-grid-gap) ) / 2) - var(--app-grid-gap));
   box-sizing: border-box;
   overflow: hidden;
-  border-radius: 1rem;
+  border-radius: var(--app-media-radius);
 
   &.has-gap-left {
     margin-left: 50%;

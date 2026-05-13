@@ -88,7 +88,7 @@ function onScrollInGallery(e: Event) {
   aspect-ratio: 10/13;
   object-fit: cover;
   width: calc(100% / 5);
-  border-radius: 1rem;
+  border-radius: var(--app-media-radius);
 
   @media (max-width: params.$break-point-reg) {
     width: calc(100% / 2.5);
@@ -100,7 +100,7 @@ function onScrollInGallery(e: Event) {
     width: 100%;
     aspect-ratio: 16/7;
     object-fit: cover;
-    border-radius: 1rem;
+    border-radius: var(--app-media-radius);
   }
 }
 

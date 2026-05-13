@@ -36,7 +36,7 @@ defineProps<{
   box-sizing: border-box;
   overflow: hidden;
   position: relative;
-  border-radius: 1rem;
+  border-radius: var(--app-media-radius);
 
   &.has-gap-left {
     margin-left: 50%;

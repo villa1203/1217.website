@@ -69,7 +69,7 @@ img {
   margin: 0;
   max-height: calc(100vh - 4rem);
   object-fit: cover;
-  border-radius: 1rem;
+  border-radius: var(--app-media-radius);
   width: 100%;
 }
 

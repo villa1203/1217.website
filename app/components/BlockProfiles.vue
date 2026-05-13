@@ -56,7 +56,7 @@ defineProps<{
 
 .block-profiles__profile-card__img {
     width: 100%;
-    border-radius: 1rem;
+    border-radius: var(--app-media-radius);
 }
 
 .block-profiles__profile-card__function {

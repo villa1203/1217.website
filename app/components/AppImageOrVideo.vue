@@ -28,7 +28,7 @@ defineProps<{
 <style lang="scss" scoped >
 .v-app-image-or-video {
   width: 100%;
-  border-radius: 1rem;
+  border-radius: var(--app-media-radius);
   overflow: hidden;
   box-shadow: 0 0 0 1px rgba(255, 255, 255, .25);
 }
