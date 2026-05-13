@@ -169,10 +169,10 @@ const clientCoverMap = computed<Record<string, CMS_API_ImageInstance>>(() => {
 
 // Four clearly distinct proportions. The morph between them is always visible.
 const CARD_SIZES: { w: number; h: number }[] = [
-  { w: 235, h: 360 },   // portrait        2:3
-  { w: 360, h: 320 },   // wide            ~9:8
-  { w: 290, h: 340 },   // slight portrait ~6:7
-  { w: 220, h: 420 },   // tall            ~1:1.9
+  { w: 270, h: 355 },   // portrait        ~3:4
+  { w: 370, h: 310 },   // wide            ~6:5
+  { w: 305, h: 335 },   // slight portrait ~9:10
+  { w: 265, h: 360 },   // tall            ~3:4.1
 ]
 
 function getSizeForSlug(slug: string): { w: number; h: number } {
