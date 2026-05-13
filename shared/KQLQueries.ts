@@ -77,6 +77,7 @@ export const KQL_QUERY_BLOCKS = {
           query: "content.client_list.toPages",
           select: {
             title: true,
+            slug: true,
             logo: {
               query: `page.logo.toFiles.first`,
               select: {

@@ -185,8 +185,10 @@ export interface CMS_BlockClientList extends CMS_BlockDataBase {
     title?: string,
     client_list: {
       title?: string,
+      slug?: string,
       logo?: CMS_API_ImageInstance
       logo_negative?: CMS_API_ImageInstance
+      cover?: CMS_API_ImageInstance
     }[]
   },
   "type": "clients_list"
