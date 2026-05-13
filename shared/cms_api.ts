@@ -75,12 +75,13 @@ export type CMS_BlockData =
   CMS_BlockSketchText |
   CMS_BlockGalleryData |
   CMS_BlockUseCase |
-  CMS_CollaboratorsList
+  CMS_CollaboratorsList |
+  CMS_BlockPrestations
 
 export interface CMS_BlockDataBase {
   "id": string,
   "isHidden": boolean,
-  "type": "article_heading" | "image" | "text" | "video" | "pages_list" | "clients_list" | "profiles" | 'sketch_text' | 'gallery' | 'use_case' | 'collaborators_list'
+  "type": "article_heading" | "image" | "text" | "video" | "pages_list" | "clients_list" | "profiles" | 'sketch_text' | 'gallery' | 'use_case' | 'collaborators_list' | 'prestations'
 }
 
 export interface CMS_BlockArticleHeadingData extends CMS_BlockDataBase {
@@ -200,6 +201,23 @@ export interface CMS_CollaboratorsList extends CMS_BlockDataBase {
     title?: string,
   },
 "type": "collaborators_list"
+}
+
+export interface CMS_BlockPrestations extends CMS_BlockDataBase {
+  "content": {
+    title?: string,
+    text?: string,
+    prestation_list: {
+      prestation_list_title: string,
+      prestation_list_description: string,
+      prestation_list_projects_linked: {
+        title: string,
+        slug: string,
+        cover?: CMS_API_ImageInstance,
+      }[],
+    }[]
+  },
+  "type": "prestations"
 }
 
 export interface CMS_BlockProfiles extends CMS_BlockDataBase {

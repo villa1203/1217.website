@@ -21,8 +21,7 @@
           <div class="app-grid__col-9 app-grid-reg__col-10">
             <div class="app-grid app-grid--wrap">
               <div class="app-grid__col-4 app-grid__shrink-1 app-grid-reg__col-4 app-grid-small__col-12 block-collaborators-list__collaborators__first_name">
-                <div>{{collaborator.first_name}}</div>
-                <div>{{collaborator.name}}</div>
+                <div>{{collaborator.first_name}} {{collaborator.name}}</div>
               </div>
               <div class="app-grid__col-4 app-grid__shrink-1 app-grid-reg__col-4 app-grid-small__col-12 block-collaborators-list__collaborators__competences">{{collaborator.competences}}</div>
               <div class="app-grid__col-4 app-grid__shrink-1 app-grid-reg__col-4 app-grid-small__col-12 block-collaborators-list__collaborators__roles">{{collaborator.roles}}</div>
@@ -43,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import type {CMS_API_ImageInstance, CMS_API_Response, CMS_CollaboratorsList} from "#shared/cms_api"
+import type {CMS_API_Response, CMS_CollaboratorsList} from "#shared/cms_api"
 
 defineProps<{
   block_data: CMS_CollaboratorsList,

@@ -141,6 +141,32 @@ export const KQL_QUERY_BLOCKS = {
           },
         },
 
+        prestation_list: {
+          query: "content.prestation_list.toStructure",
+          select: {
+            prestation_list_title: "structureItem.content.prestation_list_title",
+            prestation_list_description: "structureItem.content.prestation_list_description",
+            prestation_list_projects_linked: {
+              query: "structureItem.content.prestation_list_projects_linked.toPages",
+              select: {
+                title: true,
+                slug: true,
+                cover: {
+                  query: "page.covers.toFiles.first",
+                  select: {
+                    alt: "file.alt.value",
+                    tiny: "file.resize(50, null, 10)",
+                    small: "file.resize(500)",
+                    reg: "file.resize(1280)",
+                    large: "file.resize(1920)",
+                    xxl: "file.resize(2500)",
+                  },
+                },
+              },
+            },
+          },
+        },
+
         video_file: {
           query: "content.video_file.toFiles",
           select: {
@@ -171,7 +197,7 @@ export const KQL_PROJECTS_SELECT = {
   slug: true,
   intro: true,
   tag_dark_bg: {
-    query: 'content.tag_dark_bg.toBool',
+    query: 'page.tag_dark_bg.toBool',
   },
   covers_video: {
     query: "page.covers_video.toFiles.first",
