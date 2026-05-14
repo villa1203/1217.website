@@ -46,9 +46,7 @@ export const KQL_QUERY_BLOCKS = {
         toggle_ratio_1_1: true,
 
 
-        is_style_list: {
-          query: "content.is_style_list.toBool",
-        },
+        is_style_list: "content.is_style_list.toBool",
 
         profiles_list: {
           query: "content.profiles_list.toStructure",

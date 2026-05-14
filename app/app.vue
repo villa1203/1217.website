@@ -5,7 +5,7 @@
       <AppNav/>
     </div>
     <main>
-      <NuxtPage/>
+      <NuxtPage />
     </main>
     <div>
       <AppFooter/>

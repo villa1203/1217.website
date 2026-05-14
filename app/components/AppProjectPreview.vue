@@ -3,9 +3,7 @@
                :to="`works/${slug}`"
     >
       <button class="v-app-project-preview__tags" :class="{ 'v-app-project-preview__tags--dark-bg': tag_dark_bg }">
-        <template v-for="(service, index) in services">
-          <template v-if="index > 0" > · </template><span class="v-app-project-preview__tags__text" >{{service}}</span>
-        </template>
+        <span v-if="services?.[0]" class="v-app-project-preview__tags__text">{{ services[0] }}</span>
       </button>
       <div class="v-app-project-preview__wrapper">
         <template v-if="covers_video">

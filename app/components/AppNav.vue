@@ -12,31 +12,29 @@
 
       <div class="app-grid app-grid--justify-between app-grid-reg--wrap app-grid-reg--justify-end">
 
-        <div class="app-button app-button--reverse-with-dark-view v-nav__logo"
+        <div ref="logoRef"
+             class="app-button app-button--reverse-with-dark-view v-nav__logo"
              style="z-index: 10; transition-delay: .25s;"
+             @click="navigateTo('/')"
         >
           <div class="app-grid app-grid--align-center">
-            <nuxt-link to="/">
-              <img src="/logo.svg" role="button"/>
-            </nuxt-link>
+            <img src="/logo.svg"/>
             <div class="toggle-infos"
-                 @click="infosIsOpen = !infosIsOpen"
+                 @click.stop="infosIsOpen = !infosIsOpen"
             >
               <UIOpen/>
             </div>
           </div>
         </div>
 
-        <transition name="animation-1" :duration="1000">
+        <transition name="nav-info">
           <div v-if="infosIsOpen"
                class="app-rm-child-margin v-nav__infos"
           >
-            <p>
-              <span class="app-text-strong">informations</span>
-              <br>Bureau 1217 is a design office working across identity, digital platforms, and interactive experiences.
-              <br>From interactive storytelling for the Winter Olympic Games to visual identity systems for educational institutions and immersive memorial experiences developed with public institutions, we design projects that connect people to ideas, places, and histories.
-            </p>
-            <p>We work with 3D, 2D and generative animation to create music videos, brand identities and typography in motion.</p>
+            <div v-if="navInfo?.result?.menu_description"
+                 class="v-nav__infos__description"
+                 v-html="navInfo.result.menu_description"
+            />
 
             <div style="margin-top: 10rem;" class="app-grid">
               <span class="app-button app-button--transparent">Instagram</span>
@@ -64,11 +62,34 @@
 
 <script setup lang="ts">
 import UIOpen from "~/components/UIOpen.vue";
+import type { CMS_API_Response } from "#shared/cms_api";
+
+type NavInfoData = CMS_API_Response & {
+  result: { menu_description: string }
+}
+
+const { data: navInfo } = useFetch<NavInfoData>('/api/CMS_KQLRequest', {
+  lazy: true,
+  method: 'POST',
+  body: {
+    query: `page('informations-site')`,
+    select: { menu_description: 'page.menu_description.value' }
+  }
+})
 
 const infosIsOpen = ref(false)
+const logoRef = ref<HTMLElement | null>(null)
 
 useRouter().beforeEach(() => {
   infosIsOpen.value = false
+})
+
+watch(infosIsOpen, async (newVal) => {
+  if (!newVal && logoRef.value) {
+    logoRef.value.style.transition = 'none'
+    await nextTick()
+    logoRef.value.style.transition = ''
+  }
 })
 
 
@@ -92,15 +113,26 @@ useRouter().beforeEach(() => {
   top: var(--app-gutter);
   left: var(--app-gutter);
   width: 30rem;
-  background: hsla(0, 0%, 0%, 0.25);
+  background: var(--app-glass-bg);
   backdrop-filter: blur(10px);
   border-radius: .75rem;
   color: white;
   padding: 5rem .75rem .75rem;
   z-index: 0;
 
+  // Unified outline + shadow for the whole block
+  border: 0.5px solid hsla(0, 0%, 100%, 0.18);
+  box-shadow: 0 4px 24px hsla(0, 0%, 0%, 0.3),
+              inset 0 1px 0 hsla(0, 0%, 100%, 0.08);
+
   > * {
     opacity: 1;
+  }
+
+  // v-html content is not scoped — target p tags explicitly
+  :deep(p) {
+    opacity: 1;
+    color: white;
   }
 
   @media (max-width: params.$break-point-reg) {
@@ -110,11 +142,21 @@ useRouter().beforeEach(() => {
   }
 }
 
+// When open, strip visual styling from the logo button so the panel reads as one block.
+// All changes are delayed 150ms so the panel has faded in enough to cover the logo area
+// before the logo becomes transparent — prevents the white page showing through.
 .infos-is-open .v-nav__logo {
   @media (min-width: params.$break-point-reg) {
-    background: transparent;
-    transition: none;
-    backdrop-filter: none;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    transition: background     0s 0.15s,
+                backdrop-filter 0s 0.15s,
+                border-color   0s 0.12s,
+                box-shadow     0s 0.12s,
+                text-shadow    0s 0.12s !important;
   }
 }
 
@@ -144,6 +186,29 @@ useRouter().beforeEach(() => {
   }
 }
 
+
+// ── Info panel morph transition ───────────────────────────────────────────────
+// transform-origin: top left = panel grows out of / collapses into the button corner
+
+.nav-info-enter-active {
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity    0.2s  ease;
+  transform-origin: top left;
+}
+.nav-info-enter-from {
+  transform: scaleX(0.5) scaleY(0.06);
+  opacity: 0;
+}
+
+.nav-info-leave-active {
+  transition: transform 0.38s cubic-bezier(0.4, 0, 1, 1),
+              opacity    0.22s ease;
+  transform-origin: top left;
+}
+.nav-info-leave-to {
+  transform: scaleX(0.5) scaleY(0.06);
+  opacity: 0;
+}
 
 .v-nav__links {
   @media (max-width: params.$break-point-reg) {

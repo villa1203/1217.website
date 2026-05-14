@@ -1,13 +1,13 @@
 <template>
     <section class="v-block-use-case app-grid app-grid--align-center app-grid--justify-center"
     >
-      <div>
+      <div class="v-block-use-case__inner">
         <h2 class="v-block-use-case__title">
-          Bureau 1217 is a creative&nbsp;office.
+          Bureau 1217 is a design and technology office.
         </h2>
-        <h2 class="v-block-use-case__baseline-wrapper">
-          <Transition name="roll">
-            <div :key="currentIndex" class="v-block-use-case__baseline">{{ baselines[currentIndex] }}</div>
+        <h2 ref="wrapperRef" class="v-block-use-case__baseline-wrapper">
+          <Transition name="roll" @before-leave="freezeHeight" @after-enter="releaseHeight">
+            <span :key="currentIndex" class="v-block-use-case__baseline">{{ baselines[currentIndex] }}</span>
           </Transition>
         </h2>
       </div>
@@ -51,17 +51,32 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
 })
 
 const baselines = [
-    'We craft visual systems for jazz schools and venues.',
-    'We shape identities for cultural organizations.',
-    'We craft platforms for Swiss graphic design festivals.',
+  'We design interactive storytelling for the Olympic Games.',
+  'We craft visual systems for jazz schools and venues.',
+  'We create immersive experiences for public institutions.',
+  'We shape identities for cultural organizations.',
+  'We direct motion design for sports teams.',
+  'We co-create tools to combat disinformation.',
+  'We build platforms for graphic design festivals.',
+  'We define communication strategies for energy providers.',
 ]
 
 const currentIndex = ref(0)
+const wrapperRef   = ref<HTMLElement | null>(null)
+
+function freezeHeight() {
+  const el = wrapperRef.value
+  if (el) el.style.height = `${el.offsetHeight}px`
+}
+function releaseHeight() {
+  const el = wrapperRef.value
+  if (el) el.style.height = ''
+}
 
 onMounted(() => {
   setInterval(() => {
     currentIndex.value = (currentIndex.value + 1) % baselines.length
-  }, 2_000)
+  }, 3_500)
 })
 </script>
 
@@ -72,65 +87,48 @@ onMounted(() => {
 <style lang="scss" scoped >
 .v-block-use-case {
   box-sizing: border-box;
-  height: calc(100vh - (var(--app-row-gap) * 2) );
-  text-align: center;
+  height: calc(100vh - (var(--app-row-gap) * 2));
   position: relative;
 }
 
-.v-block-use-case__projects {
-  position: absolute;
-  bottom: var(--app-gutter);
-  left: 50%;
-  transform: translateX(-50%);
-
-  img {
-    height: 15vh;
-  }
+// width: 100% freezes the flex-item width so the title above never reflows
+.v-block-use-case__inner {
+  width: 100%;
+  text-align: center;
 }
 
 .v-block-use-case__title {
-  margin-bottom: 0;
+  margin: 0 auto;
   max-width: 25em;
 }
 
+// overflow: hidden is the clipping mask — text rolls within this window
 .v-block-use-case__baseline-wrapper {
   margin-top: 0;
-  overflow: hidden;
-  vertical-align: bottom;
   position: relative;
+  overflow: hidden;
 }
 
 .v-block-use-case__baseline {
-  display: inline-block;
+  display: block;
+  width: 100%;
 }
 
-.roll-enter-active {
-  transition: transform 0.4s ease;
-}
-.roll-enter-from {
-  transform: translateY(100%);
-}
-.roll-enter-to {
-  transform: translateY(0);
-}
+// ── Slot-machine roll ─────────────────────────────────────────────────────────
+// Both enter and leave share the exact same duration + easing so they stay
+// locked together: leaving top + entering bottom always fill one wrapper-height.
+
+$roll-timing: 0.65s cubic-bezier(0.65, 0, 0.35, 1);
+
+.roll-enter-active { transition: transform $roll-timing; }
+.roll-enter-from   { transform: translateY(100%); }
+.roll-enter-to     { transform: translateY(0); }
 
 .roll-leave-active {
-  transition: transform 0.4s ease;
+  transition: transform $roll-timing;
   position: absolute;
-  left: 0;
-  right: 0;
+  top: 0; left: 0; width: 100%;
 }
-.roll-leave-from {
-  transform: translateY(0);
-}
-.roll-leave-to {
-  transform: translateY(-100%);
-}
-
-.v-block-use-case__projects__title {
-  position: absolute;
-  top: calc(100% / 3);
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
+.roll-leave-from { transform: translateY(0); }
+.roll-leave-to   { transform: translateY(-100%); }
 </style>

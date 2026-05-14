@@ -47,31 +47,37 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
 
 const listener = () => windowsScrollListener('.v-block', 2)
 
-let hasScrollingToBottom = false
+// 'idle'    → watching for the snap zone
+// 'snapping'→ smooth scroll in flight — swallow ALL wheel events so native
+//             scroll can't compete and cause vibration
+// 'done'    → snapped, free scrolling; re-arms when user returns to top
+type SnapState = 'idle' | 'snapping' | 'done'
+let snapState: SnapState = 'idle'
+let snapTimer: ReturnType<typeof setTimeout> | null = null
 
 const handleWheelAtTop = (event: WheelEvent) => {
-
-  if(hasScrollingToBottom) {
-    if (window.scrollY === 0) {
-      hasScrollingToBottom = false
-    }
-  } else {
-    if (window.scrollY > 50 && window.scrollY < 100) {
-      const firstBlock = document.querySelector('.v-block')
-
-      const topPosition = window.innerHeight
-
-      if (firstBlock) {
-        event.preventDefault()
-        window.scrollTo({
-          behavior: 'smooth',
-          top: topPosition,
-        })
-        hasScrollingToBottom = true
-      }
-    }
+  if (snapState === 'snapping') {
+    event.preventDefault()   // block every wheel tick during the animation
+    return
   }
 
+  if (snapState === 'done') {
+    if (window.scrollY < 20) snapState = 'idle'   // re-arm at top
+    return
+  }
+
+  // idle — trigger when the user drifts into the snap zone
+  if (window.scrollY > 50 && window.scrollY < 100) {
+    const firstBlock = document.querySelector('.v-block')
+    if (!firstBlock) return
+
+    event.preventDefault()
+    snapState = 'snapping'
+    window.scrollTo({ behavior: 'smooth', top: window.innerHeight })
+
+    if (snapTimer) clearTimeout(snapTimer)
+    snapTimer = setTimeout(() => { snapState = 'done' }, 900)
+  }
 }
 
 onMounted(() => {
@@ -82,6 +88,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener('scroll', listener)
   window.removeEventListener('wheel', handleWheelAtTop)
+  if (snapTimer) clearTimeout(snapTimer)
 })
 
 
@@ -123,4 +130,5 @@ onBeforeUnmount(() => {
   text-decoration: none;
   pointer-events: auto;
 }
+
 </style>

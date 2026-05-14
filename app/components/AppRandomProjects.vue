@@ -23,9 +23,8 @@
           :class="{ 'no-transition': noTransitionIds[item.id] }"
           :style="{ transform: `translateX(-${(slideIndices[item.id] ?? 0) * 100}%)` }"
         >
-          <!-- append srcs[0] as a clone at the end for seamless infinite loop -->
           <AppImageOrVideo
-            v-for="(src, i) of [...item.srcs, item.srcs[0]]"
+            v-for="(src, i) of [...item.srcs, item.srcs[0] ?? '']"
             :key="i"
             :src="src"
           />
@@ -69,27 +68,35 @@ function getAllImagesOfProject(project: CMS_API_Page_projet): string[] {
   if (project.covers_video?.url && !seen.has(project.covers_video.url)) {
     urls.push(project.covers_video.url)
   }
-  // Random start for variety across items
   const start = Math.floor(Math.random() * urls.length)
   return [...urls.slice(start), ...urls.slice(0, start)]
 }
 
-// ── Marquee ───────────────────────────────────────────────────────────────────
+// ── Marquee — delta-time based for consistent speed across framerates ──────────
+
+const SPEED = 82  // px / second
 
 const listRef = ref<HTMLElement | null>(null)
 const paused  = ref(false)
 let currentX  = 0
+let lastTime: number | null = null
 let rafId: number | null = null
 
-function tick() {
+function tick(now: number) {
+  rafId = requestAnimationFrame(tick)
   const el = listRef.value
-  if (el && !paused.value) {
+  if (!el) return
+  if (lastTime === null) { lastTime = now; return }
+
+  const dt = Math.min(now - lastTime, 50)
+  lastTime = now
+
+  if (!paused.value) {
     const halfWidth = el.scrollWidth / 2
-    currentX -= halfWidth / (15 * 60)
+    currentX -= SPEED * dt / 1000
     if (currentX <= -halfWidth) currentX += halfWidth
     el.style.transform = `translateX(${currentX}px)`
   }
-  rafId = requestAnimationFrame(tick)
 }
 
 // ── Hover + slideshow ─────────────────────────────────────────────────────────
@@ -101,22 +108,20 @@ let   slideTimer: ReturnType<typeof setInterval> | null = null
 let   slideDelay: ReturnType<typeof setTimeout>  | null = null
 
 watch(hoveredId, (newId) => {
-  if (slideDelay) { clearTimeout(slideDelay);   slideDelay = null }
-  if (slideTimer) { clearInterval(slideTimer);   slideTimer = null }
+  if (slideDelay) { clearTimeout(slideDelay);  slideDelay = null }
+  if (slideTimer) { clearInterval(slideTimer); slideTimer = null }
   if (newId === null) return
 
   const item = doubledList.value.find(i => i.id === newId)
   if (!item || item.srcs.length <= 1) return
 
-  // Always restart from 0 on each new hover
   slideIndices[newId] = 0
 
-  // 1 s of zoom, then start cycling images
+  // Longer initial pause so the shape morph settles before images start cycling
   slideDelay = setTimeout(() => {
     slideTimer = setInterval(() => {
       const idx = slideIndices[newId] ?? 0
       if (idx >= item.srcs.length) {
-        // On the clone — jump back to real 0 instantly, then advance to 1
         noTransitionIds[newId] = true
         slideIndices[newId] = 0
         setTimeout(() => {
@@ -126,12 +131,10 @@ watch(hoveredId, (newId) => {
       } else {
         slideIndices[newId] = idx + 1
       }
-    }, 700)
-  }, 1000)
+    }, 1200)
+  }, 500)
 })
 
-// mousemove + closest: hover state is set when over an item but NOT cleared
-// when crossing a gap — only mouseleave clears it. Eliminates CSS oscillation.
 function onListMouseMove(event: MouseEvent) {
   const el = (event.target as Element).closest<HTMLElement>('.v-app-random-projects__item')
   if (!el) return
@@ -178,21 +181,32 @@ onBeforeUnmount(() => {
   border-radius: var(--app-media-radius);
 
   width: 20vw;
-  aspect-ratio: 16/9;
+  aspect-ratio: 16 / 9;
+
+  // Shape morph + shadow — both transition together
+  transition:
+    aspect-ratio 1.1s cubic-bezier(0.65, 0, 0.35, 1),
+    box-shadow   0.7s ease;
 
   @media (max-width: params.$break-point-reg) {
     width: 75vw;
-    aspect-ratio: 16/9;
   }
 
-  // Siblings: hide content, show only a light grey outline
-  &.is-sibling .v-app-random-projects__item__track {
-    opacity: 0;
-    transition: opacity 0.8s ease, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  // ── Hover: morph to portrait + drop shadow ─────────────────────────────────
+  &.is-hovered {
+    aspect-ratio: 3 / 4;
+    box-shadow:
+      0 20px 60px rgba(0, 0, 0, 0.18),
+      0  4px 16px rgba(0, 0, 0, 0.10);
   }
 
+  // ── Siblings: outline only ─────────────────────────────────────────────────
   &.is-sibling {
     box-shadow: inset 0 0 0 1px rgba(180, 180, 180, 0.35);
+  }
+
+  &.is-sibling .v-app-random-projects__item__track {
+    opacity: 0;
   }
 }
 
@@ -202,7 +216,10 @@ onBeforeUnmount(() => {
   display: flex;
   width: 100%;
   height: 100%;
-  transition: opacity 0.8s ease, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  // Slide easing: confident sweep in/out
+  transition:
+    opacity   0.9s ease,
+    transform 0.85s cubic-bezier(0.76, 0, 0.24, 1);
 
   .v-app-image-or-video {
     flex-shrink: 0;
@@ -226,10 +243,9 @@ onBeforeUnmount(() => {
   transition: none !important;
 }
 
-// Zoom in on the hovered item's current image
-.v-app-random-projects__item.is-hovered {
-  img, video {
-    transform: scale(1.05);
-  }
+// Slow zoom on hover — persists across image slides
+.v-app-random-projects__item.is-hovered img,
+.v-app-random-projects__item.is-hovered video {
+  transform: scale(1.05);
 }
 </style>
