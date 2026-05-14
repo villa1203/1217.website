@@ -5,7 +5,7 @@
       <AppNav/>
     </div>
     <main>
-      <NuxtPage />
+      <NuxtPage :transition="{ name: 'page', mode: 'out-in' }" />
     </main>
     <div>
       <AppFooter/>
@@ -66,10 +66,23 @@ useHead({
 </script>
 
 
+<style lang="scss">
+.page-leave-active {
+  transition: opacity 0.4s ease;
+}
+.page-leave-to {
+  opacity: 0;
+}
+</style>
+
 <style lang="scss" scoped>
 .v-app {
   width: 100%;
   overflow: hidden;
+}
+
+main {
+  min-height: 100svh;
 }
 
 .v-app__header {

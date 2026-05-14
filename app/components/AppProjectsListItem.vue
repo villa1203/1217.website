@@ -1,6 +1,7 @@
 <template>
   <nuxt-link :to="`/works/${project.slug}`"
              class="v-app-projects-list__item app-grid app-grid-reg--wrap"
+             :class="{ 'is-sibling': isSibling }"
   >
 
     <div class="app-grid__col-6 app-grid-reg__col-12 v-app-projects-list__left">
@@ -34,7 +35,9 @@
         </div>
       </div>
 
-      <p class="v-app-projects-list__description">{{ project.baseline }}</p>
+      <div class="v-app-projects-list__description-wrap">
+        <p class="v-app-projects-list__description">{{ project.baseline }}</p>
+      </div>
 
     </div>
 
@@ -48,19 +51,23 @@
       <div class="app-grid app-grid--justify-end v-app-projects-list__gallery__container app-grid-reg--justify-start"
            @scroll="onScrollInGallery"
       >
-        <template v-for="(item, index) of project.gallery" :key="index">
+        <div
+          v-for="(item, index) of project.gallery"
+          :key="index"
+          class="v-app-projects-list__visual-wrap app-grid__shrink-0 app-grid__col-7"
+        >
           <video
             v-if="item.small.url.endsWith('.mp4')"
-            class="v-app-projects-list__visual app-grid__shrink-0 app-grid__col-7"
+            class="v-app-projects-list__visual"
             muted autoplay loop playsinline
             :src="item.small.url"
           />
           <img
             v-else
-            class="v-app-projects-list__visual app-grid__shrink-0 app-grid__col-7"
+            class="v-app-projects-list__visual"
             :src="item.small.url"
           />
-        </template>
+        </div>
       </div>
     </div>
 
@@ -73,6 +80,7 @@ import type { CMS_API_Page_projet } from "#shared/cms_api"
 
 defineProps<{
   project: CMS_API_Page_projet
+  isSibling?: boolean
 }>()
 
 const hideGradient = ref(false)
@@ -91,6 +99,16 @@ function onScrollInGallery(e: Event) {
   padding-top: var(--app-gutter);
   color: inherit;
   text-decoration: inherit;
+
+  &.is-sibling .v-app-projects-list__visual {
+    opacity: 0;
+    transition: opacity 0.55s ease;
+  }
+
+  &.is-sibling .v-app-projects-list__visual-wrap::after {
+    border-color: transparent;
+    transition: border-color 0.55s ease;
+  }
 }
 
 // Left side: flex column so description sits at the bottom
@@ -126,18 +144,26 @@ function onScrollInGallery(e: Event) {
 
 .v-app-projects-list__tag {
   border: 1px solid var(--app-color-dark);
-  border-radius: var(--app-media-radius);
+  border-radius: 0.30rem;
   padding: 0.1rem 0.5rem;
   font-size: 0.8rem;
   white-space: nowrap;
 }
 
-// Description right edge aligns with Sector column (3 of 4 cols)
-// width = 3 cols + 2 gaps = 75% - gap/4
+.v-app-projects-list__description-wrap {
+  overflow: hidden;
+}
+
 .v-app-projects-list__description {
   margin: 0;
   opacity: 0.6;
   width: calc(75% - var(--app-grid-gap) * 0.25);
+  transform: translateY(110%);
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+
+  .v-app-projects-list__item:hover & {
+    transform: translateY(0);
+  }
 
   @media (max-width: params.$break-point-reg) {
     width: 100%;
@@ -145,10 +171,28 @@ function onScrollInGallery(e: Event) {
 }
 
 // Gallery (unchanged)
+.v-app-projects-list__visual-wrap {
+  position: relative;
+  border-radius: var(--app-media-radius);
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 0.5px solid hsla(0, 0%, 100%, 0.18);
+    pointer-events: none;
+    transition: border-color 0.55s ease;
+  }
+}
+
 .v-app-projects-list__visual {
+  display: block;
+  width: 100%;
   aspect-ratio: 16/9;
   object-fit: cover;
   border-radius: var(--app-media-radius);
+  transition: opacity 0.9s ease;
 }
 
 .v-app-projects-list__gallery {

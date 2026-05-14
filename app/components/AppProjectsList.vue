@@ -32,6 +32,9 @@
             v-for="project of filteredProjects"
             :key="project.slug"
             :project="project"
+            :is-sibling="hoveredSlug !== null && hoveredSlug !== project.slug"
+            @mouseenter="hoveredSlug = project.slug"
+            @mouseleave="hoveredSlug = null"
           />
         </template>
       </div>
@@ -48,6 +51,7 @@ const props = defineProps<{
   hideFilters?: boolean
 }>()
 
+const hoveredSlug = ref<string | null>(null)
 const activeTag = ref<string>('all')
 
 const setActiveTag = (tag: string) => {activeTag.value = tag}
@@ -65,8 +69,15 @@ const filteredProjects = computed(() => props.projects.filter(project => {
 </script>
 
 <style lang="scss" scoped>
+
+.v-app-projects-list {
+  padding-bottom: 10%;
+}
+
 .v-app-projects-list__filters {
   padding-bottom: var(--app-gutter);
   border-bottom: solid 1px var(--app-color-dark);
 }
+
+
 </style>
