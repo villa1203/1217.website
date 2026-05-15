@@ -34,7 +34,6 @@
 
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
 import type {CMS_API_ImageInstance} from "#shared/cms_api";
 
 defineProps<{
@@ -46,6 +45,7 @@ defineProps<{
   services?: string[],
   tag_dark_bg?: boolean,
 }>()
+
 </script>
 
 
@@ -134,4 +134,5 @@ defineProps<{
     transition-timing-function: cubic-bezier(0.25, 0, 0, 1);
   }
 }
+
 </style>

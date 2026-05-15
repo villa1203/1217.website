@@ -82,22 +82,40 @@ onBeforeUnmount(() => {
 </style>
 
 <style lang="scss">
-// ── 1. AppRandomProjects — cinematic sweep from right
-//    easeOutExpo: fast entry, dramatic deceleration to a precise stop
+// ── 1. AppRandomProjects — strip sweeps in from right, items morph individually
+//    ↓ tune these two values to control strip arrival feel
+//    duration: how long the slide takes         → currently 3.0s
+//    easing:   cubic-bezier(0.25, 1, 0.5, 1)   → easeOutQuart (gentler than Expo)
 .works-gallery-enter-active {
-  transition: transform 2.0s cubic-bezier(0.19, 1, 0.22, 1),
-              opacity   0.8s ease;
+  transition: transform 3.0s cubic-bezier(0.25, 1, 0.5, 1);
 }
 .works-gallery-enter-from {
   transform: translateX(100vw);
-  opacity: 0;
 }
 
-// ── 2. AppProjectsList — elegant rise after gallery settles (delay 1.9s)
-//    easeOutCubic: smooth, refined, not overdone
+// Each item grows from a tiny pill to its card shape, staggered left→right
+.works-gallery-enter-active .v-app-random-projects__item {
+  animation: works-item-morph 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--item-index, 0) * 0.1s);
+}
+
+@keyframes works-item-morph {
+  from {
+    transform: scale(0.15);
+    border-radius: 50%;
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    border-radius: var(--app-media-radius);
+    opacity: 1;
+  }
+}
+
+// ── 2. AppProjectsList — rises up while gallery is still decelerating (delay 1.8s)
 .works-list-enter-active {
-  transition: transform 1.3s cubic-bezier(0.215, 0.61, 0.355, 1) 1.9s,
-              opacity   1.1s ease 1.9s;
+  transition: transform 1.3s cubic-bezier(0.215, 0.61, 0.355, 1) 1.8s,
+              opacity   1.1s ease 1.8s;
 }
 .works-list-enter-from {
   transform: translateY(50px);

@@ -36,9 +36,9 @@
                  v-html="navInfo.result.menu_description"
             />
 
-            <div style="margin-top: 10rem;" class="app-grid">
-              <span class="app-button app-button--transparent">Instagram</span>
-              <span class="app-button app-button--transparent">LinkedIn</span>
+            <div class="v-nav__infos__social">
+              <a href="https://www.instagram.com/bureau_1217/" target="_blank" class="v-nav__infos__social__link">Instagram</a>
+              <a href="https://fr.linkedin.com/company/bureau-1217" target="_blank" class="v-nav__infos__social__link">Linkedin</a>
             </div>
 
           </div>
@@ -186,6 +186,23 @@ watch(infosIsOpen, async (newVal) => {
   }
 }
 
+
+.v-nav__infos__social {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 10rem;
+  margin-bottom: 0.2rem;
+}
+
+.v-nav__infos__social__link {
+  color: white;
+  text-decoration: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: hsla(0, 0%, 60%, 1);
+  }
+}
 
 // ── Info panel morph transition ───────────────────────────────────────────────
 // transform-origin: top left = panel grows out of / collapses into the button corner

@@ -100,6 +100,7 @@ onBeforeUnmount(() => {
   position: relative;
 }
 
+
 .v-index__hero-overlay {
   position: absolute;
   top: 0;

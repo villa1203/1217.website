@@ -67,12 +67,23 @@ useHead({
 
 
 <style lang="scss">
+// Default page leave — any page going away
 .page-leave-active {
-  transition: opacity 0.4s ease;
+  transition: opacity 0.3s ease;
 }
 .page-leave-to {
   opacity: 0;
 }
+
+// Default page enter — quick fade so white body never flashes through
+.page-enter-active {
+  transition: opacity 0.4s ease;
+}
+.page-enter-from {
+  opacity: 0;
+}
+
+
 </style>
 
 <style lang="scss" scoped>
@@ -91,7 +102,7 @@ main {
   left: 0;
   width: 100%;
   box-sizing: border-box;
-  z-index: 100;
+  z-index: 1000;
 }
 
 .v-app__sketch {

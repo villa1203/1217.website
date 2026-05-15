@@ -8,10 +8,11 @@
       @mouseleave="onListMouseLeave"
     >
       <nuxt-link
-        v-for="item of doubledList"
+        v-for="(item, index) of doubledList"
         :key="item.id"
         :data-id="item.id"
         :to="`/works/${item.slug}`"
+        :style="{ '--item-index': index % props.projects.length }"
         class="v-app-random-projects__item"
         :class="{
           'is-hovered': hoveredId === item.id,
