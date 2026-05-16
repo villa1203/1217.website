@@ -1,9 +1,9 @@
 <template>
     <nav class="v-nav app-with-padding--left-right app-with-padding--top-bottom"
-         :class="{'infos-is-open': infosIsOpen}"
+         :class="{'infos-is-open': infosIsOpen, 'mobile-menu-open': mobileMenuOpen}"
     >
-      <div class="toggle-infos toggle-infos--mobile app-button"
-           @click="infosIsOpen = !infosIsOpen"
+      <div class="toggle-infos toggle-infos--mobile app-button app-button--reverse-with-dark-view"
+           @click="mobileMenuOpen = !mobileMenuOpen"
       >
         <div>
           <UIOpen/>
@@ -14,7 +14,7 @@
 
         <div ref="logoRef"
              class="app-button app-button--reverse-with-dark-view v-nav__logo"
-             style="z-index: 10; transition-delay: .25s;"
+             style="z-index: 10;"
              @click="navigateTo('/')"
         >
           <div class="app-grid app-grid--align-center">
@@ -78,10 +78,12 @@ const { data: navInfo } = useFetch<NavInfoData>('/api/CMS_KQLRequest', {
 })
 
 const infosIsOpen = ref(false)
+const mobileMenuOpen = ref(false)
 const logoRef = ref<HTMLElement | null>(null)
 
 useRouter().beforeEach(() => {
   infosIsOpen.value = false
+  mobileMenuOpen.value = false
 })
 
 watch(infosIsOpen, async (newVal) => {
@@ -165,7 +167,8 @@ watch(infosIsOpen, async (newVal) => {
   > * {
     transition: transform 1s cubic-bezier(0, .25, 0, 1);
 
-    .infos-is-open & {
+    .infos-is-open &,
+    .mobile-menu-open & {
       transform: rotate(45deg);
     }
   }
@@ -177,11 +180,25 @@ watch(infosIsOpen, async (newVal) => {
   &.toggle-infos--mobile {
     position: fixed;
     top: var(--app-gutter);
-    left: var(--app-gutter);
+    right: var(--app-gutter);
+    z-index: 1001;
     display: none;
+    touch-action: manipulation;
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+
+    > * {
+      @media (max-width: params.$break-point-reg) {
+        transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+    }
 
     @media (max-width: params.$break-point-reg) {
       display: block;
+    }
+
+    .mobile-menu-open & {
+      transform: translateX(calc(2 * var(--app-gutter) + 100% - 100vw));
+      z-index: 1002;
     }
   }
 }
@@ -227,15 +244,42 @@ watch(infosIsOpen, async (newVal) => {
   opacity: 0;
 }
 
+.v-nav__logo {
+  @media (max-width: params.$break-point-reg) {
+    margin-right: auto;
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+
+    .mobile-menu-open & {
+      transform: translateX(calc(-100% - var(--app-gutter) * 2));
+      pointer-events: none;
+    }
+  }
+}
+
+// Restore the desktop info-panel open delay (was previously inline on the element)
+.infos-is-open .v-nav__logo {
+  @media (min-width: params.$break-point-reg) {
+    transition-delay: 0.25s;
+  }
+}
+
 .v-nav__links {
   @media (max-width: params.$break-point-reg) {
-    transition: opacity .25s ease-in-out;
+    position: fixed;
+    top: var(--app-gutter);
+    right: var(--app-gutter);
+    z-index: 1001;
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity   0.2s ease;
     opacity: 0;
     pointer-events: none;
+    transform: translateX(calc(100% + var(--app-gutter)));
 
-    .infos-is-open & {
+    .infos-is-open &,
+    .mobile-menu-open & {
       pointer-events: auto;
       opacity: 1;
+      transform: translateX(0);
     }
   }
 }

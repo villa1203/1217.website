@@ -15,24 +15,13 @@
       <div class="app-grid__col-12 block-collaborators-list__collaborators"
            v-if="data?.result?.content"
       >
-        <div class="app-grid app-grid--wrap app-grid--align-start app-grid--justify-start block-collaborators-list__collaborators__item"
+        <div class="block-collaborators-list__collaborators__item"
              v-for="collaborator of data?.result?.content"
         >
-          <div class="app-grid__col-9 app-grid-reg__col-10">
-            <div class="app-grid app-grid--wrap">
-              <div class="app-grid__col-4 app-grid__shrink-1 app-grid-reg__col-4 app-grid-small__col-12 block-collaborators-list__collaborators__first_name">
-                <div>{{collaborator.first_name}} {{collaborator.name}}</div>
-              </div>
-              <div class="app-grid__col-4 app-grid__shrink-1 app-grid-reg__col-4 app-grid-small__col-12 block-collaborators-list__collaborators__competences">{{collaborator.competences}}</div>
-              <div class="app-grid__col-4 app-grid__shrink-1 app-grid-reg__col-4 app-grid-small__col-12 block-collaborators-list__collaborators__roles">{{collaborator.roles}}</div>
-            </div>
-          </div>
-          <div class="app-grid__col-3 app-grid-reg__col-2">
-            <div class="app-grid app-grid-reg--wrap app-grid--without-row-gap">
-              <div class="app-grid__col-12 app-grid-reg__col-12 app--reg-text-align-right block-collaborators-list__collaborators__city">{{collaborator.ville}}</div>
-              <div class="app-grid__shrink-0  app-text-align-right block-collaborators-list__collaborators__date">{{collaborator.date}}</div>
-            </div>
-          </div>
+          <div class="block-collaborators-list__name">{{collaborator.first_name}} {{collaborator.name}}</div>
+          <div class="block-collaborators-list__competence">{{collaborator.competences}}</div>
+          <div class="block-collaborators-list__city">{{collaborator.ville}}</div>
+          <div class="block-collaborators-list__date">{{collaborator.date}}</div>
         </div>
       </div>
 
@@ -103,17 +92,39 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
 }
 
 .block-collaborators-list__collaborators__item {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto auto;
+  column-gap: 0.4rem;
+  row-gap: 0.15rem;
+  align-items: baseline;
   border-bottom: 1px solid var(--app-color-dark);
-  padding: 2rem 0;
+  padding: 1rem 0;
   user-select: none;
-}
-
-.block-collaborators-list__collaborators__date {
-  width: 4rem;
 
   @media (max-width: params.$break-point-reg) {
-    width: 100%;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "name date"
+      "competence city";
   }
+}
+
+.block-collaborators-list__name {
+  @media (max-width: params.$break-point-reg) { grid-area: name; }
+}
+
+.block-collaborators-list__competence {
+  @media (max-width: params.$break-point-reg) { grid-area: competence; }
+}
+
+.block-collaborators-list__city {
+  text-align: right;
+  @media (max-width: params.$break-point-reg) { grid-area: city; }
+}
+
+.block-collaborators-list__date {
+  text-align: right;
+  @media (max-width: params.$break-point-reg) { grid-area: date; }
 }
 
 

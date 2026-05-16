@@ -57,5 +57,9 @@ defineProps<{
   &.is-full {
     width: 100%;
   }
+
+  @media (max-width: params.$break-point-reg) {
+    width: 100%;
+  }
 }
 </style>

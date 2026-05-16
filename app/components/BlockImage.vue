@@ -31,6 +31,8 @@ defineProps<{
 </script>
 
 <style scoped lang="scss">
+@use "../assets/_params";
+
 .block-image {
   width: calc( ((100% + var(--app-grid-gap) ) / 2) - var(--app-grid-gap));
   box-sizing: border-box;
@@ -47,6 +49,13 @@ defineProps<{
     margin-left: calc( -1 * var(--app-gutter));
     margin-right: calc( -1 * var(--app-gutter));
     border-radius: 0;
+
+    @media (max-width: params.$break-point-reg) {
+      img {
+        height: 100svh;
+        object-fit: cover;
+      }
+    }
   }
 
   &.is-large {

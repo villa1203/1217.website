@@ -9,7 +9,7 @@
            @scroll="onScrollInGallery"
       >
         <div v-for="project of pages"
-             class="app-grid__col-3 app-grid-reg__col-6"
+             class="app-grid__col-3 app-grid-reg__col-12"
              style="flex-shrink: 0"
         >
           <AppProjectPreview__list

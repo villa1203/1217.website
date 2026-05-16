@@ -35,6 +35,13 @@
         </div>
       </div>
 
+      <div class="v-app-projects-list__meta--mobile">
+        <div>{{ project.title }}</div>
+        <div>
+          <template v-if="project.services[0]">{{ project.services[0].title }} · </template>{{ project.date?.slice(0, 4) }}
+        </div>
+      </div>
+
       <div class="v-app-projects-list__description-wrap">
         <p class="v-app-projects-list__description">{{ project.baseline }}</p>
       </div>
@@ -117,6 +124,12 @@ function onScrollInGallery(e: Event) {
   flex-direction: column;
   justify-content: space-between;
   gap: var(--app-row-gap-xs);
+
+  // Dissolve the left column into its children on mobile so we can
+  // reorder meta / gallery / description as independent flex items.
+  @media (max-width: params.$break-point-reg) {
+    display: contents;
+  }
 }
 
 // 4-column grid shared by labels and data rows
@@ -126,9 +139,23 @@ function onScrollInGallery(e: Event) {
   column-gap: var(--app-grid-gap);
   align-items: start;
 
+}
+
+.v-app-projects-list__meta {
   @media (max-width: params.$break-point-reg) {
-    grid-template-columns: 1fr 1fr;
-    row-gap: var(--app-grid-gap);
+    display: none;
+  }
+}
+
+.v-app-projects-list__meta--mobile {
+  display: none;
+
+  @media (max-width: params.$break-point-reg) {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    order: 1;
+    width: 100%;
   }
 }
 
@@ -152,6 +179,13 @@ function onScrollInGallery(e: Event) {
 
 .v-app-projects-list__description-wrap {
   overflow: hidden;
+
+  @media (max-width: params.$break-point-reg) {
+    overflow: visible;
+    order: 3;
+    width: 100%;
+    padding-top: 0.4rem;
+  }
 }
 
 .v-app-projects-list__description {
@@ -166,14 +200,18 @@ function onScrollInGallery(e: Event) {
   }
 
   @media (max-width: params.$break-point-reg) {
+    transform: translateY(0);
     width: 100%;
   }
 }
 
-// Gallery (unchanged)
 .v-app-projects-list__visual-wrap {
   position: relative;
   border-radius: var(--app-media-radius);
+
+  @media (max-width: params.$break-point-reg) {
+    width: 85% !important;
+  }
 
   &::after {
     content: '';
@@ -197,6 +235,10 @@ function onScrollInGallery(e: Event) {
 
 .v-app-projects-list__gallery {
   position: relative;
+
+  @media (max-width: params.$break-point-reg) {
+    order: 2;
+  }
 
   &.has-scroll::after {
     z-index: 5;

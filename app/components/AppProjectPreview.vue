@@ -68,6 +68,12 @@ defineProps<{
   z-index: 1;
   margin-right: var(--app-gutter);
 
+  @media (max-width: params.$break-point-reg) {
+    top: 0.5rem;
+    left: 0.5rem;
+    padding: 0.35rem 0.6rem;
+  }
+
   &--dark-bg {
     --tag-glass-bg: hsla(0, 0%, 45%, 0.409);
     background: var(--tag-glass-bg);

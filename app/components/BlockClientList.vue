@@ -356,8 +356,10 @@ const shellStyle = computed(() => ({
   border-top:  1px solid var(--app-color-dark);
   border-left: 1px solid var(--app-color-dark);
 
-  &:hover .app-block-client-list__clients__item__wrap {
-    opacity: 0.25;
+  @media (hover: hover) {
+    &:hover .app-block-client-list__clients__item__wrap {
+      opacity: 0.25;
+    }
   }
 }
 
@@ -378,9 +380,11 @@ const shellStyle = computed(() => ({
   position: relative;
   transition: opacity .5s cubic-bezier(0, .5, 1, 1);
 
-  &:hover {
-    opacity: 1 !important;
-    background: hsla(0, 0%, 100%, 0.05);
+  @media (hover: hover) {
+    &:hover {
+      opacity: 1 !important;
+      background: hsla(0, 0%, 100%, 0.05);
+    }
   }
 }
 

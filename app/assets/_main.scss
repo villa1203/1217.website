@@ -117,12 +117,14 @@ button, .app-button {
                 border-color var(--app-btn-hover-transition),
                 box-shadow var(--app-btn-hover-transition);
 
-    &:hover {
-      // Darker — never lighter — so white text stays readable
-      background: hsla(0, 0%, 9%, 0.65);
-      border-color: hsla(0, 0%, 100%, 0.28);
-      box-shadow: 0 4px 18px hsla(0, 0%, 19%, 0.3),
-                  inset 0 1px 0 hsla(0, 0%, 100%, 0.14);
+    @media (hover: hover) {
+      &:hover {
+        // Darker — never lighter — so white text stays readable
+        background: hsla(0, 0%, 9%, 0.65);
+        border-color: hsla(0, 0%, 100%, 0.28);
+        box-shadow: 0 4px 18px hsla(0, 0%, 19%, 0.3),
+                    inset 0 1px 0 hsla(0, 0%, 100%, 0.14);
+      }
     }
 
     &:focus-visible {
@@ -133,7 +135,9 @@ button, .app-button {
     // Fallback: no blur support → make background fully opaque enough
     @supports not (backdrop-filter: blur(1px)) {
       background: hsla(0, 0%, 0%, 0.72);
-      &:hover { background: hsla(0, 0%, 0%, 0.86); }
+      @media (hover: hover) {
+        &:hover { background: hsla(0, 0%, 0%, 0.86); }
+      }
     }
   }
 
@@ -145,9 +149,11 @@ button, .app-button {
     box-shadow: 0 2px 12px hsla(0, 0%, 37%, 0.4),
                 inset 0 1px 0 hsla(0, 0%, 100%, 0.08);
 
-    &:hover {
-      background: hsla(0, 0%, 1%, 0.59);
-      border-color: hsla(0, 0%, 100%, 0.32);
+    @media (hover: hover) {
+      &:hover {
+        background: hsla(0, 0%, 1%, 0.59);
+        border-color: hsla(0, 0%, 100%, 0.32);
+      }
     }
   }
 }
