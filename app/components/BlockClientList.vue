@@ -90,7 +90,7 @@
           through the full leave animation even though currentCover has moved on.
         -->
         <div class="block-client-list__card-image">
-          <Transition name="img-slide">
+          <Transition :name="`img-slide-${slideDir}`">
             <img
               v-if="currentCover"
               :key="activeSlug ?? undefined"
@@ -278,7 +278,17 @@ const currentCover = computed<CMS_API_ImageInstance | null>(() => {
   return slug !== null ? (clientCoverMap.value[slug] ?? null) : null
 })
 
+// ── Slide direction ───────────────────────────────────────────────────────────
+const slideDir = ref<'right' | 'left' | 'up' | 'down'>('right')
+let prevX = 0
+let prevY = 0
+
 function onMouseMove(e: MouseEvent, slug?: string) {
+  const dx = e.clientX - prevX
+  const dy = e.clientY - prevY
+  prevX = e.clientX
+  prevY = e.clientY
+
   mousePos.x = e.clientX
   mousePos.y = e.clientY
   if (!slug) return
@@ -291,6 +301,11 @@ function onMouseMove(e: MouseEvent, slug?: string) {
   }
 
   if (slug !== activeSlug.value) {
+    if (Math.abs(dx) >= Math.abs(dy)) {
+      slideDir.value = dx >= 0 ? 'right' : 'left'
+    } else {
+      slideDir.value = dy >= 0 ? 'down' : 'up'
+    }
     activeSlug.value = slug
     const { w, h } = getSizeForSlug(slug)
     animateTo(w, h)
@@ -441,14 +456,26 @@ const shellStyle = computed(() => ({
   }
 }
 
-// ── Image slide ───────────────────────────────────────────────────────────────
-// Previous image exits left, new image enters from right — simultaneously.
-// Pure transform, no opacity. Vue freezes departing vnodes so old src is kept.
+// ── Image slide — direction-aware ─────────────────────────────────────────────
+// Direction is set from the mouse movement vector at the moment the slug changes.
+// Dominant axis wins; within that axis the sign gives the direction.
 
-.img-slide-enter-active,
-.img-slide-leave-active {
+.img-slide-right-enter-active, .img-slide-right-leave-active,
+.img-slide-left-enter-active,  .img-slide-left-leave-active,
+.img-slide-up-enter-active,    .img-slide-up-leave-active,
+.img-slide-down-enter-active,  .img-slide-down-leave-active {
   transition: transform 0.46s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.img-slide-enter-from { transform: translateX(100%);  }
-.img-slide-leave-to   { transform: translateX(-100%); }
+
+.img-slide-right-enter-from { transform: translateX(100%);  }
+.img-slide-right-leave-to   { transform: translateX(-100%); }
+
+.img-slide-left-enter-from  { transform: translateX(-100%); }
+.img-slide-left-leave-to    { transform: translateX(100%);  }
+
+.img-slide-down-enter-from  { transform: translateY(100%);  }
+.img-slide-down-leave-to    { transform: translateY(-100%); }
+
+.img-slide-up-enter-from    { transform: translateY(-100%); }
+.img-slide-up-leave-to      { transform: translateY(100%);  }
 </style>
