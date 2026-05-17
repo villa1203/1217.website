@@ -89,7 +89,7 @@ useHead({
 <style lang="scss" scoped>
 .v-app {
   width: 100%;
-  overflow: hidden;
+  overflow: clip; // 'hidden' breaks position:sticky — clip prevents horizontal bleed without creating a scroll container
 }
 
 main {

@@ -22,13 +22,20 @@
               'app-grid__col-8': ! ( block_data.content.client_list.length < 9 ),
            }"
       >
-        <div class="app-block-client-list__clients app-grid app-grid--align-start app-grid--justify-start app-grid--wrap app-grid--without-gap">
-          <div class="app-block-client-list__clients__item"
-               :class="{
-                'app-block-client-list__clients__item--without-logo': !client.logo,
-                'app-block-client-list__clients__item--without-logo-negative': !client.logo_negative,
-               }"
-               v-for="client of block_data.content.client_list"
+        <div
+          ref="gridRef"
+          class="app-block-client-list__clients app-grid app-grid--align-start app-grid--justify-start app-grid--wrap app-grid--without-gap"
+        >
+          <div
+            v-for="(client, i) of block_data.content.client_list"
+            :key="client.slug"
+            class="app-block-client-list__clients__item"
+            :class="{
+              'app-block-client-list__clients__item--without-logo': !client.logo,
+              'app-block-client-list__clients__item--without-logo-negative': !client.logo_negative,
+              'is-visible': visibleItems.has(i),
+            }"
+            :style="{ transitionDelay: `${i * 40}ms` }"
           >
             <div
               class="app-grid app-grid--align-center app-grid--justify-center app-aspect-ratio--1-1 app-block-client-list__clients__item__wrap"
@@ -112,6 +119,31 @@ import type { CMS_API_ImageInstance, CMS_API_Response, CMS_BlockClientList } fro
 const props = defineProps<{
   block_data: CMS_BlockClientList,
 }>()
+
+// ── Scroll reveal ─────────────────────────────────────────────────────────────
+const gridRef      = ref<HTMLElement>()
+const visibleItems = ref<Set<number>>(new Set())
+let revealObserver: IntersectionObserver | null = null
+
+onMounted(async () => {
+  await nextTick()
+  revealObserver = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (entry.isIntersecting) {
+        const i = Number((entry.target as HTMLElement).dataset.itemIndex)
+        visibleItems.value = new Set([...visibleItems.value, i])
+        revealObserver?.unobserve(entry.target)
+      }
+    }
+  }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' })
+
+  gridRef.value?.querySelectorAll('.app-block-client-list__clients__item').forEach((el, i) => {
+    (el as HTMLElement).dataset.itemIndex = String(i)
+    revealObserver?.observe(el)
+  })
+})
+
+onBeforeUnmount(() => { revealObserver?.disconnect() })
 
 // ── CMS fetch (unchanged) ─────────────────────────────────────────────────────
 
@@ -364,6 +396,16 @@ const shellStyle = computed(() => ({
 }
 
 .app-block-client-list__clients__item {
+  opacity: 0;
+  transform: translateY(1.5rem);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
   border-right:  1px solid var(--app-color-dark);
   border-bottom: 1px solid var(--app-color-dark);
   box-sizing: border-box;
