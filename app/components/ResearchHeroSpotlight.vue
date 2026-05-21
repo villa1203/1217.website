@@ -12,7 +12,7 @@
         Bureau 1217 turns research into design practice.
       </h2>
       <h2 ref="wrapperRef" class="v-rh-spotlight__baseline-wrapper">
-        <Transition name="roll" @before-leave="freezeHeight" @after-enter="releaseHeight">
+        <Transition name="roll" @before-leave="freezeHeight" @after-enter="onSentenceEntered">
           <span :key="sentenceIndex" class="v-rh-spotlight__baseline">{{ baselines[sentenceIndex] }}</span>
         </Transition>
       </h2>
@@ -125,7 +125,7 @@ function morphTo(target: number[]) {
 // ── Constrained position lerp ─────────────────────────────────────────────────
 // Shape is pinned at section center by default (MAX_DRIFT = 0).
 // Set MAX_DRIFT > 0 to let the mouse nudge the shape away from center.
-const MAX_DRIFT = 80  // ← 0 = fully pinned; increase for more mouse drift range
+const MAX_DRIFT = 50  // ← 0 = fully pinned; increase for more mouse drift range
 
 const posX = ref(0)   // animated offset from center (px)
 const posY = ref(0)
@@ -203,15 +203,24 @@ function releaseHeight() {
   if (el) el.style.height = ''
 }
 
-// ── Unified cycle — shape + sentence advance on the same tick ─────────────────
+// ── Cycle — sentence advances on interval, shape morphs when sentence lands ───
 let cycleInterval: ReturnType<typeof setInterval> | null = null
+
+let morphTriggerTimer: ReturnType<typeof setTimeout> | null = null
+
+function onSentenceEntered() {
+  releaseHeight()
+}
 
 function startCycle() {
   if (cycleInterval !== null) return
   cycleInterval = setInterval(() => {
     sentenceIndex.value = (sentenceIndex.value + 1) % baselines.length
-    shapeIdx = (shapeIdx + 1) % SHAPES.length
-    morphTo(SHAPES[shapeIdx]!)
+    morphTriggerTimer = setTimeout(() => {
+      morphTriggerTimer = null
+      shapeIdx = (shapeIdx + 1) % SHAPES.length
+      morphTo(SHAPES[shapeIdx]!)
+    }, 450) // roll is 650ms — morph kicks in 200ms before sentence fully lands
   }, CYCLE_MS)
 }
 function stopCycle() {
@@ -258,7 +267,8 @@ onBeforeUnmount(() => {
   stopCycle()
   document.removeEventListener('visibilitychange', onVisibilityChange)
   window.removeEventListener('wheel', handleWheel)
-  if (snapTimer)  clearTimeout(snapTimer)
+  if (snapTimer)        clearTimeout(snapTimer)
+  if (morphTriggerTimer) clearTimeout(morphTriggerTimer)
   if (morphRaf !== null) cancelAnimationFrame(morphRaf)
   if (posRaf   !== null) cancelAnimationFrame(posRaf)
 })

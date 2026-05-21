@@ -1,55 +1,86 @@
 <template>
-    <section class="v-block-use-case app-grid app-grid--align-center app-grid--justify-center"
-    >
-      <div class="v-block-use-case__inner">
-        <h2 class="v-block-use-case__title">
-          Bureau 1217 is a design and technology office.
-        </h2>
-        <h2 ref="wrapperRef" class="v-block-use-case__baseline-wrapper">
-          <Transition name="roll" @before-leave="freezeHeight" @after-enter="releaseHeight">
-            <span :key="currentIndex" class="v-block-use-case__baseline">{{ baselines[currentIndex] }}</span>
-          </Transition>
-        </h2>
-      </div>
+  <section class="v-block-use-case app-grid app-grid--align-center app-grid--justify-center">
 
-    </section>
+    <div
+      class="v-block-use-case__inner"
+      @mousemove="onMouseMove"
+      @mouseleave="onMouseLeave"
+      @click="goToProject"
+    >
+      <h2 class="v-block-use-case__title">
+        Bureau 1217 is a design and technology office.
+      </h2>
+      <h2 ref="wrapperRef" class="v-block-use-case__baseline-wrapper">
+        <Transition name="roll" @before-leave="freezeHeight" @after-enter="releaseHeight">
+          <span :key="currentIndex" class="v-block-use-case__baseline">{{ baselines[currentIndex] }}</span>
+        </Transition>
+      </h2>
+    </div>
+
+    <div v-if="isVisible" :style="anchorStyle">
+      <div class="v-block-use-case__card" :style="cardStyle">
+        <svg
+          class="v-block-use-case__card-svg"
+          :width="CARD_SIZE.w"
+          :height="CARD_SIZE.h"
+        >
+          <path
+            :d="svgPath"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1"
+            vector-effect="non-scaling-stroke"
+          />
+        </svg>
+        <div class="v-block-use-case__card-image">
+          <img
+            v-if="currentCover"
+            :src="currentCover.reg.url"
+            :alt="currentCover.alt ?? ''"
+          />
+          <div class="v-block-use-case__card-label">See latest Use Case</div>
+        </div>
+      </div>
+    </div>
+
+  </section>
 </template>
 
 
 
 
-
 <script setup lang="ts">
-import type {CMS_API_Page_projet, CMS_API_Response, CMS_BlockData} from "#shared/cms_api";
-import {KQL_PROJECTS_SELECT, KQL_QUERY_BLOCKS} from "#shared/KQLQueries";
+import type { CMS_API_ImageInstance, CMS_API_Page_projet, CMS_API_Response, CMS_BlockData } from "#shared/cms_api"
+import { KQL_PROJECTS_SELECT, KQL_QUERY_BLOCKS } from "#shared/KQLQueries"
+import { getProjectBySector } from "#shared/projects_utils"
 
 type FetchData = CMS_API_Response & {
-  "result": {
-    "title": string,
-    "slug": string,
-    content: CMS_BlockData[],
+  result: {
+    title:    string
+    slug:     string
+    content:  CMS_BlockData[]
     projects: CMS_API_Page_projet[]
   }
 }
 
-
-const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
+const { data } = useFetch<FetchData>('/api/CMS_KQLRequest', {
   lazy: true,
   method: 'POST',
   body: {
     query: `page('projects')`,
     select: {
       title: true,
-      slug: true,
+      slug:  true,
       projects: {
-        query: 'page.children',
+        query:  'page.children',
         select: KQL_PROJECTS_SELECT,
       },
-      content: KQL_QUERY_BLOCKS
-    }
-  }
+      content: KQL_QUERY_BLOCKS,
+    },
+  },
 })
 
+// ── Baselines ─────────────────────────────────────────────────────────────────
 const baselines = [
   'We design interactive storytelling for the Olympic Games.',
   'We craft visual systems for jazz schools and venues.',
@@ -61,6 +92,7 @@ const baselines = [
   'We define communication strategies for energy providers.',
 ]
 
+// ── Roll transition ────────────────────────────────────────────────────────────
 const currentIndex = ref(0)
 const wrapperRef   = ref<HTMLElement | null>(null)
 
@@ -73,28 +105,184 @@ function releaseHeight() {
   if (el) el.style.height = ''
 }
 
-onMounted(() => {
-  setInterval(() => {
+// ── Use-case project + gallery cycling ────────────────────────────────────────
+const usecaseProjects = computed<CMS_API_Page_projet[]>(() =>
+  getProjectBySector('use-case', data.value?.result?.projects ?? [])
+)
+
+const usecaseProject = computed(() => usecaseProjects.value[0] ?? null)
+
+const currentCover = computed<CMS_API_ImageInstance | null>(() =>
+  usecaseProject.value?.gallery?.[0] ?? null
+)
+
+const isVisible = ref(false)
+
+// ── Card size — single 4:3 ratio ──────────────────────────────────────────────
+const CARD_SIZE = { w: 360, h: 270 } as const
+
+// ── rAF morph (identical to BlockClientList) ──────────────────────────────────
+function easeOutExpo(t: number): number {
+  return t >= 1 ? 1 : 1 - Math.pow(2, -10 * t)
+}
+
+// ── SVG path ──────────────────────────────────────────────────────────────────
+const R = 8
+
+const svgPath = computed(() => {
+  const w = CARD_SIZE.w, h = CARD_SIZE.h
+  const r = Math.min(R, w / 2, h / 2)
+  return [
+    `M ${r} 0`, `H ${w - r}`, `Q ${w} 0 ${w} ${r}`,
+    `V ${h - r}`, `Q ${w} ${h} ${w - r} ${h}`,
+    `H ${r}`, `Q 0 ${h} 0 ${h - r}`,
+    `V ${r}`, `Q 0 0 ${r} 0`, `Z`,
+  ].join(' ')
+})
+
+const cardActive = ref(false)
+let leaveTimer:   ReturnType<typeof setTimeout> | null = null
+let cardMounting = false
+
+// ── Quadrant-based card offset (horizontal only) ──────────────────────────────
+const GAP = 12
+const cardOffsetFrac = ref(0)
+let offsetRafId: number | null = null
+let offsetFrom = 0, offsetTo = 0, offsetStart: number | null = null
+let currentSide: 'right' | 'left' = 'right'
+
+function animateOffset(target: number, dur = 420) {
+  if (offsetRafId !== null) cancelAnimationFrame(offsetRafId)
+  offsetFrom  = cardOffsetFrac.value
+  offsetTo    = target
+  offsetStart = null
+  offsetRafId = requestAnimationFrame(function step(now) {
+    if (offsetStart === null) offsetStart = now
+    const t = Math.min((now - offsetStart) / dur, 1)
+    cardOffsetFrac.value = offsetFrom + (offsetTo - offsetFrom) * easeOutExpo(t)
+    if (t < 1) offsetRafId = requestAnimationFrame(step)
+    else offsetRafId = null
+  })
+}
+
+// ── Mouse tracking ────────────────────────────────────────────────────────────
+const mousePos = reactive({ x: 0, y: 0 })
+
+function onMouseMove(e: MouseEvent) {
+  mousePos.x = e.clientX
+  mousePos.y = e.clientY
+
+  const newSide = mousePos.x < window.innerWidth / 2 ? 'left' : 'right'
+
+  if (leaveTimer !== null) { clearTimeout(leaveTimer); leaveTimer = null }
+
+  if (!isVisible.value) {
+    currentSide          = newSide
+    cardOffsetFrac.value = newSide === 'left' ? 1 : 0
+    isVisible.value      = true
+    cardMounting         = true
+    nextTick(() => requestAnimationFrame(() => {
+      cardMounting     = false
+      cardActive.value = true
+    }))
+  } else {
+    if (!cardActive.value && !cardMounting) cardActive.value = true
+    if (newSide !== currentSide) {
+      currentSide = newSide
+      animateOffset(newSide === 'left' ? 1 : 0)
+    }
+  }
+}
+
+function onMouseLeave() {
+  cardActive.value = false
+  leaveTimer = setTimeout(() => { isVisible.value = false; leaveTimer = null }, 550)
+}
+
+function goToProject() {
+  const slug = usecaseProject.value?.slug
+  if (slug) navigateTo(`/works/${slug}`)
+}
+
+const anchorStyle = computed(() => ({
+  position:      'fixed' as const,
+  left:          `${mousePos.x}px`,
+  top:           `${mousePos.y}px`,
+  width:         '0',
+  height:        '0',
+  pointerEvents: 'none' as const,
+  zIndex:        '200',
+}))
+
+const cardStyle = computed(() => {
+  const tx = GAP - (CARD_SIZE.w + 2 * GAP) * cardOffsetFrac.value
+  return {
+    position:   'absolute' as const,
+    left:       '0',
+    top:        '0',
+    width:      `${CARD_SIZE.w}px`,
+    height:     `${CARD_SIZE.h}px`,
+    opacity:    cardActive.value ? '1' : '0',
+    transform:  `translate(${tx.toFixed(2)}px, ${GAP}px) scale(${cardActive.value ? 1 : 0.12})`,
+    transition: 'opacity 0.3s ease, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1)',
+  }
+})
+
+// ── Lifecycle ─────────────────────────────────────────────────────────────────
+let baselineInterval: ReturnType<typeof setInterval> | null = null
+
+function startBaselineInterval() {
+  if (baselineInterval !== null) return
+  baselineInterval = setInterval(() => {
     currentIndex.value = (currentIndex.value + 1) % baselines.length
   }, 3_500)
+}
+
+function stopBaselineInterval() {
+  if (baselineInterval !== null) { clearInterval(baselineInterval); baselineInterval = null }
+}
+
+function onVisibilityChange() {
+  if (document.hidden) {
+    stopBaselineInterval()
+  } else {
+    startBaselineInterval()
+  }
+}
+
+onMounted(() => {
+  startBaselineInterval()
+  document.addEventListener('visibilitychange', onVisibilityChange)
+})
+
+onBeforeUnmount(() => {
+  stopBaselineInterval()
+  document.removeEventListener('visibilitychange', onVisibilityChange)
+  if (offsetRafId !== null) cancelAnimationFrame(offsetRafId)
+  if (leaveTimer  !== null) clearTimeout(leaveTimer)
 })
 </script>
 
 
 
 
-
-<style lang="scss" scoped >
+<style scoped>
 .v-block-use-case {
   box-sizing: border-box;
   height: calc(100vh - (var(--app-row-gap) * 2));
   position: relative;
 }
 
-// width: 100% freezes the flex-item width so the title above never reflows
+/* Extra padding extends the hover zone beyond the text glyphs */
 .v-block-use-case__inner {
   width: 100%;
   text-align: center;
+  padding: 8rem 2rem 1rem;
+  cursor: default;
+  mix-blend-mode: difference;
+  position: relative;
+  z-index: 201;
+  color: white; /* difference on white bg → black; on dark bg → white */
 }
 
 .v-block-use-case__title {
@@ -102,7 +290,6 @@ onMounted(() => {
   max-width: 25em;
 }
 
-// overflow: hidden is the clipping mask — text rolls within this window
 .v-block-use-case__baseline-wrapper {
   margin-top: 0;
   position: relative;
@@ -114,21 +301,76 @@ onMounted(() => {
   width: 100%;
 }
 
-// ── Slot-machine roll ─────────────────────────────────────────────────────────
-// Both enter and leave share the exact same duration + easing so they stay
-// locked together: leaving top + entering bottom always fill one wrapper-height.
+/* Card — identical structure and shadow to BlockClientList */
+.v-block-use-case__card {
+  box-shadow: 0 14px 44px rgba(0, 0, 0, 0.2);
+}
 
-$roll-timing: 0.65s cubic-bezier(0.65, 0, 0.35, 1);
+.v-block-use-case__card-svg {
+  display: block;
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+  color: hsla(0, 0%, 70%, 0.5);
+  z-index: 2;
+}
 
-.roll-enter-active { transition: transform $roll-timing; }
+.v-block-use-case__card-image {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: var(--app-media-radius);
+}
+
+.v-block-use-case__card-image img {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Roll transition */
+.roll-enter-active { transition: transform 0.65s cubic-bezier(0.65, 0, 0.35, 1); }
 .roll-enter-from   { transform: translateY(100%); }
 .roll-enter-to     { transform: translateY(0); }
-
 .roll-leave-active {
-  transition: transform $roll-timing;
+  transition: transform 0.65s cubic-bezier(0.65, 0, 0.35, 1);
   position: absolute;
   top: 0; left: 0; width: 100%;
 }
 .roll-leave-from { transform: translateY(0); }
 .roll-leave-to   { transform: translateY(-100%); }
+
+
+/* Label — smooth scrim using perceptual easing curve (9 stops) */
+.v-block-use-case__card-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  padding: 3rem 1rem 0.9rem;
+  background: linear-gradient(
+    to top,
+    hsla(0,0%,0%,0.55)   0%,
+    hsla(0,0%,0%,0.52)   8%,
+    hsla(0,0%,0%,0.44)  18%,
+    hsla(0,0%,0%,0.34)  30%,
+    hsla(0,0%,0%,0.23)  44%,
+    hsla(0,0%,0%,0.13)  58%,
+    hsla(0,0%,0%,0.06)  72%,
+    hsla(0,0%,0%,0.02)  86%,
+    hsla(0,0%,0%,0)    100%
+  );
+  color: white;
+  font-size: 0.75rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  text-align: center;
+  pointer-events: none;
+  border-radius: 0 0 var(--app-media-radius) var(--app-media-radius);
+}
 </style>

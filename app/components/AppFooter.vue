@@ -39,11 +39,11 @@
             <div class="v-app-footer__social">
               <a href="https://fr.linkedin.com/company/bureau-1217"
                  target="_blank"
-                 class="v-app-footer__social__link"
+                 class="app-button v-app-footer__social__link"
               >Linkedin</a>
               <a href="https://www.instagram.com/bureau_1217/"
                  target="_blank"
-                 class="v-app-footer__social__link">Instagram</a>
+                 class="app-button v-app-footer__social__link">Instagram</a>
             </div>
           </div>
         </div>
@@ -159,16 +159,21 @@ onMounted(() => {
 
 .v-app-footer__social {
   display: flex;
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
 
 .v-app-footer__social__link {
-  color: white;
-  text-decoration: none;
-  transition: color 0.2s ease;
+  color: black;
+  background: var(--app-color-primary);
+  border: 1px solid var(--app-color-primary);
+  padding: 0.65rem 0.5rem;
+  transition: background var(--app-btn-hover-transition), color var(--app-btn-hover-transition);
 
-  &:hover {
-    color: var(--app-color-primary);
+  @media (hover: hover) {
+    &:hover {
+      background: transparent;
+      color: var(--app-color-primary);
+    }
   }
 }
 </style>
