@@ -21,6 +21,7 @@ type FetchData = CMS_API_Response & {
 }
 
 const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
+  key: 'office-content-v2',
   lazy: true,
   method: 'POST',
   body: {
@@ -39,7 +40,7 @@ watch(data, (val) => {
   if (val) nextTick(() => { visible.value = true })
 }, { immediate: true })
 
-const listener = () => windowsScrollListener('.v-app-footer')
+const listener = () => windowsScrollListener('.block-client-list')
 
 onMounted(() => {
   window.addEventListener('scroll', listener)

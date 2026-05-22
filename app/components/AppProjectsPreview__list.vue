@@ -1,5 +1,6 @@
 <template>
     <section class="v-app-last-projects-preview--list"
+             ref="sectionRef"
              :class="{
                 'show-gradient': showGradient,
                 'no-gradient': pages.length < 5,
@@ -8,9 +9,10 @@
       <div class="app-grid app-grid--align-start app-grid--justify-start v-app-last-projects-preview--list__scroll app-grid-reg--wrap"
            @scroll="onScrollInGallery"
       >
-        <div v-for="project of pages"
-             class="app-grid__col-3 app-grid-reg__col-12"
-             style="flex-shrink: 0"
+        <div v-for="(project, i) of pages"
+             class="v-app-last-projects-preview--list__item app-grid__col-3 app-grid-reg__col-12"
+             :class="{ 'is-visible': isVisible }"
+             :style="{ flexShrink: 0, transitionDelay: `${i * 120}ms` }"
         >
           <AppProjectPreview__list
             :image="project.cover"
@@ -30,10 +32,8 @@
 
 
 
-
 <script setup lang="ts">
 import type {CMS_API_Page_projet} from "#shared/cms_api";
-import {defineProps} from "vue";
 import AppProjectPreview__list from "~/components/AppProjectPreview__list.vue";
 
 defineProps<{
@@ -41,15 +41,30 @@ defineProps<{
 }>()
 
 const showGradient = ref(true)
+const sectionRef = ref<HTMLElement>()
+const isVisible = ref(false)
+let observer: IntersectionObserver | null = null
 
 function onScrollInGallery(e: Event) {
   if( ! (e.target instanceof HTMLElement) ) return
-
   showGradient.value = e.target.scrollLeft <= 250;
 }
 
-</script>
+onMounted(() => {
+  if (!sectionRef.value) return
+  observer = new IntersectionObserver(([entry]) => {
+    if (entry.isIntersecting) {
+      isVisible.value = true
+      observer?.disconnect()
+    }
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' })
+  observer.observe(sectionRef.value)
+})
 
+onUnmounted(() => {
+  observer?.disconnect()
+})
+</script>
 
 
 
@@ -91,6 +106,19 @@ function onScrollInGallery(e: Event) {
 
   @media (max-width: params.$break-point-reg) {
     overflow: hidden;
+  }
+}
+
+.v-app-last-projects-preview--list__item {
+  opacity: 0;
+  transform: scale(0.88);
+  transform-origin: center;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &.is-visible {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 

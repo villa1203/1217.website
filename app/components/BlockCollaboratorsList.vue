@@ -4,7 +4,7 @@
     <div class="app-grid app-grid--wrap">
 
       <div class="app-grid__col-5 app-rm-child-margin app-grid-reg__col-12">
-        <h2 class="app-text-h3 app-text-h3--with-horizontal-correction">{{ block_data.content.title }}</h2>
+        <h2 class="app-text-h3 app-text-h3--with-horizontal-correction">{{ title }}</h2>
       </div>
 
       <div class="app-grid__col-7 app-grid-reg__col-12"></div>
@@ -13,19 +13,29 @@
         v-if="data?.result?.content"
         ref="listRef"
         class="app-grid__col-12 block-collaborators-list__collaborators"
+        :class="`block-collaborators-list__collaborators--${mode}`"
       >
         <div
-          v-for="(collaborator, i) of data?.result?.content"
+          v-for="(item, i) of data?.result?.content"
           :key="i"
           class="block-collaborators-list__collaborators__item"
           :class="{ 'is-visible': visibleItems.has(i) }"
           :style="{ transitionDelay: `${i * 50}ms` }"
         >
-          <div class="block-collaborators-list__name">{{ collaborator.first_name }} {{ collaborator.name }}</div>
-          <div class="block-collaborators-list__competence">{{ collaborator.competences }}</div>
-          <div class="block-collaborators-list__roles">{{ collaborator.roles }}</div>
-          <div class="block-collaborators-list__city">{{ collaborator.ville }}</div>
-          <div class="block-collaborators-list__date">{{ collaborator.date }}</div>
+          <template v-if="mode === 'collaborators'">
+            <div class="block-collaborators-list__name">{{ (item as CollaboratorItem).first_name }} {{ (item as CollaboratorItem).name }}</div>
+            <div class="block-collaborators-list__competence">{{ (item as CollaboratorItem).competences }}</div>
+            <div class="block-collaborators-list__roles">{{ (item as CollaboratorItem).roles }}</div>
+            <div class="block-collaborators-list__city">{{ (item as CollaboratorItem).ville }}</div>
+            <div class="block-collaborators-list__date">{{ (item as CollaboratorItem).date }}</div>
+          </template>
+          <template v-else>
+            <div class="block-collaborators-list__institution">{{ (item as ResearchItem).institution }}</div>
+            <div class="block-collaborators-list__project">{{ (item as ResearchItem).project }}</div>
+            <div class="block-collaborators-list__contribution">{{ (item as ResearchItem).contribution }}</div>
+            <div class="block-collaborators-list__city">{{ (item as ResearchItem).location }}</div>
+            <div class="block-collaborators-list__date">{{ (item as ResearchItem).year }}</div>
+          </template>
         </div>
       </div>
 
@@ -37,38 +47,70 @@
 <script setup lang="ts">
 import type { CMS_API_Response, CMS_CollaboratorsList } from '#shared/cms_api'
 
-defineProps<{ block_data: CMS_CollaboratorsList }>()
+const props = withDefaults(defineProps<{
+  block_data?: CMS_CollaboratorsList
+  mode?: 'collaborators' | 'research'
+}>(), {
+  mode: 'collaborators'
+})
+
+type CollaboratorItem = {
+  title?: string
+  name?: string
+  first_name?: string
+  competences?: string
+  roles?: string
+  ville?: string
+  date?: string
+}
+
+type ResearchItem = {
+  institution?: string
+  project?: string
+  contribution?: string
+  location?: string
+  year?: string
+}
 
 type FetchData = CMS_API_Response & {
   result?: {
     title?: string
     slug?: string
-    content?: {
-      title?: string
-      name?: string
-      first_name?: string
-      competences?: string
-      roles?: string
-      ville?: string
-      date?: string
-    }[]
+    content?: (CollaboratorItem | ResearchItem)[]
   }
 }
+
+const title = computed(() =>
+  props.mode === 'research' ? 'Research & Engagement' : (props.block_data?.content?.title ?? '')
+)
 
 const { data } = useFetch<FetchData>('/api/CMS_KQLRequest', {
   lazy: true,
   method: 'POST',
-  body: {
-    query: `page('collaborators')`,
-    select: {
-      title: true,
-      slug: true,
-      content: {
-        query: 'page.children',
-        select: { title: true, name: true, first_name: true, competences: true, roles: true, ville: true, date: true },
-      },
-    },
-  },
+  body: computed(() => props.mode === 'research'
+    ? {
+        query: `page('research-engagements')`,
+        select: {
+          title: true,
+          slug: true,
+          content: {
+            query: 'page.children',
+            select: { institution: true, project: true, contribution: true, location: true, year: true },
+          },
+        },
+      }
+    : {
+        query: `page('collaborators')`,
+        select: {
+          title: true,
+          slug: true,
+          content: {
+            query: 'page.children',
+            select: { title: true, name: true, first_name: true, competences: true, roles: true, ville: true, date: true },
+          },
+        },
+      }
+  ),
 })
 
 const listRef      = ref<HTMLElement>()
@@ -112,7 +154,6 @@ onUnmounted(() => { observer?.disconnect() })
 
 .block-collaborators-list__collaborators__item {
   display: grid;
-  grid-template-columns: 2fr 2fr 2fr 1fr 1fr;
   column-gap: 0.4rem;
   row-gap: 0.15rem;
   align-items: baseline;
@@ -130,11 +171,26 @@ onUnmounted(() => { observer?.disconnect() })
     transform: translateY(0);
   }
 
-  @media (max-width: params.$break-point-reg) {
-    grid-template-columns: 1fr auto;
-    grid-template-areas:
-      "name date"
-      "competence city";
+  .block-collaborators-list__collaborators--collaborators & {
+    grid-template-columns: 2fr 2fr 2fr 1fr 1fr;
+
+    @media (max-width: params.$break-point-reg) {
+      grid-template-columns: 1fr auto;
+      grid-template-areas:
+        "name date"
+        "competence city";
+    }
+  }
+
+  .block-collaborators-list__collaborators--research & {
+    grid-template-columns: 3fr 2fr 2fr 1fr 1fr;
+
+    @media (max-width: params.$break-point-reg) {
+      grid-template-columns: 1fr auto;
+      grid-template-areas:
+        "institution year"
+        "contribution location";
+    }
   }
 }
 
@@ -146,6 +202,15 @@ onUnmounted(() => { observer?.disconnect() })
 }
 .block-collaborators-list__roles {
   @media (max-width: params.$break-point-reg) { display: none; }
+}
+.block-collaborators-list__institution {
+  @media (max-width: params.$break-point-reg) { grid-area: institution; }
+}
+.block-collaborators-list__project {
+  @media (max-width: params.$break-point-reg) { display: none; }
+}
+.block-collaborators-list__contribution {
+  @media (max-width: params.$break-point-reg) { grid-area: contribution; }
 }
 .block-collaborators-list__city {
   text-align: right;

@@ -1,10 +1,13 @@
 <template>
-	<section class="v-block block-video"
+	<section ref="sectionRef"
+           class="v-block block-video"
+           :style="{ transitionDelay: `${revealDelay}ms` }"
            :class="{
               'is-full':      block_data.content.toggle_is_full === 'true',
               'has-gap-left': block_data.content.toggle_gap_left === 'true',
               'has-ratio-1-1': block_data.content.toggle_ratio_1_1 === 'true',
               'is-large':     block_data.content.toggle_is_large === 'true',
+              'is-visible':   isVisible,
            }"
   >
 		<header v-if="block_data.content.title">
@@ -81,6 +84,38 @@ const props = defineProps<{
   block_data: CMS_BlockVideoData
 }>()
 
+const sectionRef  = ref<HTMLElement | null>(null)
+const isVisible   = ref(false)
+const revealDelay = ref(0)
+let observer: IntersectionObserver | null = null
+
+onMounted(() => {
+  const el = sectionRef.value
+  if (!el) return
+
+  // Walk preceding .block-image/.block-video siblings to find column position (0 or 1)
+  const parent = el.closest<HTMLElement>('.app-blocks')
+  if (parent) {
+    const allMedia = [...parent.querySelectorAll<HTMLElement>('.block-image, .block-video')]
+    let col = 0
+    for (const block of allMedia) {
+      const isHalf = !block.classList.contains('is-full') && !block.classList.contains('is-large')
+      if (block === el) { revealDelay.value = isHalf ? col * 120 : 0; break }
+      col = isHalf ? (col === 0 ? 1 : 0) : 0
+    }
+  }
+
+  observer = new IntersectionObserver((entries) => {
+    if (entries[0]?.isIntersecting) {
+      isVisible.value = true
+      observer?.disconnect()
+    }
+  }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' })
+  observer.observe(el)
+})
+
+onUnmounted(() => { observer?.disconnect() })
+
 	const getEmbedUrl = (url: string) => {
 		const videoId = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i)
 
@@ -102,6 +137,17 @@ const props = defineProps<{
   box-sizing: border-box;
   overflow: hidden;
   border-radius: var(--app-media-radius);
+
+  opacity: 0;
+  transform: scale(0.94);
+  transform-origin: center;
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &.is-visible {
+    opacity: 1;
+    transform: scale(1);
+  }
 
   &.has-gap-left {
     margin-left: 50%;

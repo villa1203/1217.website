@@ -12,7 +12,15 @@
         :key="item.id"
         :data-id="item.id"
         :to="`/works/${item.slug}`"
-        :style="{ '--item-index': index % props.projects.length }"
+        :style="{
+          '--item-index': index % props.projects.length,
+          aspectRatio: hoveredId === item.id && hoveredRatio !== null && !isSameRatioHover
+            ? String(hoveredRatio)
+            : undefined,
+          width: hoveredId === item.id && isSameRatioHover
+            ? '28vw'
+            : undefined,
+        }"
         class="v-app-random-projects__item"
         :class="{
           'is-hovered': hoveredId === item.id,
@@ -25,9 +33,9 @@
           :style="{ transform: `translateX(-${(slideIndices[item.id] ?? 0) * 100}%)` }"
         >
           <AppImageOrVideo
-            v-for="(src, i) of [...item.srcs, item.srcs[0] ?? '']"
+            v-for="(src, i) of [...item.srcs, item.srcs[0]]"
             :key="i"
-            :src="src"
+            :src="src?.url ?? ''"
           />
         </div>
       </nuxt-link>
@@ -41,6 +49,8 @@ import type { CMS_API_Page_projet } from "#shared/cms_api"
 const props = defineProps<{
   projects: CMS_API_Page_projet[]
 }>()
+
+type ImageSrc = { url: string; ratio: number }
 
 const listOfImagesForProject = computed(() =>
   props.projects.map(project => ({
@@ -57,21 +67,43 @@ const doubledList = computed(() => {
   ]
 })
 
-function getAllImagesOfProject(project: CMS_API_Page_projet): string[] {
+function getAllImagesOfProject(project: CMS_API_Page_projet): ImageSrc[] {
   const seen = new Set<string>()
-  const urls: string[] = []
+  const images: ImageSrc[] = []
   for (const img of project.gallery) {
-    if (!seen.has(img.reg.url)) { seen.add(img.reg.url); urls.push(img.reg.url) }
+    if (!seen.has(img.reg.url)) {
+      seen.add(img.reg.url)
+      images.push({ url: img.reg.url, ratio: img.reg.width / img.reg.height })
+    }
   }
   if (project.cover?.reg.url && !seen.has(project.cover.reg.url)) {
-    seen.add(project.cover.reg.url); urls.push(project.cover.reg.url)
+    seen.add(project.cover.reg.url)
+    images.push({ url: project.cover.reg.url, ratio: project.cover.reg.width / project.cover.reg.height })
   }
   if (project.covers_video?.url && !seen.has(project.covers_video.url)) {
-    urls.push(project.covers_video.url)
+    images.push({ url: project.covers_video.url, ratio: 16 / 9 })
   }
-  const start = Math.floor(Math.random() * urls.length)
-  return [...urls.slice(start), ...urls.slice(0, start)]
+  const start = Math.floor(Math.random() * images.length)
+  return [...images.slice(start), ...images.slice(0, start)]
 }
+
+// Ratio of the image currently shown in the hovered item — updates as slideshow advances
+const hoveredRatio = computed<number | null>(() => {
+  if (hoveredId.value === null) return null
+  const item = doubledList.value.find(i => i.id === hoveredId.value)
+  if (!item) return null
+  const src = item.srcs[slideIndices[hoveredId.value] ?? 0]
+  return src ? src.ratio : null
+})
+
+const DEFAULT_RATIO = 16 / 9
+
+// True when the image ratio is essentially the same as the default (within 15%):
+// morph does nothing visible, so scale up instead.
+const isSameRatioHover = computed<boolean>(() => {
+  if (hoveredRatio.value === null) return false
+  return Math.abs(hoveredRatio.value - DEFAULT_RATIO) / DEFAULT_RATIO < 0.15
+})
 
 // ── Marquee — delta-time based for consistent speed across framerates ──────────
 
@@ -184,18 +216,18 @@ onBeforeUnmount(() => {
   width: 20vw;
   aspect-ratio: 16 / 9;
 
-  // Shape morph + shadow — both transition together
+  // Shape morph + shadow — both transition together (width added for same-ratio scale-up)
   transition:
     aspect-ratio 1.1s cubic-bezier(0.65, 0, 0.35, 1),
+    width        1.1s cubic-bezier(0.65, 0, 0.35, 1),
     box-shadow   0.7s ease;
 
   @media (max-width: params.$break-point-reg) {
     width: 75vw;
   }
 
-  // ── Hover: morph to portrait + drop shadow ─────────────────────────────────
+  // ── Hover: drop shadow — aspect-ratio is driven by inline style (natural image ratio)
   &.is-hovered {
-    aspect-ratio: 3 / 4;
     box-shadow:
       0 20px 60px rgba(0, 0, 0, 0.18),
       0  4px 16px rgba(0, 0, 0, 0.10);

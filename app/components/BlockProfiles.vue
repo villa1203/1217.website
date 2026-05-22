@@ -11,7 +11,7 @@
       >
         <div class="block-profiles__profile-card__profiles">
           <div class="app-grid">
-            <div class="app-button">{{ profile.first_name }} {{ profile.last_name }}</div>
+            <div class="app-button block-profiles__name-tag">{{ profile.first_name }} {{ profile.last_name }}</div>
           </div>
         </div>
 
@@ -77,11 +77,17 @@ onUnmounted(() => { observer?.disconnect() })
   transform-origin: center;
   transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
               transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: default;
 
   &.is-visible {
     opacity: 1;
     transform: scale(1);
   }
+}
+
+.block-profiles__name-tag {
+  pointer-events: none;
+  cursor: default;
 }
 
 .block-profiles__profile-card__profiles {

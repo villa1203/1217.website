@@ -21,7 +21,26 @@
         class="v-prestations__panel app-with-padding--left-right"
         :style="{ zIndex: i + 1 }"
       >
-        <div class="v-prestations__panel__name">{{ item.prestation_list_title }}</div>
+        <div class="v-prestations__panel__left">
+          <div class="v-prestations__panel__name">{{ item.prestation_list_title }}</div>
+          <div
+            v-if="parseLines(item.prestation_list_includes).length || parseLines(item.prestation_list_details).length"
+            class="v-prestations__panel__lists"
+          >
+            <div v-if="parseLines(item.prestation_list_includes).length" class="v-prestations__panel__list">
+              <p class="v-prestations__panel__list__heading">{{ item.prestation_list_includes_title || 'Typical project includes' }}</p>
+              <ul class="v-prestations__panel__list__items">
+                <li v-for="line in parseLines(item.prestation_list_includes)" :key="line">{{ line }}</li>
+              </ul>
+            </div>
+            <div v-if="parseLines(item.prestation_list_details).length" class="v-prestations__panel__list">
+              <p class="v-prestations__panel__list__heading">{{ item.prestation_list_details_title || 'More Details' }}</p>
+              <ul class="v-prestations__panel__list__items">
+                <li v-for="line in parseLines(item.prestation_list_details)" :key="line">{{ line }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
 
         <div class="v-prestations__panel__right">
           <div
@@ -104,6 +123,13 @@ const props = defineProps<{ block_data: CMS_BlockPrestations }>()
 
 const items = computed(() => props.block_data.content.prestation_list ?? [])
 
+function parseLines(text?: string | Record<string, unknown>): string[] {
+  if (!text) return []
+  const str = typeof text === 'string' ? text : (text as Record<string, unknown>).value as string ?? ''
+  if (!str) return []
+  return str.split(/\r?\n/).map(s => s.trim()).filter(Boolean)
+}
+
 // ── Image auto-slide ──────────────────────────────────────────────────────────
 const IMAGE_INTERVAL_MS = 3_000
 const imageIndices = ref<number[]>([])
@@ -144,6 +170,10 @@ onBeforeUnmount(() => {
 // ── Block header ──────────────────────────────────────────────────────────────
 .v-prestations__header {
   margin-bottom: var(--app-row-gap);
+
+  @media (max-width: params.$break-point-reg) {
+    margin-bottom: 1.5rem;
+  }
 }
 
 .v-prestations__header__title {
@@ -183,6 +213,11 @@ onBeforeUnmount(() => {
   }
 }
 
+.v-prestations__panel__left {
+  display: flex;
+  flex-direction: column;
+}
+
 .v-prestations__panel__name {
   font-size: clamp(1.25rem, 2.5vw, 2.5rem);
   line-height: 1.1;
@@ -190,10 +225,50 @@ onBeforeUnmount(() => {
   margin: 0;
 }
 
+.v-prestations__panel__lists {
+  display: flex;
+  gap: 3rem;
+  margin-top: calc(35vw * 0.75 + var(--app-grid-gap));
+}
+
+.v-prestations__panel__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.v-prestations__panel__list__heading {
+  margin: 0;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.5;
+}
+
+.v-prestations__panel__list__items {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+
+  li {
+    font-size: 0.9rem;
+    opacity: 0.85;
+
+    &::before {
+      content: '—';
+      margin-right: 0.4em;
+      opacity: 0.4;
+    }
+  }
+}
+
 .v-prestations__panel__right {
   display: flex;
   flex-direction: column;
-  gap: var(--app-grid-gap);
+  gap: 2rem;
 }
 
 .v-prestations__panel__visual {
@@ -250,6 +325,7 @@ onBeforeUnmount(() => {
   border: none;
   cursor: pointer;
   text-align: left;
+  color: inherit;
 }
 
 .v-prestations__accordion__label {

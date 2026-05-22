@@ -1,11 +1,11 @@
 <template>
   <nuxt-link :to="`/works/${project.slug}`"
-             class="v-app-projects-list__item app-grid app-grid-reg--wrap"
+             class="v-app-projects-list__item"
              :class="{ 'is-sibling': isSibling }"
   >
 
-    <div class="app-grid__col-6 app-grid-reg__col-12 v-app-projects-list__left">
-
+    <!-- Desktop: meta (left) + description (top right) -->
+    <div class="v-app-projects-list__top">
       <div class="v-app-projects-list__meta">
         <div class="v-app-projects-list__row v-app-projects-list__labels">
           <div class="app-text-strong">Client</div>
@@ -13,10 +13,8 @@
           <div class="app-text-strong">Sector</div>
           <div class="app-text-strong">Year</div>
         </div>
-
         <div class="v-app-projects-list__row v-app-projects-list__data">
           <div>{{ project.title }}</div>
-
           <div class="v-app-projects-list__services">
             <span
               v-for="service of project.services"
@@ -24,59 +22,52 @@
               class="v-app-projects-list__tag"
             >{{ service.title }}</span>
           </div>
-
           <div>
             <span v-for="(sector, i) of project.sectors" :key="sector.slug">
               {{ sector.title }}<template v-if="i < project.sectors.length - 1">, </template>
             </span>
           </div>
-
           <div>{{ project.date?.slice(0, 4) }}</div>
         </div>
       </div>
 
-      <div class="v-app-projects-list__meta--mobile">
-        <div>{{ project.title }}</div>
-        <div>
-          <template v-if="project.services[0]">{{ project.services[0].title }} · </template>{{ project.date?.slice(0, 4) }}
-        </div>
-      </div>
-
-      <div class="v-app-projects-list__description-wrap">
-        <p class="v-app-projects-list__description">{{ project.baseline }}</p>
-      </div>
-
+      <p class="v-app-projects-list__description">{{ project.baseline }}</p>
     </div>
 
-    <div class="app-grid__col-6 v-app-projects-list__gallery app-grid-reg__col-12"
-         :class="{
-           'has-scroll': project.gallery.length > 1,
-           'reg-has-scroll': project.gallery.length > 1,
-           'hide-gradient': hideGradient,
-         }"
-    >
-      <div class="app-grid app-grid--justify-end v-app-projects-list__gallery__container app-grid-reg--justify-start"
-           @scroll="onScrollInGallery"
-      >
+    <!-- Mobile: simplified meta -->
+    <div class="v-app-projects-list__meta--mobile">
+      <div>{{ project.title }}</div>
+      <div>
+        <template v-if="project.services[0]">{{ project.services[0].title }} · </template>{{ project.date?.slice(0, 4) }}
+      </div>
+    </div>
+
+    <!-- Full-viewport gallery strip -->
+    <div class="v-app-projects-list__gallery" :class="{ 'hide-gradient': hideGradient }">
+      <div class="v-app-projects-list__gallery__container" @scroll="onScrollInGallery">
         <div
           v-for="(item, index) of project.gallery"
           :key="index"
-          class="v-app-projects-list__visual-wrap app-grid__shrink-0 app-grid__col-7"
+          class="v-app-projects-list__visual-wrap"
         >
           <video
-            v-if="item.small.url.endsWith('.mp4')"
+            v-if="item.reg?.url?.endsWith('.mp4')"
             class="v-app-projects-list__visual"
             muted autoplay loop playsinline
-            :src="item.small.url"
+            :src="item.reg.url"
           />
           <img
             v-else
             class="v-app-projects-list__visual"
-            :src="item.small.url"
+            :src="item.reg?.url"
+            :alt="item.alt"
           />
         </div>
       </div>
     </div>
+
+    <!-- Description below gallery on mobile -->
+    <p class="v-app-projects-list__description--mobile">{{ project.baseline }}</p>
 
   </nuxt-link>
 </template>
@@ -104,8 +95,12 @@ function onScrollInGallery(e: Event) {
 .v-app-projects-list__item {
   border-top: 1px solid var(--app-color-dark);
   padding-top: var(--app-gutter);
+  padding-bottom: var(--app-gutter);
   color: inherit;
   text-decoration: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: var(--app-grid-gap);
 
   &.is-sibling .v-app-projects-list__visual {
     opacity: 0;
@@ -118,49 +113,29 @@ function onScrollInGallery(e: Event) {
   }
 }
 
-// Left side: flex column so description sits at the bottom
-.v-app-projects-list__left {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: var(--app-row-gap-xs);
-
-  // Dissolve the left column into its children on mobile so we can
-  // reorder meta / gallery / description as independent flex items.
-  @media (max-width: params.$break-point-reg) {
-    display: contents;
-  }
-}
-
-// 4-column grid shared by labels and data rows
-.v-app-projects-list__row {
+// ── Top row: meta (left 3fr) + description (right 1fr) ────────────────────────
+.v-app-projects-list__top {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  column-gap: var(--app-grid-gap);
+  grid-template-columns: 3fr 1fr;
+  gap: var(--app-grid-gap);
   align-items: start;
 
-}
-
-.v-app-projects-list__meta {
   @media (max-width: params.$break-point-reg) {
     display: none;
   }
 }
 
-.v-app-projects-list__meta--mobile {
-  display: none;
-
-  @media (max-width: params.$break-point-reg) {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    order: 1;
-    width: 100%;
-  }
+.v-app-projects-list__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
 }
 
-.v-app-projects-list__labels {
-  margin-bottom: 0.15rem;
+.v-app-projects-list__row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: var(--app-grid-gap);
+  align-items: start;
 }
 
 .v-app-projects-list__services {
@@ -177,40 +152,77 @@ function onScrollInGallery(e: Event) {
   white-space: nowrap;
 }
 
-.v-app-projects-list__description-wrap {
-  overflow: hidden;
-
-  @media (max-width: params.$break-point-reg) {
-    overflow: visible;
-    order: 3;
-    width: 100%;
-    padding-top: 0.4rem;
-  }
-}
-
 .v-app-projects-list__description {
   margin: 0;
   opacity: 0.6;
-  width: calc(75% - var(--app-grid-gap) * 0.25);
-  transform: translateY(110%);
-  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
 
-  .v-app-projects-list__item:hover & {
-    transform: translateY(0);
-  }
+.v-app-projects-list__description--mobile {
+  display: none;
 
   @media (max-width: params.$break-point-reg) {
-    transform: translateY(0);
+    display: block;
+    margin: 0;
+    opacity: 0.6;
+  }
+}
+
+// ── Mobile simplified meta ─────────────────────────────────────────────────────
+.v-app-projects-list__meta--mobile {
+  display: none;
+
+  @media (max-width: params.$break-point-reg) {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
     width: 100%;
   }
 }
 
-.v-app-projects-list__visual-wrap {
+// ── Full-viewport gallery strip ────────────────────────────────────────────────
+// Escapes the parent's app-with-padding--left-right to reach viewport edges
+.v-app-projects-list__gallery {
   position: relative;
+  margin-left: calc(-1 * var(--app-grid-gap));
+  width: 100vw;
+
+  &::after {
+    z-index: 5;
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 8rem;
+    height: 100%;
+    transition: opacity 0.25s ease;
+    background: linear-gradient(to left, var(--app-color-light) 0%, transparent 100%);
+    pointer-events: none;
+  }
+
+  &.hide-gradient::after {
+    opacity: 0;
+  }
+}
+
+.v-app-projects-list__gallery__container {
+  display: flex;
+  gap: var(--app-grid-gap);
+  padding-left: var(--app-grid-gap);
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar { display: none; }
+}
+
+.v-app-projects-list__visual-wrap {
+  flex-shrink: 0;
+  position: relative;
+  height: clamp(180px, 32vh, 480px);
   border-radius: var(--app-media-radius);
+  overflow: hidden;
 
   @media (max-width: params.$break-point-reg) {
-    width: 85% !important;
+    height: clamp(120px, 25vh, 280px);
   }
 
   &::after {
@@ -226,52 +238,10 @@ function onScrollInGallery(e: Event) {
 
 .v-app-projects-list__visual {
   display: block;
-  width: 100%;
-  aspect-ratio: 16/9;
+  height: 100%;
+  width: auto;
   object-fit: cover;
   border-radius: var(--app-media-radius);
   transition: opacity 0.9s ease;
-}
-
-.v-app-projects-list__gallery {
-  position: relative;
-
-  @media (max-width: params.$break-point-reg) {
-    order: 2;
-  }
-
-  &.has-scroll::after {
-    z-index: 5;
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: calc(100% / 5);
-    height: 100%;
-    transition: all .25s ease-in-out;
-    background: linear-gradient(to left, var(--app-color-light) 0%, hsla(0, 0%, 100%, 0) 100%);
-    pointer-events: none;
-  }
-
-  &.hide-gradient::after {
-    transform: translateX(100%);
-  }
-}
-
-.v-app-projects-list__gallery__container {
-  width: 100%;
-  overflow: hidden;
-  border-radius: var(--app-media-radius);
-
-  .has-scroll & {
-    overflow: scroll;
-    justify-content: flex-start;
-  }
-
-  @media (max-width: params.$break-point-reg) {
-    .reg-has-scroll & {
-      overflow: scroll;
-    }
-  }
 }
 </style>

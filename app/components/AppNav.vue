@@ -1,6 +1,6 @@
 <template>
     <nav class="v-nav app-with-padding--left-right app-with-padding--top-bottom"
-         :class="{'infos-is-open': infosIsOpen, 'mobile-menu-open': mobileMenuOpen}"
+         :class="{'infos-is-open': navClassOpen, 'mobile-menu-open': mobileMenuOpen}"
     >
       <div class="toggle-infos toggle-infos--mobile app-button app-button--reverse-with-dark-view"
            @click="mobileMenuOpen = !mobileMenuOpen"
@@ -12,14 +12,14 @@
 
       <div class="app-grid app-grid--justify-between app-grid-reg--wrap app-grid-reg--justify-end">
 
-        <div ref="logoRef"
-             class="app-button app-button--reverse-with-dark-view v-nav__logo"
+        <div class="app-button app-button--reverse-with-dark-view v-nav__logo"
              style="z-index: 10;"
              @click="navigateTo('/')"
         >
           <div class="app-grid app-grid--align-center">
             <img src="/logo.svg"/>
             <div class="toggle-infos"
+                 :class="{ 'is-open': infosIsOpen }"
                  @click.stop="infosIsOpen = !infosIsOpen"
             >
               <UIOpen/>
@@ -27,7 +27,7 @@
           </div>
         </div>
 
-        <transition name="nav-info">
+        <transition name="nav-info" @after-leave="navClassOpen = false">
           <div v-if="infosIsOpen"
                class="app-rm-child-margin v-nav__infos"
           >
@@ -77,22 +77,29 @@ const { data: navInfo } = useFetch<NavInfoData>('/api/CMS_KQLRequest', {
   }
 })
 
-const infosIsOpen = ref(false)
+const infosIsOpen  = ref(false)
+const navClassOpen = ref(false)   // stays true until leave transition ends
 const mobileMenuOpen = ref(false)
-const logoRef = ref<HTMLElement | null>(null)
+
+watch(infosIsOpen, (val) => {
+  if (val) navClassOpen.value = true
+  // navClassOpen cleared by @after-leave on the transition
+})
 
 useRouter().beforeEach(() => {
   infosIsOpen.value = false
   mobileMenuOpen.value = false
 })
 
-watch(infosIsOpen, async (newVal) => {
-  if (!newVal && logoRef.value) {
-    logoRef.value.style.transition = 'none'
-    await nextTick()
-    logoRef.value.style.transition = ''
+onMounted(() => {
+  const mq = window.matchMedia('(max-width: 900px)')
+  const onBreakpoint = (e: MediaQueryListEvent) => {
+    if (e.matches) infosIsOpen.value = false
   }
+  mq.addEventListener('change', onBreakpoint)
+  onBeforeUnmount(() => mq.removeEventListener('change', onBreakpoint))
 })
+
 
 
 
@@ -144,21 +151,16 @@ watch(infosIsOpen, async (newVal) => {
   }
 }
 
-// When open, strip visual styling from the logo button so the panel reads as one block.
-// All changes are delayed 150ms so the panel has faded in enough to cover the logo area
-// before the logo becomes transparent — prevents the white page showing through.
 .infos-is-open .v-nav__logo {
   @media (min-width: params.$break-point-reg) {
     background: transparent !important;
     backdrop-filter: none !important;
     border-color: transparent !important;
     box-shadow: none !important;
-    text-shadow: none !important;
-    transition: background     0s 0.15s,
-                backdrop-filter 0s 0.15s,
-                border-color   0s 0.12s,
-                box-shadow     0s 0.12s,
-                text-shadow    0s 0.12s !important;
+    transition: background      0.3s ease,
+                backdrop-filter 0.3s ease,
+                border-color    0.3s ease,
+                box-shadow      0.3s ease !important;
   }
 }
 
@@ -167,10 +169,13 @@ watch(infosIsOpen, async (newVal) => {
   > * {
     transition: transform 1s cubic-bezier(0, .25, 0, 1);
 
-    .infos-is-open &,
     .mobile-menu-open & {
       transform: rotate(45deg);
     }
+  }
+
+  &.is-open > * {
+    transform: rotate(45deg);
   }
 
   @media (max-width: params.$break-point-reg) {
@@ -221,27 +226,31 @@ watch(infosIsOpen, async (newVal) => {
   }
 }
 
-// ── Info panel morph transition ───────────────────────────────────────────────
-// transform-origin: top left = panel grows out of / collapses into the button corner
-
+// Panel ~20rem tall, button clip ~3rem tall.
+// R_start = 0.75rem × (3/20) = 0.11rem keeps R/height constant throughout
+// → corner proportion stays identical at every frame, regardless of easing.
 .nav-info-enter-active {
-  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity    0.2s  ease;
-  transform-origin: top left;
+  transition: clip-path 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  > * { transition: opacity 0.3s ease 0.25s; }
 }
 .nav-info-enter-from {
-  transform: scaleX(0.5) scaleY(0.06);
-  opacity: 0;
+  clip-path: inset(0 calc(100% - 8rem) calc(100% - 3rem) 0 round 0.11rem);
+  > * { opacity: 0; }
+}
+.nav-info-enter-to {
+  clip-path: inset(0 round 0.75rem);
 }
 
 .nav-info-leave-active {
-  transition: transform 0.38s cubic-bezier(0.4, 0, 1, 1),
-              opacity    0.22s ease;
-  transform-origin: top left;
+  transition: clip-path 0.22s cubic-bezier(0.4, 0, 1, 1);
+  > * { transition: opacity 0.12s ease; }
+}
+.nav-info-leave-from {
+  clip-path: inset(0 round 0.75rem);
 }
 .nav-info-leave-to {
-  transform: scaleX(0.5) scaleY(0.06);
-  opacity: 0;
+  clip-path: inset(0 calc(100% - 8rem) calc(100% - 3rem) 0 round 0.11rem);
+  > * { opacity: 0; }
 }
 
 .v-nav__logo {

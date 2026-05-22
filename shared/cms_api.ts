@@ -215,6 +215,10 @@ export interface CMS_BlockPrestations extends CMS_BlockDataBase {
         slug: string,
         cover?: CMS_API_ImageInstance,
       }[],
+      prestation_list_includes_title?: string,
+      prestation_list_includes?: string,
+      prestation_list_details_title?: string,
+      prestation_list_details?: string,
     }[]
   },
   "type": "prestations"

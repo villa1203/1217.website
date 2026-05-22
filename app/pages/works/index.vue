@@ -1,7 +1,7 @@
 <template>
   <main class="v-works"
   >
-    <Transition name="works-gallery" appear>
+    <Transition name="works-gallery" appear :duration="3000">
       <AppRandomProjects
         v-if="data?.result?.projects"
         :projects="data.result.projects"
@@ -82,26 +82,16 @@ onBeforeUnmount(() => {
 </style>
 
 <style lang="scss">
-// ── 1. AppRandomProjects — strip sweeps in from right, items morph individually
-//    ↓ tune these two values to control strip arrival feel
-//    duration: how long the slide takes         → currently 3.0s
-//    easing:   cubic-bezier(0.25, 1, 0.5, 1)   → easeOutQuart (gentler than Expo)
-.works-gallery-enter-active {
-  transition: transform 3.0s cubic-bezier(0.25, 1, 0.5, 1);
-}
-.works-gallery-enter-from {
-  transform: translateX(100vw);
-}
-
-// Each item grows from a tiny pill to its card shape, staggered left→right
+// ── 1. AppRandomProjects — items grow from a dot in place (no strip fly-in)
+// :duration="3000" on <Transition> keeps enter-active long enough for the stagger.
 .works-gallery-enter-active .v-app-random-projects__item {
-  animation: works-item-morph 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: works-item-morph 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
   animation-delay: calc(var(--item-index, 0) * 0.1s);
 }
 
 @keyframes works-item-morph {
   from {
-    transform: scale(0.15);
+    transform: scale(0.02);
     border-radius: 50%;
     opacity: 0;
   }
@@ -112,10 +102,10 @@ onBeforeUnmount(() => {
   }
 }
 
-// ── 2. AppProjectsList — rises up while gallery is still decelerating (delay 1.8s)
+// ── 2. AppProjectsList — rises up once items are appearing (delay 0.6s)
 .works-list-enter-active {
-  transition: transform 1.3s cubic-bezier(0.215, 0.61, 0.355, 1) 1.8s,
-              opacity   1.1s ease 1.8s;
+  transition: transform 1.3s cubic-bezier(0.215, 0.61, 0.355, 1) 0.6s,
+              opacity   1.1s ease 0.6s;
 }
 .works-list-enter-from {
   transform: translateY(50px);

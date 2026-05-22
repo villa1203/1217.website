@@ -40,6 +40,10 @@
       </nuxt-link>
     </div>
 
+    <div class="v-research__engagements app-with-padding--left-right">
+      <BlockCollaboratorsList mode="research" />
+    </div>
+
   </main>
 </template>
 
@@ -49,6 +53,7 @@ import type {CMS_API_Page_projet, CMS_API_Response, CMS_BlockData} from "#shared
 import {KQL_PROJECTS_SELECT, KQL_QUERY_BLOCKS} from "#shared/KQLQueries";
 import {getProjectBySector} from "#shared/projects_utils";
 import ResearchHeroSpotlight from "~/components/ResearchHeroSpotlight.vue";
+import BlockCollaboratorsList from "~/components/BlockCollaboratorsList.vue";
 
 type FetchData = CMS_API_Response & {
   "result": {
@@ -221,6 +226,10 @@ onUnmounted(() => {
   margin: 0;
   opacity: 0.6;
   font-size: 0.9rem;
+}
+
+.v-research__engagements {
+  padding-bottom: 10rem;
 }
 </style>
 

@@ -6,14 +6,24 @@
     @mouseleave="onMouseLeave"
     @click="onClick"
   >
-    <!-- Black text — invisible on dark bg, revealed only through the white shape -->
-    <div class="v-rh-spotlight__inner">
+    <!-- Desktop text -->
+    <div class="v-rh-spotlight__inner v-rh-spotlight__inner--desktop">
       <h2 class="v-rh-spotlight__title">
         Bureau 1217 turns research into design practice.
       </h2>
       <h2 ref="wrapperRef" class="v-rh-spotlight__baseline-wrapper">
         <Transition name="roll" @before-leave="freezeHeight" @after-enter="onSentenceEntered">
           <span :key="sentenceIndex" class="v-rh-spotlight__baseline">{{ baselines[sentenceIndex] }}</span>
+        </Transition>
+      </h2>
+    </div>
+
+    <!-- Mobile text -->
+    <div class="v-rh-spotlight__inner v-rh-spotlight__inner--mobile">
+      <h2 class="v-rh-spotlight__mobile-static">{{ staticLine }}</h2>
+      <h2 ref="mobileWrapperRef" class="v-rh-spotlight__mobile-rolling">
+        <Transition name="roll" @before-leave="freezeMobileHeight" @after-enter="releaseMobileHeight">
+          <span :key="mobileSentenceIndex" class="v-rh-spotlight__baseline">{{ researchLinesMobile[mobileSentenceIndex] }}</span>
         </Transition>
       </h2>
     </div>
@@ -53,9 +63,9 @@ const SHAPES: number[][] = [
   // circumradius R=420, straight-side polar: R cos(60°)/cos(θ mod 120° − 60°)
   [420, 242, 210, 242, 420, 242, 210, 242, 420, 242, 210, 242],
 
-  // ④ Teardrop — distillation; knowledge condensing to a single point
-  // Pointed at top (r=52), round at bottom (r=440), smooth flanks
-  [52, 130, 270, 400, 438, 440, 440, 440, 438, 400, 270, 130],
+  // ④ Six-pointed star — collision of two opposite triangles, 6 sharp tips
+  // Alternating peak r=430 / valley r=130 every 30°
+  [430, 130, 430, 130, 430, 130, 430, 130, 430, 130, 430, 130],
 
   // ⑤ Trefoil — dialectic synthesis; three lobes at 12 / 4 / 8 o'clock
   // period = 4: lobe peak r=435 at i=0,4,8 — saddle r=108 between
@@ -191,8 +201,23 @@ const baselines = [
   'Studies that shape future projects.',
 ]
 
-const sentenceIndex = ref(0)
-const wrapperRef    = ref<HTMLElement | null>(null)
+const staticLine = 'Research for'
+
+const researchLinesMobile = [
+  'strange tools',
+  'living systems',
+  'weak signals',
+  'daily rituals',
+  'speculative interfaces',
+  'regenerative practices',
+  'counter-disinformation',
+  'unnamed forms',
+]
+
+const sentenceIndex      = ref(0)
+const mobileSentenceIndex = ref(0)
+const wrapperRef         = ref<HTMLElement | null>(null)
+const mobileWrapperRef   = ref<HTMLElement | null>(null)
 
 function freezeHeight() {
   const el = wrapperRef.value
@@ -200,6 +225,14 @@ function freezeHeight() {
 }
 function releaseHeight() {
   const el = wrapperRef.value
+  if (el) el.style.height = ''
+}
+function freezeMobileHeight() {
+  const el = mobileWrapperRef.value
+  if (el) el.style.height = `${el.offsetHeight}px`
+}
+function releaseMobileHeight() {
+  const el = mobileWrapperRef.value
   if (el) el.style.height = ''
 }
 
@@ -215,7 +248,8 @@ function onSentenceEntered() {
 function startCycle() {
   if (cycleInterval !== null) return
   cycleInterval = setInterval(() => {
-    sentenceIndex.value = (sentenceIndex.value + 1) % baselines.length
+    sentenceIndex.value       = (sentenceIndex.value + 1) % baselines.length
+    mobileSentenceIndex.value = (mobileSentenceIndex.value + 1) % researchLinesMobile.length
     morphTriggerTimer = setTimeout(() => {
       morphTriggerTimer = null
       shapeIdx = (shapeIdx + 1) % SHAPES.length
@@ -277,7 +311,8 @@ onBeforeUnmount(() => {
 
 
 
-<style scoped>
+<style scoped lang="scss">
+@use '~/assets/__params' as params;
 .v-rh-spotlight {
   position: relative;
   box-sizing: border-box;
@@ -304,6 +339,41 @@ onBeforeUnmount(() => {
   pointer-events: none;
 }
 
+.v-rh-spotlight__inner--mobile {
+  display: none;
+  @media (max-width: params.$break-point-reg) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+    padding: calc(var(--app-header-height) / 2) 1.5rem 0;
+    text-align: center;
+  }
+}
+
+.v-rh-spotlight__mobile-static,
+.v-rh-spotlight__mobile-rolling {
+  margin: 0;
+  font-size: clamp(1.2rem, 6.5vw, 2rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  width: 100%;
+  text-align: center;
+}
+
+.v-rh-spotlight__mobile-rolling {
+  position: relative;
+  overflow: hidden;
+  margin-top: 0.1em;
+}
+
+.v-rh-spotlight__inner--desktop {
+  @media (max-width: params.$break-point-reg) {
+    display: none;
+  }
+}
+
 .v-rh-spotlight__title { margin: 0; }
 
 .v-rh-spotlight__baseline-wrapper {
@@ -322,6 +392,11 @@ onBeforeUnmount(() => {
   position: absolute;
   left: 50%;
   top: 50%;
+
+  @media (max-width: params.$break-point-reg) {
+    top: calc(50% + var(--app-header-height) / 4);
+    transform: translate(-50%, -50%) !important;
+  }
   /* 100vmin: in landscape (vmin=vh) the shape radius touches viewport top/bottom exactly.
      In portrait (vmin=vw) it has vertical headroom. Horizontal bleed is clipped by
      the section's overflow:hidden and is intentional. */

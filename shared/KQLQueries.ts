@@ -144,6 +144,10 @@ export const KQL_QUERY_BLOCKS = {
           select: {
             prestation_list_title: "structureItem.content.prestation_list_title",
             prestation_list_description: "structureItem.content.prestation_list_description",
+            prestation_list_includes_title: "structureItem.content.prestation_list_includes_title",
+            prestation_list_includes: "structureItem.content.prestation_list_includes",
+            prestation_list_details_title: "structureItem.content.prestation_list_details_title",
+            prestation_list_details: "structureItem.content.prestation_list_details",
             prestation_list_projects_linked: {
               query: "structureItem.content.prestation_list_projects_linked.toPages",
               select: {
