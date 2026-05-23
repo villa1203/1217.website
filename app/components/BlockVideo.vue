@@ -158,6 +158,10 @@ onUnmounted(() => { observer?.disconnect() })
     margin-right: calc( -1 * var(--app-gutter));
     margin-left: calc( -1 * var(--app-gutter));
     border-radius: 0;
+    // Full-screen hero: always visible, no reveal animation
+    opacity: 1;
+    transform: none;
+    transition: none;
 
     video {
       height: 100vh;

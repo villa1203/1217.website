@@ -24,7 +24,7 @@
       </div>
 
       <div class="v-app-last-projects-preview--list__button app-grid app-grid--align-start app-grid--justify-end">
-        <nuxt-link to='/works' class="app-button app-button--variant-primary">see more <UIArrow/></nuxt-link>
+        <nuxt-link to='/works' class="app-button app-button--variant-primary">see more</nuxt-link>
       </div>
     </section>
 </template>

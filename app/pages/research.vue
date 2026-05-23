@@ -35,7 +35,7 @@
         </div>
         <div class="v-research__card__text">
           <h2 class="v-research__card__title app-text-reg app-text-strong app-no-margin">{{ project.title }}</h2>
-          <p class="v-research__card__description">{{ project.baseline }}</p>
+          <p class="v-research__card__description">{{ truncate(project.baseline, 20) }}</p>
         </div>
       </nuxt-link>
     </div>
@@ -54,6 +54,12 @@ import {KQL_PROJECTS_SELECT, KQL_QUERY_BLOCKS} from "#shared/KQLQueries";
 import {getProjectBySector} from "#shared/projects_utils";
 import ResearchHeroSpotlight from "~/components/ResearchHeroSpotlight.vue";
 import BlockCollaboratorsList from "~/components/BlockCollaboratorsList.vue";
+
+const truncate = (text: string, words: number) => {
+  if (!text) return ''
+  const parts = text.split(' ')
+  return parts.length <= words ? text : parts.slice(0, words).join(' ') + '…'
+}
 
 type FetchData = CMS_API_Response & {
   "result": {

@@ -5,14 +5,14 @@
       <Blocks :content="data?.result.content || []" />
     </div>
 
-    <div class="v-index__hero-overlay">
+    <!-- <div class="v-index__hero-overlay">
       <div class="v-index__latest-use">
         <div class="v-index__latest-use__label">Latest Case Study</div>
         <nuxt-link class="v-index__latest-use__link" to="/works/jazz-action-valence">
           Jazz action Valence →
         </nuxt-link>
       </div>
-    </div>
+    </div> -->
   </main>
 </template>
 
@@ -133,3 +133,4 @@ onBeforeUnmount(() => {
 }
 
 </style>
+

@@ -1,6 +1,7 @@
 <template>
     <nav class="v-nav app-with-padding--left-right app-with-padding--top-bottom"
-         :class="{'infos-is-open': navClassOpen, 'mobile-menu-open': mobileMenuOpen}"
+         :class="{'infos-is-open': navClassOpen, 'mobile-menu-open': mobileMenuOpen, 'v-nav--intro': introActive}"
+         :style="introActive ? { '--nav-intro-delay': `${INTRO_DELAY_MS}ms` } : {}"
     >
       <div class="toggle-infos toggle-infos--mobile app-button app-button--reverse-with-dark-view"
            @click="mobileMenuOpen = !mobileMenuOpen"
@@ -14,7 +15,7 @@
 
         <div class="app-button app-button--reverse-with-dark-view v-nav__logo"
              style="z-index: 10;"
-             @click="navigateTo('/')"
+             @click="handleNavClick('/')"
         >
           <div class="app-grid app-grid--align-center">
             <img src="/logo.svg"/>
@@ -47,9 +48,9 @@
         <nav class="app-grid app-grid--justify-end v-nav__links"
              style="gap: .5rem"
         >
-          <nuxt-link class="app-button app-button--reverse-with-dark-view" to="/works">works</nuxt-link>
-          <nuxt-link class="app-button app-button--reverse-with-dark-view" to="/office">office</nuxt-link>
-          <nuxt-link class="app-button app-button--reverse-with-dark-view" to="/research">research</nuxt-link>
+          <nuxt-link class="app-button app-button--reverse-with-dark-view" to="/works" @click.prevent="handleNavClick('/works')">works</nuxt-link>
+          <nuxt-link class="app-button app-button--reverse-with-dark-view" to="/office" @click.prevent="handleNavClick('/office')">office</nuxt-link>
+          <nuxt-link class="app-button app-button--reverse-with-dark-view" to="/research" @click.prevent="handleNavClick('/research')">research</nuxt-link>
         </nav>
 
       </div>
@@ -64,6 +65,11 @@
 import UIOpen from "~/components/UIOpen.vue";
 import type { CMS_API_Response } from "#shared/cms_api";
 
+// ── Home intro animation timing ────────────────────────────────────────────────
+const INTRO_DELAY_MS    = 400   // ms after page load before slide-in starts
+const INTRO_DURATION_MS = 1400  // ms — keep in sync with animation-duration in CSS
+// ──────────────────────────────────────────────────────────────────────────────
+
 type NavInfoData = CMS_API_Response & {
   result: { menu_description: string }
 }
@@ -77,13 +83,29 @@ const { data: navInfo } = useFetch<NavInfoData>('/api/CMS_KQLRequest', {
   }
 })
 
-const infosIsOpen  = ref(false)
-const navClassOpen = ref(false)   // stays true until leave transition ends
+const infosIsOpen    = ref(false)
+const navClassOpen   = ref(false)
 const mobileMenuOpen = ref(false)
+
+// useState initialises on SSR too, so when the page is home the HTML already
+// carries the intro class → CSS fill-mode:backwards hides buttons from the very
+// first browser paint → zero flash before the slide-in.
+const route = useRoute()
+const introActive = useState('nav-intro-active', () => import.meta.server && route.path === '/')
+
+// Module-level flag: reset on hard load/reload, survives SPA navigation
+let _introPlayed = false
+
+function handleNavClick(to: string) {
+  if (route.path === to) {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  } else {
+    navigateTo(to)
+  }
+}
 
 watch(infosIsOpen, (val) => {
   if (val) navClassOpen.value = true
-  // navClassOpen cleared by @after-leave on the transition
 })
 
 useRouter().beforeEach(() => {
@@ -92,17 +114,22 @@ useRouter().beforeEach(() => {
 })
 
 onMounted(() => {
+  // Breakpoint watcher
   const mq = window.matchMedia('(max-width: 900px)')
   const onBreakpoint = (e: MediaQueryListEvent) => {
     if (e.matches) infosIsOpen.value = false
   }
   mq.addEventListener('change', onBreakpoint)
   onBeforeUnmount(() => mq.removeEventListener('change', onBreakpoint))
+
+  // Intro animation: only on hard load/reload to home, never on SPA nav.
+  // introActive may already be true (set by SSR); just arm the teardown timer.
+  if (route.path === '/' && !_introPlayed) {
+    _introPlayed = true
+    introActive.value = true
+    setTimeout(() => { introActive.value = false }, INTRO_DELAY_MS + INTRO_DURATION_MS + 100)
+  }
 })
-
-
-
-
 </script>
 
 
@@ -289,6 +316,38 @@ onMounted(() => {
       pointer-events: auto;
       opacity: 1;
       transform: translateX(0);
+    }
+  }
+}
+
+// ── Home intro slide-in ────────────────────────────────────────────────────────
+// Duration here must match INTRO_DURATION_MS in the script.
+@keyframes nav-intro-slide {
+  from { transform: translateY(-6rem); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.v-nav--intro {
+  .v-nav__logo {
+    animation: nav-intro-slide 1.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: var(--nav-intro-delay, 0.4s);
+  }
+
+  // Desktop: animate the three nav links with a light stagger
+  @media (min-width: params.$break-point-reg) {
+    .v-nav__links .app-button {
+      animation: nav-intro-slide 1.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+      &:nth-child(1) { animation-delay: var(--nav-intro-delay, 0.4s); }
+      &:nth-child(2) { animation-delay: calc(var(--nav-intro-delay, 0.4s) + 0.06s); }
+      &:nth-child(3) { animation-delay: calc(var(--nav-intro-delay, 0.4s) + 0.12s); }
+    }
+  }
+
+  // Mobile: animate the hamburger button instead
+  @media (max-width: params.$break-point-reg) {
+    .toggle-infos--mobile {
+      animation: nav-intro-slide 1.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation-delay: var(--nav-intro-delay, 0.4s);
     }
   }
 }
