@@ -224,6 +224,7 @@ onBeforeUnmount(() => {
 
   @media (max-width: params.$break-point-reg) {
     width: 75vw;
+    height: clamp(120px, 25vh, 280px);
   }
 
   // ── Hover: drop shadow — aspect-ratio is driven by inline style (natural image ratio)

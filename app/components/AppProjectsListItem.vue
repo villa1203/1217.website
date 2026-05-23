@@ -17,10 +17,10 @@
           <div>{{ project.title }}</div>
           <div class="v-app-projects-list__services">
             <span
-              v-for="service of project.services"
+              v-for="(service, i) of project.services"
               :key="service.slug"
               class="v-app-projects-list__tag"
-            >{{ service.title }}</span>
+            >{{ service.title }}<template v-if="i < project.services.length - 1">,</template></span>
           </div>
           <div>{{ project.date?.slice(0, 4) }}</div>
         </div>
@@ -45,14 +45,7 @@
           :key="index"
           class="v-app-projects-list__visual-wrap"
         >
-          <video
-            v-if="item.isVideo"
-            class="v-app-projects-list__visual"
-            muted autoplay loop playsinline
-            :src="item.url"
-          />
           <img
-            v-else
             class="v-app-projects-list__visual"
             :src="item.url"
             :alt="item.alt"
@@ -68,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import type { CMS_API_Page_projet, CMS_BlockImageData, CMS_BlockGalleryData, CMS_BlockVideoData } from "#shared/cms_api"
+import type { CMS_API_Page_projet, CMS_BlockImageData, CMS_BlockGalleryData } from "#shared/cms_api"
 
 const props = defineProps<{
   project: CMS_API_Page_projet
@@ -77,32 +70,28 @@ const props = defineProps<{
 
 const allVisuals = computed(() => {
   const seen = new Set<string>()
-  const list: { url: string; isVideo: boolean; alt?: string }[] = []
+  const list: { url: string; alt?: string }[] = []
 
-  const add = (url: string, isVideo: boolean, alt?: string) => {
-    if (url && !seen.has(url)) { seen.add(url); list.push({ url, isVideo, alt }) }
+  const add = (url: string, alt?: string) => {
+    if (url && !seen.has(url)) { seen.add(url); list.push({ url, alt }) }
   }
 
   // Cover first — matches the project page hero so the expand feels connected
-  if (props.project.cover?.reg?.url) add(props.project.cover.reg.url, false, props.project.cover.alt ?? undefined)
-  if (props.project.covers_video?.url) add(props.project.covers_video.url, true)
+  if (props.project.cover?.reg?.url) add(props.project.cover.reg.url, props.project.cover.alt ?? undefined)
 
   for (const img of (props.project.gallery ?? [])) {
-    if (img.reg?.url) add(img.reg.url, img.reg.url.endsWith('.mp4'), img.alt ?? undefined)
+    if (img.reg?.url && !img.reg.url.endsWith('.mp4')) add(img.reg.url, img.alt ?? undefined)
   }
 
   for (const block of (props.project.content ?? [])) {
     if (block.isHidden) continue
     if (block.type === 'image') {
       const img = (block as CMS_BlockImageData).content?.image
-      if (img?.reg?.url) add(img.reg.url, false, img.alt ?? undefined)
+      if (img?.reg?.url) add(img.reg.url, img.alt ?? undefined)
     } else if (block.type === 'gallery') {
       for (const img of ((block as CMS_BlockGalleryData).content?.images ?? [])) {
-        if (img?.reg?.url) add(img.reg.url, false, img.alt ?? undefined)
+        if (img?.reg?.url) add(img.reg.url, img.alt ?? undefined)
       }
-    } else if (block.type === 'video') {
-      const vf = (block as CMS_BlockVideoData).content?.video_file?.[0]
-      if (vf?.url) add(vf.url, true)
     }
   }
 
@@ -432,18 +421,10 @@ async function handleClick(e: MouseEvent) {
   height: clamp(180px, 32vh, 480px);
   border-radius: var(--app-media-radius);
   overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .25);
 
   @media (max-width: params.$break-point-reg) {
     height: clamp(120px, 25vh, 280px);
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    border: 0.5px solid hsla(0, 0%, 100%, 0.18);
-    pointer-events: none;
   }
 }
 
