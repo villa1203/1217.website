@@ -1,7 +1,8 @@
 <template>
-  <nuxt-link :to="`/works/${project.slug}`"
-             class="v-app-projects-list__item"
-             :class="{ 'is-sibling': isSibling }"
+  <a :href="`/works/${project.slug}`"
+     class="v-app-projects-list__item"
+     :class="{ 'is-sibling': isSibling }"
+     @click="handleClick"
   >
 
     <!-- Desktop: meta (left) + description (top right) -->
@@ -10,7 +11,6 @@
         <div class="v-app-projects-list__row v-app-projects-list__labels">
           <div class="app-text-strong">Client</div>
           <div class="app-text-strong">Services</div>
-          <div class="app-text-strong">Sector</div>
           <div class="app-text-strong">Year</div>
         </div>
         <div class="v-app-projects-list__row v-app-projects-list__data">
@@ -21,11 +21,6 @@
               :key="service.slug"
               class="v-app-projects-list__tag"
             >{{ service.title }}</span>
-          </div>
-          <div>
-            <span v-for="(sector, i) of project.sectors" :key="sector.slug">
-              {{ sector.title }}<template v-if="i < project.sectors.length - 1">, </template>
-            </span>
           </div>
           <div>{{ project.date?.slice(0, 4) }}</div>
         </div>
@@ -43,13 +38,12 @@
     </div>
 
     <!-- Full-viewport gallery strip -->
-    <div class="v-app-projects-list__gallery" :class="{ 'hide-gradient': hideGradient }">
-      <div class="v-app-projects-list__gallery__container" @scroll="onScrollInGallery">
+    <div ref="galleryRef" class="v-app-projects-list__gallery" :class="{ 'hide-gradient': hideGradient }">
+      <div ref="containerRef" class="v-app-projects-list__gallery__container" @scroll="onScrollInGallery">
         <div
-          v-for="(item, index) of allVisuals"
+          v-for="(item, index) of galleryVisuals"
           :key="index"
           class="v-app-projects-list__visual-wrap"
-          :style="{ '--delay': `${index * 0.06}s` }"
         >
           <video
             v-if="item.isVideo"
@@ -70,18 +64,17 @@
     <!-- Description below gallery on mobile -->
     <p class="v-app-projects-list__description--mobile">{{ project.baseline }}</p>
 
-  </nuxt-link>
+  </a>
 </template>
 
 <script setup lang="ts">
-import type { CMS_API_Page_projet } from "#shared/cms_api"
+import type { CMS_API_Page_projet, CMS_BlockImageData, CMS_BlockGalleryData, CMS_BlockVideoData } from "#shared/cms_api"
 
 const props = defineProps<{
   project: CMS_API_Page_projet
   isSibling?: boolean
 }>()
 
-// covers_video first, then all gallery files — deduped
 const allVisuals = computed(() => {
   const seen = new Set<string>()
   const list: { url: string; isVideo: boolean; alt?: string }[] = []
@@ -90,21 +83,226 @@ const allVisuals = computed(() => {
     if (url && !seen.has(url)) { seen.add(url); list.push({ url, isVideo, alt }) }
   }
 
-  if (props.project.covers_video?.url) {
-    add(props.project.covers_video.url, true)
-  }
+  // Cover first — matches the project page hero so the expand feels connected
+  if (props.project.cover?.reg?.url) add(props.project.cover.reg.url, false, props.project.cover.alt ?? undefined)
+  if (props.project.covers_video?.url) add(props.project.covers_video.url, true)
+
   for (const img of (props.project.gallery ?? [])) {
     if (img.reg?.url) add(img.reg.url, img.reg.url.endsWith('.mp4'), img.alt ?? undefined)
+  }
+
+  for (const block of (props.project.content ?? [])) {
+    if (block.isHidden) continue
+    if (block.type === 'image') {
+      const img = (block as CMS_BlockImageData).content?.image
+      if (img?.reg?.url) add(img.reg.url, false, img.alt ?? undefined)
+    } else if (block.type === 'gallery') {
+      for (const img of ((block as CMS_BlockGalleryData).content?.images ?? [])) {
+        if (img?.reg?.url) add(img.reg.url, false, img.alt ?? undefined)
+      }
+    } else if (block.type === 'video') {
+      const vf = (block as CMS_BlockVideoData).content?.video_file?.[0]
+      if (vf?.url) add(vf.url, true)
+    }
   }
 
   return list
 })
 
+const galleryRef   = ref<HTMLElement>()
+const containerRef = ref<HTMLElement>()
 const hideGradient = ref(false)
 
+// Tripled list for seamless infinite scroll in both directions.
+// Middle segment is the default view; loop resets keep scrollLeft there.
+const galleryVisuals = computed(() => {
+  const list = allVisuals.value
+  return list.length > 1 ? [...list, ...list, ...list] : list
+})
+
+let loopResetting = false
+
+onMounted(async () => {
+  await nextTick()
+  const el = containerRef.value
+  if (el) el.scrollLeft = el.scrollWidth / 3   // start in the middle segment
+})
+
+// ── Per-instance animation state ───────────────────────────────────────────────
+let animationToken  = 0
+let activeOverlay: HTMLElement | null = null
+
 function onScrollInGallery(e: Event) {
+  if (loopResetting) return
   if (!(e.target instanceof HTMLElement)) return
-  hideGradient.value = e.target.scrollLeft > 250
+  const el    = e.target
+  const third = el.scrollWidth / 3
+
+  // Seamless loop: when user reaches either boundary, teleport one segment over.
+  // Suppressed while animationToken > 0 so the click animation isn't interrupted.
+  if (animationToken === 0 && third > 0) {
+    if (el.scrollLeft >= third * 2) {
+      loopResetting = true; el.scrollLeft -= third; loopResetting = false
+    } else if (el.scrollLeft < 50) {
+      loopResetting = true; el.scrollLeft += third; loopResetting = false
+    }
+  }
+
+  hideGradient.value = el.scrollLeft > 250
+}
+
+async function handleClick(e: MouseEvent) {
+  e.preventDefault()
+  if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
+    window.open(`/works/${props.project.slug}`, '_blank')
+    return
+  }
+
+  // ── Second click while animating: abort & navigate immediately
+  if (animationToken > 0) {
+    animationToken++
+    activeOverlay?.remove(); activeOverlay = null
+    return navigateTo(`/works/${props.project.slug}`)
+  }
+
+  const gallery   = galleryRef.value
+  const container = containerRef.value
+
+  if (!gallery || !container || !allVisuals.value.length) {
+    return navigateTo(`/works/${props.project.slug}`)
+  }
+
+  // Cover is allVisuals[0]. In the tripled gallery it lives at index n (middle segment).
+  // Single-visual galleries are not tripled, so index 0 is used instead.
+  const n         = allVisuals.value.length > 1 ? allVisuals.value.length : 0
+  const coverWrap = container.children[n] as HTMLElement | undefined
+  if (!coverWrap) return navigateTo(`/works/${props.project.slug}`)
+
+  animationToken++
+  const myToken = animationToken
+
+  // Preload the xxl cover in parallel with Act 1 so it's in cache before the overlay appears.
+  const heroUrl  = props.project.cover?.xxl?.url
+  const xxlReady = heroUrl
+    ? new Promise<HTMLImageElement>(resolve => {
+        const img = new Image()
+        img.onload  = () => resolve(img)
+        img.onerror = () => resolve(img)
+        img.src = heroUrl
+      })
+    : Promise.resolve(null as unknown as HTMLImageElement)
+
+  // ── Act 1: animate scrollLeft to center the cover in the strip.
+  //    The gallery element never moves — other visuals stay visible on both sides.
+  const containerRect    = container.getBoundingClientRect()
+  const coverBcr         = coverWrap.getBoundingClientRect()
+  const coverScrollLeft  = coverBcr.left - containerRect.left + container.scrollLeft
+  const targetScrollLeft = coverScrollLeft - (container.clientWidth - coverWrap.offsetWidth) / 2
+
+  const startScrollLeft  = container.scrollLeft
+  const scrollDist       = targetScrollLeft - startScrollLeft
+  const SLIDE_MS         = 1100
+
+  await Promise.all([
+    new Promise<void>(resolve => {
+      const t0 = performance.now()
+      ;(function tick() {
+        const t     = Math.min((performance.now() - t0) / SLIDE_MS, 1)
+        const eased = 1 - Math.pow(1 - t, 4) // easeOutQuart — confident, smooth deceleration
+        container.scrollLeft = startScrollLeft + scrollDist * eased
+        if (t < 1) requestAnimationFrame(tick)
+        else resolve()
+      })()
+    }),
+    xxlReady,
+  ])
+
+  await new Promise(r => setTimeout(r, 500)) // brief settle
+  if (myToken !== animationToken) return
+
+  // ── Act 2: body-level overlay positioned at the cover's current viewport rect.
+  //    xxl is already cached → paints immediately, no black flash.
+  const rect         = coverWrap.getBoundingClientRect()
+  const videoEl      = coverWrap.querySelector('video')
+  const preloadedImg = await xxlReady
+
+  const overlay = document.createElement('div')
+  Object.assign(overlay.style, {
+    position:      'fixed',
+    top:           `${rect.top}px`,
+    left:          `${rect.left}px`,
+    width:         `${rect.width}px`,
+    height:        `${rect.height}px`,
+    borderRadius:  getComputedStyle(coverWrap).borderRadius,
+    overflow:      'hidden',
+    zIndex:        '999',
+    pointerEvents: 'none',
+  })
+
+  if (preloadedImg?.src) {
+    Object.assign(preloadedImg.style, { display: 'block', width: '100%', height: '100%', objectFit: 'cover' })
+    overlay.appendChild(preloadedImg)
+  } else if (videoEl) {
+    const clone = videoEl.cloneNode(true) as HTMLVideoElement
+    Object.assign(clone.style, { display: 'block', width: '100%', height: '100%', objectFit: 'cover' })
+    clone.muted = true; clone.autoplay = true; clone.loop = true; clone.playsInline = true
+    overlay.appendChild(clone)
+    clone.play().catch(() => {})
+  }
+
+  // Suppress the app.vue page transition (leave 0.3s + enter 0.4s in out-in mode)
+  // while our overlay is the visual — otherwise the new page fades in at partial
+  // opacity and conflicts with the overlay removal.
+  const noTransitionStyle = document.createElement('style')
+  noTransitionStyle.textContent = '.page-leave-active,.page-enter-active{transition:none!important}.page-enter-from{opacity:1!important}'
+  document.head.appendChild(noTransitionStyle)
+
+  // Gallery stays translated — overlay covers it; navigation unmounts it anyway
+  activeOverlay = overlay
+  document.body.appendChild(overlay)
+  overlay.offsetHeight // force paint before transition
+
+  // ── Act 3: expand from cover's gallery position to full viewport
+  const easeExpand = 'cubic-bezier(0.76, 0, 0.24, 1)'
+  const d = '1.4s'
+  overlay.style.transition   = `top ${d} ${easeExpand}, left ${d} ${easeExpand}, width ${d} ${easeExpand}, height ${d} ${easeExpand}, border-radius ${d} ${easeExpand}`
+  overlay.style.top          = '0'
+  overlay.style.left         = '0'
+  overlay.style.width        = '100vw'
+  overlay.style.height       = '100vh'
+  overlay.style.borderRadius = '0'
+
+  await new Promise(r => setTimeout(r, 1500))
+  if (myToken !== animationToken) { overlay.remove(); activeOverlay = null; noTransitionStyle.remove(); return }
+
+  activeOverlay = null
+
+  // ── Act 4: navigate (page transitions suppressed → instant, invisible under overlay),
+  //    then poll until the project hero image is in the DOM, decoded, and painted.
+  await navigateTo(`/works/${props.project.slug}`)
+
+  await new Promise<void>(resolve => {
+    const giveUp = setTimeout(resolve, 8000)
+
+    function check() {
+      const hero = document.querySelector('.v-projet-slug__img') as HTMLImageElement | null
+      if (!hero) { requestAnimationFrame(check); return }
+
+      const done = () => { clearTimeout(giveUp); requestAnimationFrame(() => requestAnimationFrame(resolve)) }
+      if (hero.complete && hero.naturalHeight !== 0) { done(); return }
+      hero.addEventListener('load',  done, { once: true })
+      hero.addEventListener('error', () => { clearTimeout(giveUp); resolve() }, { once: true })
+      if (hero.complete && hero.naturalHeight !== 0) done() // race-condition guard
+    }
+
+    check()
+  })
+
+  // ── Act 5: hero and overlay show identical xxl at full viewport size/crop
+  //    — instant swap, zero flicker. Restore page transitions.
+  overlay.remove()
+  noTransitionStyle.remove()
+  animationToken = 0
 }
 </script>
 
@@ -113,6 +311,7 @@ function onScrollInGallery(e: Event) {
 
 .v-app-projects-list__item {
   border-top: 1px solid var(--app-color-dark);
+  border-bottom: 1px solid transparent;
   padding-top: var(--app-gutter);
   padding-bottom: var(--app-gutter);
   color: inherit;
@@ -120,6 +319,15 @@ function onScrollInGallery(e: Event) {
   display: flex;
   flex-direction: column;
   gap: var(--app-grid-gap);
+  transition: opacity 0.7s ease, border-bottom-color 0.2s ease;
+
+  &.is-sibling {
+    opacity: 0;
+  }
+
+  &:not(.is-sibling):hover {
+    border-bottom-color: var(--app-color-dark);
+  }
 }
 
 // ── Top row: meta (left 3fr) + description (right 1fr) ────────────────────────
@@ -142,7 +350,7 @@ function onScrollInGallery(e: Event) {
 
 .v-app-projects-list__row {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   column-gap: var(--app-grid-gap);
   align-items: start;
 }
@@ -153,15 +361,14 @@ function onScrollInGallery(e: Event) {
   gap: var(--app-grid-gap-xs);
 }
 
-// 1. No outline on service tags
 .v-app-projects-list__tag {
-  font-size: 0.8rem;
   white-space: nowrap;
 }
 
 .v-app-projects-list__description {
   margin: 0;
-  opacity: 0.6;
+  opacity: 1;
+  color: inherit;
 }
 
 .v-app-projects-list__description--mobile {
@@ -170,7 +377,6 @@ function onScrollInGallery(e: Event) {
   @media (max-width: params.$break-point-reg) {
     display: block;
     margin: 0;
-    opacity: 0.6;
   }
 }
 
@@ -238,34 +444,14 @@ function onScrollInGallery(e: Event) {
     border-radius: inherit;
     border: 0.5px solid hsla(0, 0%, 100%, 0.18);
     pointer-events: none;
-    transition: border-color 0.55s ease;
   }
 }
 
-// 2. Morph animation — visuals scale from near-zero when appearing (sibling → active)
 .v-app-projects-list__visual {
   display: block;
   height: 100%;
   width: auto;
   object-fit: cover;
   border-radius: var(--app-media-radius);
-  transition-property: opacity, transform;
-  transition-duration: 0.9s;
-  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-  transition-delay: var(--delay, 0s);
-}
-
-// Sibling: compress quickly, no stagger on exit
-.v-app-projects-list__item.is-sibling .v-app-projects-list__visual {
-  opacity: 0;
-  transform: scale(0.05);
-  transition-duration: 0.3s;
-  transition-timing-function: ease;
-  transition-delay: 0s !important;
-}
-
-.v-app-projects-list__item.is-sibling .v-app-projects-list__visual-wrap::after {
-  border-color: transparent;
-  transition: border-color 0.3s ease;
 }
 </style>

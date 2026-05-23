@@ -18,7 +18,7 @@
             ? String(hoveredRatio)
             : undefined,
           width: hoveredId === item.id && isSameRatioHover
-            ? '28vw'
+            ? '36vw'
             : undefined,
         }"
         class="v-app-random-projects__item"
@@ -213,7 +213,7 @@ onBeforeUnmount(() => {
   overflow: hidden;
   border-radius: var(--app-media-radius);
 
-  width: 20vw;
+  width: 28vw;
   aspect-ratio: 16 / 9;
 
   // Shape morph + shadow — both transition together (width added for same-ratio scale-up)
