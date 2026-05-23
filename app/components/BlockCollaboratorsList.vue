@@ -10,13 +10,13 @@
       <div class="app-grid__col-7 app-grid-reg__col-12"></div>
 
       <div
-        v-if="data?.result?.content"
+        v-if="displayContent.length"
         ref="listRef"
         class="app-grid__col-12 block-collaborators-list__collaborators"
         :class="`block-collaborators-list__collaborators--${mode}`"
       >
         <div
-          v-for="(item, i) of data?.result?.content"
+          v-for="(item, i) of displayContent"
           :key="i"
           class="block-collaborators-list__collaborators__item"
           :class="{ 'is-visible': visibleItems.has(i) }"
@@ -113,6 +113,16 @@ const { data } = useFetch<FetchData>('/api/CMS_KQLRequest', {
   ),
 })
 
+const displayContent = computed(() => {
+  const content = data.value?.result?.content ?? []
+  if (props.mode !== 'research') return content
+  return [...content].sort((a, b) => {
+    const ya = parseInt((a as ResearchItem).year ?? '0', 10)
+    const yb = parseInt((b as ResearchItem).year ?? '0', 10)
+    return yb - ya
+  })
+})
+
 const listRef      = ref<HTMLElement>()
 const visibleItems = ref<Set<number>>(new Set())
 let observer: IntersectionObserver | null = null
@@ -188,8 +198,8 @@ onUnmounted(() => { observer?.disconnect() })
     @media (max-width: params.$break-point-reg) {
       grid-template-columns: 1fr auto;
       grid-template-areas:
-        "institution year"
-        "contribution location";
+        "institution date"
+        "contribution project";
     }
   }
 }
@@ -204,17 +214,29 @@ onUnmounted(() => { observer?.disconnect() })
   @media (max-width: params.$break-point-reg) { display: none; }
 }
 .block-collaborators-list__institution {
-  @media (max-width: params.$break-point-reg) { grid-area: institution; }
+  @media (max-width: params.$break-point-reg) {
+    grid-area: institution;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 50vw;
+  }
 }
 .block-collaborators-list__project {
-  @media (max-width: params.$break-point-reg) { display: none; }
+  @media (max-width: params.$break-point-reg) {
+    grid-area: project;
+    text-align: right;
+  }
 }
 .block-collaborators-list__contribution {
   @media (max-width: params.$break-point-reg) { grid-area: contribution; }
 }
 .block-collaborators-list__city {
   text-align: right;
-  @media (max-width: params.$break-point-reg) { grid-area: city; }
+  @media (max-width: params.$break-point-reg) {
+    .block-collaborators-list__collaborators--research & { display: none; }
+    .block-collaborators-list__collaborators--collaborators & { grid-area: city; }
+  }
 }
 .block-collaborators-list__date {
   text-align: right;

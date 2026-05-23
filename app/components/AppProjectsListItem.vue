@@ -46,20 +46,21 @@
     <div class="v-app-projects-list__gallery" :class="{ 'hide-gradient': hideGradient }">
       <div class="v-app-projects-list__gallery__container" @scroll="onScrollInGallery">
         <div
-          v-for="(item, index) of project.gallery"
+          v-for="(item, index) of allVisuals"
           :key="index"
           class="v-app-projects-list__visual-wrap"
+          :style="{ '--delay': `${index * 0.06}s` }"
         >
           <video
-            v-if="item.reg?.url?.endsWith('.mp4')"
+            v-if="item.isVideo"
             class="v-app-projects-list__visual"
             muted autoplay loop playsinline
-            :src="item.reg.url"
+            :src="item.url"
           />
           <img
             v-else
             class="v-app-projects-list__visual"
-            :src="item.reg?.url"
+            :src="item.url"
             :alt="item.alt"
           />
         </div>
@@ -73,13 +74,31 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import type { CMS_API_Page_projet } from "#shared/cms_api"
 
-defineProps<{
+const props = defineProps<{
   project: CMS_API_Page_projet
   isSibling?: boolean
 }>()
+
+// covers_video first, then all gallery files — deduped
+const allVisuals = computed(() => {
+  const seen = new Set<string>()
+  const list: { url: string; isVideo: boolean; alt?: string }[] = []
+
+  const add = (url: string, isVideo: boolean, alt?: string) => {
+    if (url && !seen.has(url)) { seen.add(url); list.push({ url, isVideo, alt }) }
+  }
+
+  if (props.project.covers_video?.url) {
+    add(props.project.covers_video.url, true)
+  }
+  for (const img of (props.project.gallery ?? [])) {
+    if (img.reg?.url) add(img.reg.url, img.reg.url.endsWith('.mp4'), img.alt ?? undefined)
+  }
+
+  return list
+})
 
 const hideGradient = ref(false)
 
@@ -101,16 +120,6 @@ function onScrollInGallery(e: Event) {
   display: flex;
   flex-direction: column;
   gap: var(--app-grid-gap);
-
-  &.is-sibling .v-app-projects-list__visual {
-    opacity: 0;
-    transition: opacity 0.55s ease;
-  }
-
-  &.is-sibling .v-app-projects-list__visual-wrap::after {
-    border-color: transparent;
-    transition: border-color 0.55s ease;
-  }
 }
 
 // ── Top row: meta (left 3fr) + description (right 1fr) ────────────────────────
@@ -144,10 +153,8 @@ function onScrollInGallery(e: Event) {
   gap: var(--app-grid-gap-xs);
 }
 
+// 1. No outline on service tags
 .v-app-projects-list__tag {
-  border: 1px solid var(--app-color-dark);
-  border-radius: 0.30rem;
-  padding: 0.1rem 0.5rem;
   font-size: 0.8rem;
   white-space: nowrap;
 }
@@ -180,7 +187,6 @@ function onScrollInGallery(e: Event) {
 }
 
 // ── Full-viewport gallery strip ────────────────────────────────────────────────
-// Escapes the parent's app-with-padding--left-right to reach viewport edges
 .v-app-projects-list__gallery {
   position: relative;
   margin-left: calc(-1 * var(--app-grid-gap));
@@ -236,12 +242,30 @@ function onScrollInGallery(e: Event) {
   }
 }
 
+// 2. Morph animation — visuals scale from near-zero when appearing (sibling → active)
 .v-app-projects-list__visual {
   display: block;
   height: 100%;
   width: auto;
   object-fit: cover;
   border-radius: var(--app-media-radius);
-  transition: opacity 0.9s ease;
+  transition-property: opacity, transform;
+  transition-duration: 0.9s;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--delay, 0s);
+}
+
+// Sibling: compress quickly, no stagger on exit
+.v-app-projects-list__item.is-sibling .v-app-projects-list__visual {
+  opacity: 0;
+  transform: scale(0.05);
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+  transition-delay: 0s !important;
+}
+
+.v-app-projects-list__item.is-sibling .v-app-projects-list__visual-wrap::after {
+  border-color: transparent;
+  transition: border-color 0.3s ease;
 }
 </style>
