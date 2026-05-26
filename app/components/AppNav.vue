@@ -1,6 +1,6 @@
 <template>
     <nav class="v-nav app-with-padding--left-right app-with-padding--top-bottom"
-         :class="{'infos-is-open': navClassOpen, 'mobile-menu-open': mobileMenuOpen, 'v-nav--intro': introActive}"
+         :class="{'infos-is-open': navClassOpen, 'mobile-menu-open': mobileMenuOpen, 'v-nav--intro': introActive, 'v-nav--loader-pending': loaderPending}"
          :style="introActive ? { '--nav-intro-delay': `${INTRO_DELAY_MS}ms` } : {}"
     >
       <div class="toggle-infos toggle-infos--mobile app-button app-button--reverse-with-dark-view"
@@ -66,8 +66,8 @@ import UIOpen from "~/components/UIOpen.vue";
 import type { CMS_API_Response } from "#shared/cms_api";
 
 // ── Home intro animation timing ────────────────────────────────────────────────
-const INTRO_DELAY_MS    = 400   // ms after page load before slide-in starts
-const INTRO_DURATION_MS = 1400  // ms — keep in sync with animation-duration in CSS
+const INTRO_DELAY_MS    = 100   // ms gap after loader exits before slide-in starts
+const INTRO_DURATION_MS = 1000  // ms — keep in sync with animation-duration in CSS
 // ──────────────────────────────────────────────────────────────────────────────
 
 type NavInfoData = CMS_API_Response & {
@@ -91,7 +91,10 @@ const mobileMenuOpen = ref(false)
 // carries the intro class → CSS fill-mode:backwards hides buttons from the very
 // first browser paint → zero flash before the slide-in.
 const route = useRoute()
-const introActive = useState('nav-intro-active', () => import.meta.server && route.path === '/')
+const introActive   = useState('nav-intro-active', () => import.meta.server && route.path === '/')
+// Shared with AppLoader — true while the loader overlay is covering the page.
+// Keeps the CSS animation paused so it plays only after the loader exits.
+const loaderPending = useState('loader-pending',   () => import.meta.server && route.path === '/')
 
 // Module-level flag: reset on hard load/reload, survives SPA navigation
 let _introPlayed = false
@@ -122,12 +125,18 @@ onMounted(() => {
   mq.addEventListener('change', onBreakpoint)
   onBeforeUnmount(() => mq.removeEventListener('change', onBreakpoint))
 
-  // Intro animation: only on hard load/reload to home, never on SPA nav.
-  // introActive may already be true (set by SSR); just arm the teardown timer.
+  // Intro animation: fires when the loader signals done (loaderPending → false).
+  // { immediate: true } handles the case where no loader was shown (already false).
   if (route.path === '/' && !_introPlayed) {
-    _introPlayed = true
-    introActive.value = true
-    setTimeout(() => { introActive.value = false }, INTRO_DELAY_MS + INTRO_DURATION_MS + 100)
+    const triggerIntro = () => {
+      if (_introPlayed) return
+      _introPlayed = true
+      introActive.value = true
+      setTimeout(() => { introActive.value = false }, INTRO_DELAY_MS + INTRO_DURATION_MS + 100)
+    }
+    const stopWatch = watch(loaderPending, (pending) => {
+      if (!pending) { stopWatch(); triggerIntro() }
+    }, { immediate: true })
   }
 })
 </script>
@@ -349,6 +358,17 @@ onMounted(() => {
       animation: nav-intro-slide 1.4s cubic-bezier(0.16, 1, 0.3, 1) both;
       animation-delay: var(--nav-intro-delay, 0.4s);
     }
+  }
+}
+
+// Pause the animation clock while the page loader is visible.
+// The clock is held at t=0 (fill-mode:backwards keeps items hidden).
+// Removing this class resumes from the start → animation plays normally.
+.v-nav--intro.v-nav--loader-pending {
+  .v-nav__logo,
+  .v-nav__links .app-button,
+  .toggle-infos--mobile {
+    animation-play-state: paused;
   }
 }
 </style>

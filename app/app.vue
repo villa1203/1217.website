@@ -1,6 +1,7 @@
 <template>
   <div class="v-app"
   >
+    <AppLoader />
     <div class="v-app__header app-grid">
       <AppNav/>
     </div>
