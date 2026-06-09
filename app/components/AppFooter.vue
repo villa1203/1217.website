@@ -1,6 +1,11 @@
 <template>
     <footer class="v-app-footer app-with-padding--left-right app-with-padding--top-bottom"
     >
+
+        <AppNewsletterForm
+            baseURL="https://1217contactapi.villa1203.deno.net"
+        />
+
       <div style="width: 100%; height: 1px; background: white; margin-bottom: var(--app-gutter)"/>
 
       <div class="v-app-footer__projects-list app-grid app-grid--justify-between app-grid--direction-column">
@@ -58,6 +63,7 @@
 
 <script setup lang="ts">
 import type { CMS_API_Response } from "#shared/cms_api";
+import AppNewsletterForm from "~/components/AppNewsletterForm.vue";
 
 type FooterData = CMS_API_Response & {
   result: {
