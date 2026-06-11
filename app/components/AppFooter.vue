@@ -2,9 +2,11 @@
     <footer class="v-app-footer app-with-padding--left-right app-with-padding--top-bottom"
     >
 
-        <AppNewsletterForm
-            baseURL="https://1217contactapi.villa1203.deno.net"
-        />
+        <div style="margin-bottom: var(--app-row-gap-xs)">
+            <AppNewsletterForm
+                baseURL="https://1217contactapi.villa1203.deno.net"
+            />
+        </div>
 
       <div style="width: 100%; height: 1px; background: white; margin-bottom: var(--app-gutter)"/>
 

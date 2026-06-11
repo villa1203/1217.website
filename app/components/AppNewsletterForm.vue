@@ -1,12 +1,19 @@
 <template>
-    <section>
-        <h2 v-if="!isSuccess">
+    <section class="app-newsletter-form">
+        <h3 class="app-newsletter-form__title" v-if="!isSuccess">
             {{ props.title }}
-        </h2>
+        </h3>
 
-        <form v-if="!isSuccess" @submit.prevent="handleSubmit">
-            <label>
-                <span>{{ props.label }}</span>
+        <form class="app-newsletter-form__form"
+              v-if="!isSuccess" @submit.prevent="handleSubmit"
+        >
+            <label class="app-newsletter-form__form__label">
+
+                <transition name="app-newsletter-transition">
+                    <span class="app-newsletter-form__form__label__mail-info"
+                          v-if="email.length > 0"
+                    >{{ props.label }}</span>
+                </transition>
 
                 <input
                     v-model="email"
@@ -24,11 +31,95 @@
             </button>
         </form>
 
-        <p v-if="message" role="status" aria-live="polite">
+        <p class="app-newsletter-form__msg"
+           v-if="message" role="status" aria-live="polite"
+        >
             {{ message }}
         </p>
+
     </section>
 </template>
+
+<style lang="scss" scoped >
+.app-newsletter-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1rem;
+    gap: 1rem;
+}
+
+.app-newsletter-form__form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+    max-width: 30rem;
+    position: relative;
+    flex-wrap: wrap;
+
+    button {
+        border-radius: 1rem;
+        background: white;
+        color: black;
+        text-align: center;
+        height: 2rem;
+        box-sizing: border-box;
+        padding: .25rem 1rem;
+        line-height: 1rem;
+    }
+
+}
+
+.app-newsletter-form__form__label {
+    width: 100%;
+    max-width: 20rem;
+    position: relative;
+    padding-top: .75rem;
+
+    input {
+        border-radius: 1rem;
+        height: 2rem;
+        box-sizing: border-box;
+        padding: .25rem 1rem;
+        border: none;
+        width: 100%;
+    }
+}
+
+.app-newsletter-form__form__label__mail-info {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: .25rem;
+    top: .5rem;
+    left: 0;
+    padding-left: 1rem;
+    transform: translate(0, -100%);
+}
+
+
+.app-newsletter-form__title {
+    text-align: center;
+    margin: 0;
+}
+
+.app-newsletter-form__btn {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+.app-newsletter-form__msg {
+    text-align: center;
+}
+
+</style>
 
 <script setup lang="ts">
 type SubscriptionStatus = 'ok' | 'error'
