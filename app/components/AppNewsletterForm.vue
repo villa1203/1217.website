@@ -157,6 +157,7 @@ type Props = {
     submittingLabel?: string
     successMessage?: string
     errorMessage?: string
+    serverResponseErrorMessage?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -168,6 +169,7 @@ const props = withDefaults(defineProps<Props>(), {
     submittingLabel: 'Envoi...',
     successMessage: 'Merci pour votre inscription !',
     errorMessage: 'Une erreur est survenue. Veuillez réessayer.',
+    serverResponseErrorMessage: "Erreur lors de la validation de l'adresse mail"
 })
 
 const emit = defineEmits<{
@@ -221,7 +223,7 @@ const handleSubmit = async () => {
 
         emit("error")
 
-        message.value = `${props.errorMessage} (${responseData.message})`
+        message.value = `${props.errorMessage} (${props.serverResponseErrorMessage})`
 
         Error( responseData.message || props.errorMessage)
     } catch (error) {
