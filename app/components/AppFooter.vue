@@ -2,7 +2,7 @@
     <footer class="v-app-footer app-with-padding--left-right app-with-padding--top-bottom"
     >
 
-        <div style="margin-bottom: var(--app-row-gap-xs)">
+        <div style="margin-bottom: 2rem; border-top: solid 1px white; padding-top: 2rem">
             <AppNewsletterForm
                 baseURL="https://1217contactapi.villa1203.deno.net"
             />

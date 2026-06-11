@@ -26,7 +26,7 @@
                 >
             </label>
 
-            <button type="submit" :disabled="isSubmitting">
+            <button type="submit" :disabled="isSubmitting" class="app-button--variant-primary">
                 {{ isSubmitting ? props.submittingLabel : props.submitLabel }}
             </button>
         </form>
@@ -62,17 +62,6 @@
     position: relative;
     flex-wrap: wrap;
 
-    button {
-        border-radius: 1rem;
-        background: white;
-        color: black;
-        text-align: center;
-        height: 2rem;
-        box-sizing: border-box;
-        padding: .25rem 1rem;
-        line-height: 1rem;
-    }
-
 }
 
 .app-newsletter-form__form__label {
@@ -82,12 +71,14 @@
     padding-top: .75rem;
 
     input {
-        border-radius: 1rem;
-        height: 2rem;
         box-sizing: border-box;
-        padding: .25rem 1rem;
-        border: none;
         width: 100%;
+        padding: .75rem;
+        border-radius: .5rem;
+        line-height: 1.15;
+        font-size: 100%;
+        border: 1px solid white;
+        background: rgba(255, 255, 255, 1);
     }
 }
 
