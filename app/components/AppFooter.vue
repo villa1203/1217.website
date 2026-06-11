@@ -5,6 +5,14 @@
         <div style="margin-bottom: 2rem; border-top: solid 1px white; padding-top: 2rem">
             <AppNewsletterForm
                 baseURL="https://1217contactapi.villa1203.deno.net"
+                title=                      'Don’t miss a thing !'
+                label=                      'Email address'
+                placeholder=                'Your email address'
+                submitLabel=                "Sign up"
+                submittingLabel=            'Submitting...'
+                successMessage=             'Thank you for signing up!'
+                errorMessage=               'An error occurred. Please try again.'
+                serverResponseErrorMessage= "Error validating the email address"
             />
         </div>
 
