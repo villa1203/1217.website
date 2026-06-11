@@ -119,6 +119,24 @@
     text-align: center;
 }
 
+.app-newsletter-transition-enter-active,
+.app-newsletter-transition-leave-active {
+    transition: opacity .25s cubic-bezier(0, .25, 0, 1),
+                transform 1s cubic-bezier(0, .25, 0, 1);
+}
+
+.app-newsletter-transition-enter-from,
+.app-newsletter-transition-leave-to {
+    opacity: 0;
+    transform: translate(0, -50%);
+}
+
+.app-newsletter-transition-enter-to,
+.app-newsletter-transition-leave-from {
+    opacity: 1;
+    transform: translate(0, -100%);
+}
+
 </style>
 
 <script setup lang="ts">
