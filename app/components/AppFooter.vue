@@ -129,6 +129,7 @@ onMounted(() => {
   width: 100%;
   color: white;
   background: black;
+  padding-top: 0;
 }
 
 .v-app-footer__projects-list {
