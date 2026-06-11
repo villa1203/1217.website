@@ -32,6 +32,8 @@
 
 <script setup lang="ts">
 
+import {initMatomo, updateMatomoWithNavigation} from "#shared/matomo";
+
 useRouter().afterEach(() => {
   document.documentElement.classList.remove('app-body-drak-view')
   document.body.classList.remove('app-body-drak-view')
@@ -49,6 +51,13 @@ useHead({
     {name:"apple-mobile-web-app-title", content: "bureau 1217"},
   ],
 })
+
+if (import.meta.client) {
+    initMatomo()
+    useRouter().afterEach((to, from) => {
+        updateMatomoWithNavigation(from.fullPath)
+    })
+}
 
 
 // const showIframe = ref(true)
