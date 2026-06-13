@@ -8,10 +8,11 @@
          class="v-research__grid app-with-padding--left-right"
     >
       <h2 class="v-research__title app-text-h3 app-text-h3--with-horizontal-correction">Ongoing Research</h2>
-      <nuxt-link
+      <component
+        :is="project.coming_soon === 'true' ? 'div' : NuxtLink"
         v-for="(project, i) of getProjectBySector('research', data.result.projects)"
         :key="project.slug"
-        :to="`/works/${project.slug}`"
+        :to="project.coming_soon === 'true' ? undefined : `/works/${project.slug}`"
         class="v-research__card"
         :class="{ 'is-visible': visibleCards.has(i) }"
         :style="{ transitionDelay: `${(i % 3) * CARD_STAGGER_MS}ms` }"
@@ -37,7 +38,7 @@
           <h2 class="v-research__card__title app-text-reg app-text-strong app-no-margin">{{ project.title }}</h2>
           <p class="v-research__card__description">{{ truncate(project.baseline, 20) }}</p>
         </div>
-      </nuxt-link>
+      </component>
     </div>
 
     <div class="v-research__engagements app-with-padding--left-right">
@@ -52,6 +53,7 @@
 import type {CMS_API_Page_projet, CMS_API_Response, CMS_BlockData} from "#shared/cms_api";
 import {KQL_PROJECTS_SELECT, KQL_QUERY_BLOCKS} from "#shared/KQLQueries";
 import {getProjectBySector} from "#shared/projects_utils";
+import {NuxtLink} from "#components";
 import ResearchHeroSpotlight from "~/components/ResearchHeroSpotlight.vue";
 import BlockCollaboratorsList from "~/components/BlockCollaboratorsList.vue";
 
@@ -82,7 +84,10 @@ const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
       slug: true,
       projects: {
         query: 'page.children',
-        select: KQL_PROJECTS_SELECT,
+        select: {
+          ...KQL_PROJECTS_SELECT,
+          coming_soon: true,
+        },
       },
       content: KQL_QUERY_BLOCKS
     }
