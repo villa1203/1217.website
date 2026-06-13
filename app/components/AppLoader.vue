@@ -119,7 +119,7 @@ onMounted(async () => {
 
   logoExpand.value    = true     // trigger immediately — BUREAU slides left, 2·1·7 unfold right
 
-  await wait(530)                // logo settling (0.65s anim) → overlap sentences near end
+  await wait(180)                // sentences start 350ms earlier — overlap with logo still sliding
 
   // ── Transition to sentences (logo still finishing / just settled) ─────────────
   sentencesVisible.value = true

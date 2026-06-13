@@ -3,6 +3,22 @@
 
     <ResearchHeroSpotlight />
 
+    <div class="v-research__intro app-with-padding--left-right">
+      <div class="v-research__intro__grid">
+        <p class="v-research__intro__main app-text-h1">
+          Bureau 1217 investigates how technological systems shape creative and everyday experience—by building them, teaching them and critically examining them.
+        </p>
+        <div class="v-research__intro__right">
+          <p class="v-research__intro__secondary">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.
+          </p>
+          <p class="v-research__intro__secondary">
+            Exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla.
+          </p>
+        </div>
+      </div>
+    </div>
+
     <div v-if="data?.result?.projects"
          ref="gridRef"
          class="v-research__grid app-with-padding--left-right"
@@ -149,6 +165,50 @@ onUnmounted(() => {
   color: white;
   padding-top: var(--app-header-height);
   min-height: 100svh;
+}
+
+.v-research__intro {
+  padding-top: var(--app-row-gap);
+  padding-bottom: var(--app-row-gap);
+}
+
+.v-research__intro__grid {
+  display: grid;
+  grid-template-columns: 8fr 4fr;
+  column-gap: var(--app-grid-gap);
+
+  @media (max-width: params.$break-point-reg) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.v-research__intro__main {
+  grid-column: 1;
+  grid-row: 1;
+  margin: 0;
+  opacity: 1;
+}
+
+.v-research__intro__right {
+  grid-column: 2;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+
+  @media (max-width: params.$break-point-reg) {
+    grid-column: 1;
+    grid-row: 2;
+  }
+}
+
+.v-research__intro__secondary {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.25em;
+  opacity: 1;
+  color: white;
+  max-width: none;
 }
 
 .v-research__grid {
