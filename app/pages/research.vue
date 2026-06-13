@@ -10,10 +10,10 @@
         </p>
         <div class="v-research__intro__right">
           <p class="v-research__intro__secondary">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.
+            These projects serve as research opportunities, allowing the studio to experiment with new tools and methods while enriching its practice through interaction with students and the discussions sparked by teaching.
           </p>
           <p class="v-research__intro__secondary">
-            Exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla.
+            They result in publications, art installations, workshops, and collaborations in academic and cultural settings.
           </p>
         </div>
       </div>
