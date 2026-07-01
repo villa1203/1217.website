@@ -4,25 +4,24 @@
       <div class="v-app-footer__projects-list app-grid app-grid--justify-between app-grid--direction-column">
 
         <div class="v-app-footer__top-row">
-          <div class="v-app-footer__newsletter">
-            <AppNewsletterForm
-                baseURL="https://1217contactapi.villa1203.deno.net"
-                title="Stay up to date with Bureau 1217"
-                placeholder="Enter your email"
-                successMessage="Thank you, you're now on the list."
-                alreadySubscribedMessage="You're already on our mailing list."
-                errorMessage="Please enter a valid email address."
+          <div class="v-app-footer__top-left">
+            <div class="app-text-h1"
+                 v-html="footerData?.result?.footer_heading"
             />
+            <div class="v-app-footer__newsletter">
+              <AppNewsletterForm
+                  baseURL="https://1217contactapi.villa1203.deno.net"
+                  title="Keep up with Bureau 1217’s latest projects."
+                  placeholder="enter your email"
+                  successMessage="You're on the list."
+                  alreadySubscribedMessage="You're already on our list."
+                  errorMessage="Please enter a valid email."
+              />
+            </div>
           </div>
 
           <img class="v-app-footer__logo--anim"
                src="/logo__anime.gif"
-          />
-        </div>
-
-        <div class="v-app-footer__left-content">
-          <div class="app-text-h1"
-               v-html="footerData?.result?.footer_heading"
           />
         </div>
 
@@ -142,19 +141,34 @@ onMounted(() => {
   align-items: flex-start;
 }
 
-.v-app-footer__newsletter {
-  max-width: 20rem;
+.v-app-footer__top-left {
+  display: flex;
+  flex-direction: column;
+  gap: var(--app-grid-gap);
+  max-width: 40em;
+
+  .app-text-h1 {
+    margin-bottom: 1%;
+  }
 
   @media (max-width: params.$break-point-reg) {
     max-width: 100%;
   }
 }
 
-.v-app-footer__left-content {
-  max-width: 40em;
+.v-app-footer__newsletter {
+  width: fit-content;
+
+  :deep(.app-newsletter-form__title) {
+    white-space: nowrap;
+  }
 
   @media (max-width: params.$break-point-reg) {
-    max-width: 100%;
+    width: 100%;
+
+    :deep(.app-newsletter-form__title) {
+      white-space: normal;
+    }
   }
 }
 

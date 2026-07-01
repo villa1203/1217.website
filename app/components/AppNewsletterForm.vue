@@ -1,6 +1,6 @@
 <template>
     <section class="app-newsletter-form">
-        <p class="app-newsletter-form__title">
+        <p class="app-newsletter-form__title" v-if="props.title">
             {{ props.title }}
         </p>
 
@@ -142,15 +142,15 @@ type Props = {
 
 const props = withDefaults(defineProps<Props>(), {
     groups: () => ['Venu du site'],
-    title: 'Restez informé',
-    label: 'Adresse email',
+    title: 'Stay informed',
+    label: 'Email address',
     placeholder: 'E-mail',
-    submitLabel: "S'inscrire",
-    submittingLabel: 'Envoi...',
-    successMessage: 'Merci pour votre inscription !',
-    alreadySubscribedMessage: 'Vous êtes déjà inscrit.',
-    errorMessage: 'Une erreur est survenue. Veuillez réessayer.',
-    serverResponseErrorMessage: "Erreur lors de la validation de l'adresse mail"
+    submitLabel: 'Sign up',
+    submittingLabel: 'Sending...',
+    successMessage: "You're on the list.",
+    alreadySubscribedMessage: "You're already on our list.",
+    errorMessage: 'An error occurred. Please try again.',
+    serverResponseErrorMessage: 'Error validating the email address'
 })
 
 const emit = defineEmits<{
