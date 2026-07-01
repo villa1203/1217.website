@@ -22,6 +22,17 @@ import type {CMS_API_Response, CMS_BlockData} from "#shared/cms_api";
 import {KQL_QUERY_BLOCKS} from "#shared/KQLQueries";
 import {windowsScrollListener} from "~/utils/windowsScrollListener";
 
+const _ogImage = useRequestURL().origin + '/OpenGraph.png'
+useSeoMeta({
+  title: 'Bureau 1217 — Design & Web Development Office',
+  ogTitle: 'Bureau 1217 — Design & Web Development Office',
+  description: 'Bureau 1217 is a design and web development office creating visual identities, websites, digital tools and research-led experiences.',
+  ogDescription: 'Bureau 1217 is a design and web development office creating visual identities, websites, digital tools and research-led experiences.',
+  ogImage: _ogImage,
+  twitterCard: 'summary_large_image',
+  twitterImage: _ogImage,
+})
+
 type FetchData = CMS_API_Response & {
   "result": {
     "title": string,

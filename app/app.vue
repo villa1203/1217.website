@@ -41,11 +41,17 @@ useRouter().afterEach(() => {
 
 useHead({
   link: [
-    {rel:"icon", type:"image/png", href:"/favicon-96x96.png", sizes:"96x96"},
-    {rel:"icon", type:"image/svg+xml", href:"/favicon.svg"},
-    {rel:"shortcut icon", href:"/favicon.ico"},
+    // Light mode
+    {rel:"icon", type:"image/png", href:"/favicon-96x96.png", sizes:"96x96", media:"(prefers-color-scheme: light)"},
+    {rel:"icon", type:"image/svg+xml", href:"/favicon.svg", media:"(prefers-color-scheme: light)"},
+    {rel:"shortcut icon", href:"/favicon.ico", media:"(prefers-color-scheme: light)"},
+    // Dark mode
+    {rel:"icon", type:"image/png", href:"/favicon-32x32_white.png", sizes:"32x32", media:"(prefers-color-scheme: dark)"},
+    {rel:"icon", type:"image/png", href:"/favicon-16x16_white.png", sizes:"16x16", media:"(prefers-color-scheme: dark)"},
+    {rel:"shortcut icon", href:"/favicon_white.ico", media:"(prefers-color-scheme: dark)"},
+    // Shared
     {rel:"apple-touch-icon", sizes: "180x180", href:"/apple-touch-icon.png"},
-    {rel:"manifest", href: "/site.webmanifest", },
+    {rel:"manifest", href: "/site.webmanifest"},
   ],
   meta: [
     {name:"apple-mobile-web-app-title", content: "bureau 1217"},

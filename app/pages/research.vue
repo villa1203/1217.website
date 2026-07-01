@@ -90,6 +90,17 @@ type FetchData = CMS_API_Response & {
 
 useHead({ bodyAttrs: { class: 'v-research-active' } })
 
+const _ogImage = useRequestURL().origin + '/OpenGraph.png'
+useSeoMeta({
+  title: 'Bureau 1217 Research — Design, Tools & Education',
+  ogTitle: 'Bureau 1217 Research — Design, Tools & Education',
+  description: 'Research projects, educational formats and publications exploring how design tools shape creative processes, interfaces and everyday experiences.',
+  ogDescription: 'Research projects, educational formats and publications exploring how design tools shape creative processes, interfaces and everyday experiences.',
+  ogImage: _ogImage,
+  twitterCard: 'summary_large_image',
+  twitterImage: _ogImage,
+})
+
 const {data} = useFetch<FetchData>('/api/CMS_KQLRequest', {
   lazy: true,
   method: 'POST',

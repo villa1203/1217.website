@@ -126,6 +126,17 @@ const {data} = await useFetch<FetchData>('/api/CMS_KQLRequest', {
 })
 
 
+const _fallbackOgImage = useRequestURL().origin + '/OpenGraph.png'
+useSeoMeta({
+  title:          () => data.value?.result?.title ? `${data.value.result.title} — Bureau 1217` : 'Bureau 1217',
+  ogTitle:        () => data.value?.result?.title ? `${data.value.result.title} — Bureau 1217` : 'Bureau 1217',
+  description:    () => data.value?.result?.baseline ?? '',
+  ogDescription:  () => data.value?.result?.baseline ?? '',
+  ogImage:        () => data.value?.result?.cover?.reg?.url ?? _fallbackOgImage,
+  twitterCard: 'summary_large_image',
+  twitterImage:   () => data.value?.result?.cover?.reg?.url ?? _fallbackOgImage,
+})
+
 const listener = () => windowsScrollListener('.block-page-list--list')
 
 onMounted(() => {

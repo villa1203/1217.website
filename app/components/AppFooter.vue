@@ -1,37 +1,29 @@
 <template>
-    <footer class="v-app-footer app-with-padding--left-right app-with-padding--top-bottom"
-    >
-
-        <div style="margin-bottom: 2rem; border-top: solid 1px white; padding-top: 2rem">
-            <AppNewsletterForm
-                baseURL="https://1217contactapi.villa1203.deno.net"
-                title=                      'Don’t miss a thing !'
-                label=                      'Email address'
-                placeholder=                'Your email address'
-                submitLabel=                "Sign up"
-                submittingLabel=            'Submitting...'
-                successMessage=             'Thank you for signing up!'
-                errorMessage=               'An error occurred. Please try again.'
-                serverResponseErrorMessage= "Error validating the email address"
-            />
-        </div>
-
-      <div style="width: 100%; height: 1px; background: white; margin-bottom: var(--app-gutter)"/>
+    <footer class="v-app-footer app-with-padding--left-right app-with-padding--top-bottom">
 
       <div class="v-app-footer__projects-list app-grid app-grid--justify-between app-grid--direction-column">
 
-        <div class="app-grid app-grid--justify-between app-grid-reg--wrap">
-          <div class="v-app-footer__left-content">
-            <div class="app-text-h1"
-                 v-html="footerData?.result?.footer_heading"
+        <div class="v-app-footer__top-row">
+          <div class="v-app-footer__newsletter">
+            <AppNewsletterForm
+                baseURL="https://1217contactapi.villa1203.deno.net"
+                title="Stay up to date with Bureau 1217"
+                placeholder="Enter your email"
+                successMessage="Thank you, you're now on the list."
+                alreadySubscribedMessage="You're already on our mailing list."
+                errorMessage="Please enter a valid email address."
             />
           </div>
 
-          <div class="app-grid-reg__col-12 app-reg-display-none">
-            <img class="v-app-footer__logo--anim"
-                 src="/logo__anime.gif"
-            />
-          </div>
+          <img class="v-app-footer__logo--anim"
+               src="/logo__anime.gif"
+          />
+        </div>
+
+        <div class="v-app-footer__left-content">
+          <div class="app-text-h1"
+               v-html="footerData?.result?.footer_heading"
+          />
         </div>
 
         <div class="app-grid app-grid--justify-between app-grid-reg--wrap app-grid-reg--justify-start">
@@ -135,10 +127,26 @@ onMounted(() => {
 .v-app-footer__projects-list {
   height: calc(100vh - 7rem);
   min-height: 500px;
+  border-top: 1px solid white;
+  padding-top: 2rem;
 
   @media (max-width: params.$break-point-reg) {
     height: auto;
     row-gap: var(--app-row-gap-small);
+  }
+}
+
+.v-app-footer__top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.v-app-footer__newsletter {
+  max-width: 20rem;
+
+  @media (max-width: params.$break-point-reg) {
+    max-width: 100%;
   }
 }
 
@@ -157,6 +165,8 @@ onMounted(() => {
 .v-app-footer__logo--anim {
   display: block;
   width: 15rem;
+  margin-right: 0;
+  flex-shrink: 0;
 }
 
 .v-app-footer__mail {

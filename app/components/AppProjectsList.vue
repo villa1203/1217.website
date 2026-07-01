@@ -32,7 +32,8 @@
             v-for="project of filteredProjects"
             :key="project.slug"
             :project="project"
-            :is-sibling="hoveredSlug !== null && hoveredSlug !== project.slug"
+            :is-sibling="hoveredSlug !== null && hoveredSlug !== project.slug && nextHoveredSlug !== project.slug"
+            :is-next-sibling="nextHoveredSlug === project.slug"
             @mouseenter="hoveredSlug = project.slug"
             @mouseleave="hoveredSlug = null"
           />
@@ -53,6 +54,12 @@ const props = defineProps<{
 
 const hoveredSlug = ref<string | null>(null)
 const activeTag = ref<string>('all')
+
+const nextHoveredSlug = computed<string | null>(() => {
+  if (hoveredSlug.value === null) return null
+  const idx = filteredProjects.value.findIndex(p => p.slug === hoveredSlug.value)
+  return filteredProjects.value[idx + 1]?.slug ?? null
+})
 
 const setActiveTag = (tag: string) => {activeTag.value = tag}
 

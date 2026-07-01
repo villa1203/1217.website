@@ -1,7 +1,7 @@
 <template>
   <a :href="`/works/${project.slug}`"
      class="v-app-projects-list__item"
-     :class="{ 'is-sibling': isSibling }"
+     :class="{ 'is-sibling': isSibling, 'is-next-sibling': isNextSibling }"
      @click="handleClick"
   >
 
@@ -66,6 +66,7 @@ import type { CMS_API_Page_projet, CMS_BlockImageData, CMS_BlockGalleryData } fr
 const props = defineProps<{
   project: CMS_API_Page_projet
   isSibling?: boolean
+  isNextSibling?: boolean
 }>()
 
 const allVisuals = computed(() => {
@@ -300,7 +301,6 @@ async function handleClick(e: MouseEvent) {
 
 .v-app-projects-list__item {
   border-top: 1px solid var(--app-color-dark);
-  border-bottom: 1px solid transparent;
   padding-top: var(--app-gutter);
   padding-bottom: var(--app-gutter);
   color: inherit;
@@ -308,14 +308,15 @@ async function handleClick(e: MouseEvent) {
   display: flex;
   flex-direction: column;
   gap: var(--app-grid-gap);
-  transition: opacity 0.7s ease, border-bottom-color 0.2s ease;
+  transition: opacity 0.7s ease;
 
   &.is-sibling {
-    opacity: 0;
+    opacity: 0.1;
   }
 
-  &:not(.is-sibling):hover {
-    border-bottom-color: var(--app-color-dark);
+  &.is-next-sibling > * {
+    opacity: 0.1;
+    transition: opacity 0.7s ease;
   }
 }
 

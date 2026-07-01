@@ -37,6 +37,17 @@ import {KQL_PROJECTS_SELECT, KQL_QUERY_BLOCKS} from "#shared/KQLQueries";
 import {getProjectBySector} from "#shared/projects_utils";
 import {windowsScrollListener} from "~/utils/windowsScrollListener";
 
+const _ogImage = useRequestURL().origin + '/OpenGraph.png'
+useSeoMeta({
+  title: 'Bureau 1217 Works — Identity, Web & Creative Development',
+  ogTitle: 'Bureau 1217 Works — Identity, Web & Creative Development',
+  description: 'Explore Bureau 1217 projects across visual identity, web development, art direction, brand strategy and creative digital tools.',
+  ogDescription: 'Explore Bureau 1217 projects across visual identity, web development, art direction, brand strategy and creative digital tools.',
+  ogImage: _ogImage,
+  twitterCard: 'summary_large_image',
+  twitterImage: _ogImage,
+})
+
 type FetchData = CMS_API_Response & {
   "result": {
     "title": string,

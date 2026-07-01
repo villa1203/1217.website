@@ -1,20 +1,13 @@
 <template>
     <section class="app-newsletter-form">
-        <h3 class="app-newsletter-form__title" v-if="!isSuccess">
+        <p class="app-newsletter-form__title">
             {{ props.title }}
-        </h3>
+        </p>
 
         <form class="app-newsletter-form__form"
-              v-if="!isSuccess" @submit.prevent="handleSubmit"
+              @submit.prevent="handleSubmit"
         >
-            <label class="app-newsletter-form__form__label">
-
-                <transition name="app-newsletter-transition">
-                    <span class="app-newsletter-form__form__label__mail-info"
-                          v-if="email.length > 0"
-                    >{{ props.label }}</span>
-                </transition>
-
+            <div class="app-newsletter-form__field">
                 <input
                     v-model="email"
                     type="email"
@@ -22,13 +15,14 @@
                     autocomplete="email"
                     required
                     :placeholder="props.placeholder"
-                    :disabled="isSubmitting"
+                    :disabled="isSubmitting || isSuccess"
                 >
-            </label>
-
-            <button type="submit" :disabled="isSubmitting" class="app-button--variant-primary">
-                {{ isSubmitting ? props.submittingLabel : props.submitLabel }}
-            </button>
+                <button type="submit" :disabled="isSubmitting || isSuccess" class="app-newsletter-form__arrow">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </button>
+            </div>
         </form>
 
         <p class="app-newsletter-form__msg"
@@ -40,94 +34,79 @@
     </section>
 </template>
 
-<style lang="scss" scoped >
+<style lang="scss" scoped>
 .app-newsletter-form {
     width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border-radius: 1rem;
-    gap: 1rem;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.app-newsletter-form__title {
+    margin: 0;
+    line-height: 1.4;
+    font-size: inherit;
 }
 
 .app-newsletter-form__form {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-end;
-    justify-content: center;
-    gap: 1rem;
     width: 100%;
-    max-width: 30rem;
-    position: relative;
-    flex-wrap: wrap;
-
 }
 
-.app-newsletter-form__form__label {
-    width: 100%;
-    max-width: 20rem;
-    position: relative;
-    padding-top: .75rem;
+.app-newsletter-form__field {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    padding-bottom: 0.5rem;
 
     input {
-        box-sizing: border-box;
-        width: 100%;
-        padding: .75rem;
-        border-radius: .5rem;
-        line-height: 1.15;
-        font-size: 100%;
-        border: 1px solid white;
-        background: rgba(255, 255, 255, 1);
+        flex: 1;
+        background: transparent;
+        border: none;
+        color: white;
+        font-size: inherit;
+        font-family: inherit;
+        padding: 0;
+        outline: none;
+        min-width: 0;
+
+        &::placeholder {
+            color: white;
+            opacity: 0.5;
+        }
+
+        &:disabled {
+            opacity: 0.5;
+        }
     }
 }
 
-.app-newsletter-form__form__label__mail-info {
-    position: absolute;
+.app-newsletter-form__arrow {
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 0 0 0 0.5rem;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: .25rem;
-    top: .5rem;
-    left: 0;
-    padding-left: 1rem;
-    transform: translate(0, -100%);
-}
+    align-items: center;
+    flex-shrink: 0;
+    transition: opacity 0.2s ease;
 
+    &:hover {
+        opacity: 0.6;
+    }
 
-.app-newsletter-form__title {
-    text-align: center;
-    margin: 0;
-}
-
-.app-newsletter-form__btn {
-    display: flex;
-    justify-content: center;
-    align-content: center;
+    &:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+    }
 }
 
 .app-newsletter-form__msg {
-    text-align: center;
+    margin: 0;
+    font-size: inherit;
+    line-height: 1.4;
 }
-
-.app-newsletter-transition-enter-active,
-.app-newsletter-transition-leave-active {
-    transition: opacity .25s cubic-bezier(0, .25, 0, 1),
-                transform 1s cubic-bezier(0, .25, 0, 1);
-}
-
-.app-newsletter-transition-enter-from,
-.app-newsletter-transition-leave-to {
-    opacity: 0;
-    transform: translate(0, -50%);
-}
-
-.app-newsletter-transition-enter-to,
-.app-newsletter-transition-leave-from {
-    opacity: 1;
-    transform: translate(0, -100%);
-}
-
 </style>
 
 <script setup lang="ts">
@@ -149,13 +128,14 @@ type SubscriptionResponse = {
 
 type Props = {
     baseURL: string
-    groups?: string[]  // groupe pour le tri dans la newsletter Infomaniak
+    groups?: string[]
     title?: string
     label?: string
     placeholder?: string
     submitLabel?: string
     submittingLabel?: string
     successMessage?: string
+    alreadySubscribedMessage?: string
     errorMessage?: string
     serverResponseErrorMessage?: string
 }
@@ -164,10 +144,11 @@ const props = withDefaults(defineProps<Props>(), {
     groups: () => ['Venu du site'],
     title: 'Restez informé',
     label: 'Adresse email',
-    placeholder: 'votre adresse mail',
+    placeholder: 'E-mail',
     submitLabel: "S'inscrire",
     submittingLabel: 'Envoi...',
     successMessage: 'Merci pour votre inscription !',
+    alreadySubscribedMessage: 'Vous êtes déjà inscrit.',
     errorMessage: 'Une erreur est survenue. Veuillez réessayer.',
     serverResponseErrorMessage: "Erreur lors de la validation de l'adresse mail"
 })
@@ -212,7 +193,6 @@ const handleSubmit = async () => {
 
         const responseData: SubscriptionResponse = await response.json()
 
-
         if (responseData.status === 'ok') {
             message.value = props.successMessage
             isSuccess.value = true
@@ -222,10 +202,8 @@ const handleSubmit = async () => {
         }
 
         emit("error")
-
-        message.value = `${props.errorMessage} (${props.serverResponseErrorMessage})`
-
-        Error( responseData.message || props.errorMessage)
+        const isAlreadySubscribed = responseData.message?.toLowerCase().includes('already') || responseData.message?.toLowerCase().includes('exist')
+        message.value = isAlreadySubscribed ? props.alreadySubscribedMessage : props.errorMessage
     } catch (error) {
         message.value = error instanceof Error ? error.message : props.errorMessage
         isSuccess.value = false

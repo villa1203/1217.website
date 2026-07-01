@@ -39,8 +39,10 @@
           >
             <div
               class="app-grid app-grid--align-center app-grid--justify-center app-aspect-ratio--1-1 app-block-client-list__clients__item__wrap"
+              :class="{ 'app-block-client-list__clients__item__wrap--clickable': !!clientProjectMap[client.slug] }"
               @mousemove="(e) => onMouseMove(e, client.slug)"
               @mouseleave="onMouseLeave"
+              @click="onClientClick(client.slug)"
             >
               <img class="block-client-list__logo"
                    v-if="client.logo?.reg.url"
@@ -96,7 +98,7 @@
           Vue freezes each departing vnode so the old img src is preserved
           through the full leave animation even though currentCover has moved on.
         -->
-        <div class="block-client-list__card-image">
+        <div class="block-client-list__card-image" :class="{ 'block-client-list__card-image--no-cover': !currentCover }">
           <Transition :name="`img-slide-${slideDir}`">
             <img
               v-if="currentCover"
@@ -105,6 +107,9 @@
               :alt="currentCover.alt ?? ''"
             />
           </Transition>
+          <div v-if="!currentCover && activeSlug" class="block-client-list__card-no-cover">
+            Selected work not publicly available
+          </div>
         </div>
 
       </div>
@@ -150,6 +155,7 @@ onBeforeUnmount(() => { revealObserver?.disconnect() })
 type ProjectCoverData = CMS_API_Response & {
   result: {
     projects: {
+      slug: string,
       clients: { slug: string }[],
       cover: CMS_API_ImageInstance | null,
     }[]
@@ -165,6 +171,7 @@ const { data: projectsData } = useFetch<ProjectCoverData>('/api/CMS_KQLRequest',
       projects: {
         query: 'page.children',
         select: {
+          slug: true,
           clients: {
             query: 'page.clients.toPages',
             select: { slug: true },
@@ -197,6 +204,16 @@ const clientCoverMap = computed<Record<string, CMS_API_ImageInstance>>(() => {
   return map
 })
 
+const clientProjectMap = computed<Record<string, string>>(() => {
+  const map: Record<string, string> = {}
+  for (const project of projectsData.value?.result?.projects ?? []) {
+    for (const client of project.clients ?? []) {
+      if (client.slug && !map[client.slug]) map[client.slug] = project.slug
+    }
+  }
+  return map
+})
+
 // ── Card sizes ────────────────────────────────────────────────────────────────
 
 // Four clearly distinct proportions. The morph between them is always visible.
@@ -206,6 +223,8 @@ const CARD_SIZES: { w: number; h: number }[] = [
   { w: 305, h: 335 },   // slight portrait ~9:10
   { w: 265, h: 360 },   // tall            ~3:4.1
 ]
+
+const NO_COVER_SIZE = { w: 260, h: 260 }
 
 function getSizeForSlug(slug: string): { w: number; h: number } {
   const idx = props.block_data.content.client_list.findIndex(c => c.slug === slug)
@@ -332,6 +351,8 @@ function onMouseMove(e: MouseEvent, slug?: string) {
     animH.value = 2
   }
 
+  const { w, h } = clientCoverMap.value[slug] ? getSizeForSlug(slug) : NO_COVER_SIZE
+
   if (slug !== activeSlug.value) {
     if (Math.abs(dx) >= Math.abs(dy)) {
       slideDir.value = dx >= 0 ? 'right' : 'left'
@@ -339,9 +360,18 @@ function onMouseMove(e: MouseEvent, slug?: string) {
       slideDir.value = dy >= 0 ? 'down' : 'up'
     }
     activeSlug.value = slug
-    const { w, h } = getSizeForSlug(slug)
+    animateTo(w, h)
+  } else if (toW !== w || toH !== h) {
+    // re-entered same slug during shrink animation — grow back to target
     animateTo(w, h)
   }
+}
+
+const router = useRouter()
+
+function onClientClick(slug: string) {
+  const projectSlug = clientProjectMap.value[slug]
+  if (projectSlug) router.push(`/projects/${projectSlug}`)
 }
 
 function onMouseLeave() {
@@ -428,6 +458,10 @@ const shellStyle = computed(() => ({
       background: hsla(0, 0%, 100%, 0.05);
     }
   }
+
+  &--clickable {
+    cursor: pointer;
+  }
 }
 
 .block-client-list__logo {
@@ -500,6 +534,21 @@ const shellStyle = computed(() => ({
     height: 100%;
     object-fit: cover;
   }
+
+  &--no-cover {
+    background: rgba(0, 0, 0, 0.5);
+  }
+}
+
+.block-client-list__card-no-cover {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: 1.25rem 1.5rem;
+  color: white;
+  font-size: 1.1rem;
+  line-height: 1.3;
 }
 
 // ── Image slide — direction-aware ─────────────────────────────────────────────

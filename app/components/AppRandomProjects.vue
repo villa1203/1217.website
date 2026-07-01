@@ -14,8 +14,8 @@
         :to="`/works/${item.slug}`"
         :style="{
           '--item-index': index % props.projects.length,
-          aspectRatio: hoveredId === item.id && hoveredRatio !== null && !isSameRatioHover
-            ? String(hoveredRatio)
+          aspectRatio: hoveredId === item.id && effectiveHoveredRatio !== null && !isSameRatioHover
+            ? String(effectiveHoveredRatio)
             : undefined,
           width: hoveredId === item.id && isSameRatioHover
             ? '36vw'
@@ -103,6 +103,20 @@ const DEFAULT_RATIO = 16 / 9
 const isSameRatioHover = computed<boolean>(() => {
   if (hoveredRatio.value === null) return false
   return Math.abs(hoveredRatio.value - DEFAULT_RATIO) / DEFAULT_RATIO < 0.15
+})
+
+// Clamp the ratio so the card height never exceeds 90% of the section height
+// (5% margin from nav above + 5% margin from section bottom).
+const effectiveHoveredRatio = computed<number | null>(() => {
+  const ratio = hoveredRatio.value
+  if (ratio === null) return null
+  if (typeof window === 'undefined') return ratio
+  const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize)
+  const sectionH = window.innerHeight - 10 * rootFontSize  // matches: height: calc(100vh - 10rem)
+  const maxH     = sectionH * 0.7
+  const itemW    = window.innerWidth * 0.28                 // matches: width: 28vw
+  const minRatio = itemW / maxH
+  return Math.max(ratio, minRatio)
 })
 
 // ── Marquee — delta-time based for consistent speed across framerates ──────────
