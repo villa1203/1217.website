@@ -39,6 +39,14 @@ useRouter().afterEach(() => {
   document.body.classList.remove('app-body-drak-view')
 })
 
+const _currentURL = useRequestURL()
+useSeoMeta({
+  ogLocale: 'en_US',
+  ogType: 'website',
+  ogUrl: () => _currentURL.href,
+  ogLogo: 'https://bureau1217.ch/logo.svg',
+})
+
 useHead({
   link: [
     // Light mode

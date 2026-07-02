@@ -6,7 +6,7 @@
     <div class="v-research__intro app-with-padding--left-right">
       <div class="v-research__intro__grid">
         <p class="v-research__intro__main app-text-h1">
-          Bureau 1217 investigates how technological systems shape creative and everyday experience—by building them, teaching them and critically examining them.
+          Bureau 1217 investigates how technological systems shape creative and everyday experience, by building them, teaching them and critically examining them.
         </p>
         <div class="v-research__intro__right">
           <p class="v-research__intro__secondary">
