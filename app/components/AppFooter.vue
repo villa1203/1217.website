@@ -27,8 +27,12 @@
           />
         </div>
 
+        <div class="v-app-footer__logo-mobile">
+          <img class="v-app-footer__logo" src="/logo.svg" />
+        </div>
+
         <div class="app-grid app-grid--justify-between app-grid-reg--wrap app-grid-reg--justify-start">
-          <div class="app-grid-reg__col-12">
+          <div class="app-grid-reg__col-12 v-app-footer__logo-desktop">
             <img class="v-app-footer__logo"
                  src="/logo.svg" />
           </div>
@@ -165,7 +169,7 @@ const handleSubmit = async () => {
 
   @media (max-width: params.$break-point-reg) {
     height: auto;
-    row-gap: var(--app-row-gap-small);
+    row-gap: 3rem;
   }
 }
 
@@ -181,6 +185,7 @@ const handleSubmit = async () => {
 
   @media (max-width: params.$break-point-reg) {
     max-width: 100%;
+    font-size: 1.35rem;
   }
 }
 
@@ -244,10 +249,29 @@ const handleSubmit = async () => {
   height: 2rem;
 }
 
+.v-app-footer__logo-mobile {
+  display: none;
+
+  @media (max-width: params.$break-point-reg) {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.v-app-footer__logo-desktop {
+  @media (max-width: params.$break-point-reg) {
+    display: none;
+  }
+}
+
 .v-app-footer__logo--anim {
   display: block;
   width: 15rem;
   flex-shrink: 0;
+
+  @media (max-width: params.$break-point-reg) {
+    display: none;
+  }
 }
 
 .v-app-footer__mail {
